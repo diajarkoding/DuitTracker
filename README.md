@@ -277,7 +277,7 @@ Fitur export menghasilkan file XLSX dengan 6 sheet:
 - [ ] Multi-currency
 - [ ] Recurring transactions
 - [ ] Backup dan restore data
-- [ ] Widget home screen
+- [ ] ...
 
 ---
 
