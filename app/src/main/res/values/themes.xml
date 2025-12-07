@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main App Theme -->
+    <style name="Theme.DuitTracker" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/neo_background</item>
+        <item name="android:navigationBarColor">@color/neo_background</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <!-- Splash Screen Theme - Clean OffWhite background -->
+    <style name="Theme.DuitTracker.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/neo_off_white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
+        <item name="windowSplashScreenIconBackgroundColor">@color/neo_pure_black</item>
+        <item name="postSplashScreenTheme">@style/Theme.DuitTracker</item>
+    </style>
+</resources>
