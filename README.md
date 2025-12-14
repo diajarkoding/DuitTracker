@@ -4,95 +4,67 @@ Aplikasi pencatat keuangan pribadi untuk Android dengan tampilan **Neobrutalism*
 
 ---
 
-## Tampilan Aplikasi
+## Daftar Isi
 
-| Splash | Login | Dashboard |
-|--------|-------|-----------|
-| Logo animasi + Cek sesi | Form login + Versi app | Ringkasan + Daftar transaksi |
-
-| Tambah Transaksi | Detail | Statistik |
-|------------------|--------|-----------|
-| Form lengkap + Gambar | Info + Edit/Hapus | Chart + Export Excel |
+1. [Fitur Utama](#fitur-utama)
+2. [Tech Stack](#tech-stack)
+3. [Persyaratan](#persyaratan)
+4. [Instalasi](#instalasi)
+5. [Struktur Project](#struktur-project)
+6. [Kategori Transaksi](#kategori-transaksi)
+7. [Komponen UI](#komponen-ui)
+8. [Lisensi](#lisensi)
 
 ---
 
 ## Fitur Utama
 
-### Autentikasi
+### 🔐 Autentikasi
 - Login dan Register dengan email
-- Sesi tersimpan otomatis (tidak perlu login ulang)
-- Password visibility toggle
+- Sesi tersimpan otomatis
 - Validasi input dengan pesan error yang jelas
 
-### Manajemen Transaksi
-- Tambah transaksi pemasukan dan pengeluaran
-- Edit transaksi yang sudah ada
-- Hapus transaksi (termasuk gambar terkait)
-- Kategori lengkap dengan ikon warna-warni
+### 💰 Manajemen Transaksi
+- Tambah, edit, dan hapus transaksi
+- Kategori lengkap dengan ikon berwarna
 - Pilihan sumber dana: Tunai, Bank, E-Wallet
-- Lampirkan gambar bukti (struk/nota) dari kamera atau galeri
-- Format mata uang Rupiah otomatis (Rp 1.000.000)
+- Lampirkan gambar bukti (struk/nota)
+- Format mata uang Rupiah otomatis
 
-### Dashboard
-- Salam personal berdasarkan waktu dan nama pengguna
-- Ringkasan saldo, pemasukan, dan pengeluaran bulan ini
+### 📊 Dashboard
+- Salam personal berdasarkan waktu
+- Ringkasan saldo, pemasukan, dan pengeluaran
 - Tampilan transaksi per hari atau per bulan
 - Indikator status online/offline
-- Auto-refresh setelah tambah/edit/hapus
 
-### Statistik
+### 📈 Statistik
 - Grafik pie untuk visualisasi kategori
 - Filter berdasarkan bulan
-- Breakdown detail per kategori
-- Export ke file Excel (XLSX) dengan 6 sheet lengkap
+- Export ke file Excel (XLSX)
 
-### Mode Offline
-- Aplikasi tetap bisa digunakan tanpa internet
-- Data tersimpan lokal dan otomatis sync saat online
-- Indikator visual saat offline
-- Pending queue untuk operasi yang belum tersinkronisasi
-
----
-
-## Desain Neobrutalism
-
-Aplikasi menggunakan gaya desain Neobrutalism yang khas:
-
-- **Border tebal** hitam pada semua komponen
-- **Shadow solid** tanpa blur (hard shadow)
-- **Warna cerah** namun tetap profesional
-- **Tipografi tebal** untuk heading
-
-### Palet Warna
-
-| Warna | Kode | Penggunaan |
-|-------|------|------------|
-| Electric Blue | `#2563EB` | Primary, tombol utama |
-| Lime Green | `#22C55E` | Pemasukan, sukses |
-| Expense Red | `#EF4444` | Pengeluaran, error |
-| Sun Yellow | `#FFE500` | Aksen, highlight |
-| Off White | `#FAFAF9` | Background |
+### 📴 Mode Offline
+- Aplikasi tetap berfungsi tanpa internet
+- Data tersimpan lokal dan sync otomatis saat online
 
 ---
 
 ## Tech Stack
 
-| Teknologi | Versi | Fungsi |
-|-----------|-------|--------|
-| Kotlin | 1.9+ | Bahasa pemrograman |
-| Jetpack Compose | BOM | UI Framework modern |
-| Material3 | Latest | Komponen UI |
-| Hilt | 2.51 | Dependency Injection |
-| Room | 2.6.1 | Database lokal |
-| Supabase | 3.0.3 | Backend (Auth + DB + Storage) |
-| WorkManager | 2.9.1 | Background sync |
-| Coil | 2.5.0 | Image loading |
-| Apache POI | 5.2.5 | Export Excel |
-| Vico | 2.0.0-beta | Chart/Grafik |
+| Teknologi | Fungsi |
+|-----------|--------|
+| **Kotlin** | Bahasa pemrograman |
+| **Jetpack Compose** | UI Framework |
+| **Material3** | Komponen UI |
+| **Hilt** | Dependency Injection |
+| **Room** | Database lokal |
+| **Supabase** | Backend (Auth + Database + Storage) |
+| **WorkManager** | Background sync |
+| **Coil** | Image loading |
+| **Apache POI** | Export Excel |
 
 ---
 
-## Persyaratan Sistem
+## Persyaratan
 
 - Android Studio Ladybug atau lebih baru
 - JDK 11+
@@ -102,7 +74,7 @@ Aplikasi menggunakan gaya desain Neobrutalism yang khas:
 
 ---
 
-## Cara Instalasi
+## Instalasi
 
 ### 1. Clone Repository
 
@@ -111,20 +83,20 @@ git clone <repository-url>
 cd DuitTracker
 ```
 
-### 2. Setup Supabase
+### 2. Setup Database Supabase
 
-Ikuti panduan lengkap di [docs/BACKEND_SETUP.md](docs/BACKEND_SETUP.md)
+📖 **Ikuti panduan lengkap di [docs/setup-database.md](docs/setup-database.md)**
 
-Ringkasan singkat:
-1. Buat project di [supabase.com](https://supabase.com)
-2. Buat tabel `transactions` (lihat [docs/DATABASE_SCHEMA.md](docs/DATABASE_SCHEMA.md))
-3. Aktifkan Row Level Security
-4. Buat storage bucket `receipts`
-5. Copy Project URL dan Anon Key
+Panduan tersebut mencakup:
+- Membuat akun dan project Supabase
+- Membuat tabel dan enum
+- Mengaktifkan Row Level Security
+- Membuat storage bucket untuk gambar
+- Mendapatkan API keys
 
-### 3. Konfigurasi Lokal
+### 3. Konfigurasi Aplikasi
 
-Buat atau edit file `local.properties` di root project:
+Edit file `local.properties` di root project:
 
 ```properties
 SUPABASE_URL=https://your-project.supabase.co
@@ -134,24 +106,11 @@ SUPABASE_ANON_KEY=your-anon-key-here
 ### 4. Build dan Run
 
 ```bash
-# Sync Gradle
 ./gradlew build
-
-# Run di emulator/device
 ./gradlew installDebug
 ```
 
-Atau buka project di Android Studio dan klik tombol Run.
-
----
-
-## Dokumentasi Lengkap
-
-| Dokumen | Deskripsi |
-|---------|-----------|
-| [Backend Setup](docs/BACKEND_SETUP.md) | Panduan lengkap setup Supabase |
-| [Database Schema](docs/DATABASE_SCHEMA.md) | Struktur tabel dan tipe data |
-| [Arsitektur](docs/ARSITEKTUR.md) | Clean Architecture dan MVVM |
+Atau buka project di Android Studio dan klik tombol **Run**.
 
 ---
 
@@ -178,26 +137,70 @@ app/src/main/java/com/diajarkoding/duittracker/
 
 ---
 
-## Komponen UI Kustom
+## Kategori Transaksi
 
-Aplikasi menyediakan komponen UI dengan gaya Neobrutalism:
+### Pengeluaran
+
+| Kategori | Warna |
+|----------|-------|
+| Makanan | 🟠 Orange |
+| Transportasi | 🔵 Blue |
+| Belanja | 🩷 Pink |
+| Hiburan | 🟣 Purple |
+| Tagihan | 🔴 Red |
+| Kesehatan | 🩵 Teal |
+| Pendidikan | 🟡 Yellow |
+| Sosial | 🩷 Hot Pink |
+| Hadiah | 🟣 Magenta |
+| Kebutuhan Harian | 🔵 Sky Blue |
+| Lainnya | ⚫ Gray |
+
+### Pemasukan
+
+| Kategori | Warna |
+|----------|-------|
+| Gaji | 🟢 Green |
+| Investasi | 🟣 Purple |
+| Lainnya | ⚫ Gray |
+
+---
+
+## Komponen UI
+
+Aplikasi menggunakan gaya desain **Neobrutalism** dengan komponen kustom:
 
 | Komponen | Fungsi |
 |----------|--------|
 | `NeoCard` | Card dengan border dan shadow |
 | `NeoCardFlat` | Card tanpa shadow |
-| `NeoButton` | Tombol dengan animasi press |
-| `NeoButtonText` | Tombol dengan label teks |
-| `NeoIconButton` | Tombol dengan ikon |
+| `NeoButton` | Tombol dengan animasi |
 | `NeoInput` | Input text field |
-| `NeoPasswordInput` | Input password dengan toggle visibility |
-| `NeoCurrencyInput` | Input nominal dengan format Rupiah |
-| `NeoTopBar` | App bar dengan border |
-| `NeoToggle` | Toggle switch |
-| `NeoExpenseIncomeToggle` | Toggle pengeluaran/pemasukan |
-| `NeoSnackbar` | Notifikasi dengan warna status |
+| `NeoCurrencyInput` | Input dengan format Rupiah |
+| `NeoSnackbar` | Notifikasi berwarna |
 | `NeoSkeleton` | Loading placeholder |
-| `OfflineIndicator` | Indikator status offline |
+
+### Palet Warna
+
+| Warna | Kode | Penggunaan |
+|-------|------|------------|
+| Electric Blue | `#2563EB` | Primary |
+| Lime Green | `#22C55E` | Pemasukan |
+| Expense Red | `#EF4444` | Pengeluaran |
+| Sun Yellow | `#FFE500` | Aksen |
+| Off White | `#FAFAF9` | Background |
+
+---
+
+## Export Excel
+
+Fitur export menghasilkan file XLSX dengan 6 sheet:
+
+1. **Summary** - Ringkasan total
+2. **Category Details** - Breakdown per kategori
+3. **Daily Details** - Transaksi per tanggal
+4. **Income** - Semua pemasukan
+5. **Expense** - Semua pengeluaran
+6. **All Transactions** - Semua transaksi
 
 ---
 
@@ -209,109 +212,12 @@ Splash ──► Login ◄──► Register
               ▼
          Dashboard
          /   │   \
-        /    │    \
-       ▼     ▼     ▼
-   Stats  Add Tx  Detail
-            │       │
-            │       ▼
-            └───► Edit Tx
+        ▼    ▼    ▼
+    Stats  Add   Detail ──► Edit
+             │
+             ▼
+      CategoryList ──► Detail
 ```
-
----
-
-## Kategori Transaksi
-
-### Pengeluaran
-| Kategori | Icon | Warna |
-|----------|------|-------|
-| Makanan | 🍔 | Orange |
-| Transportasi | 🚗 | Blue |
-| Belanja | 🛍️ | Pink |
-| Hiburan | 🎬 | Purple |
-| Tagihan | 📄 | Red |
-| Kesehatan | 💊 | Teal |
-| Pendidikan | 📚 | Yellow |
-| Sosial | 👥 | Blue |
-| Lainnya | ❓ | Gray |
-
-### Pemasukan
-| Kategori | Icon | Warna |
-|----------|------|-------|
-| Gaji | 💰 | Green |
-| Investasi | 📈 | Blue |
-| Lainnya | ❓ | Gray |
-
----
-
-## Export Excel
-
-Fitur export menghasilkan file XLSX dengan 6 sheet:
-
-1. **Summary** - Ringkasan total pemasukan, pengeluaran, dan saldo
-2. **Category Details** - Breakdown per kategori dengan detail harian
-3. **Daily Details** - Transaksi dikelompokkan per tanggal
-4. **Income** - Semua transaksi pemasukan
-5. **Expense** - Semua transaksi pengeluaran
-6. **All Transactions** - Semua transaksi lengkap
-
----
-
-## Status Pengembangan
-
-### Selesai
-- [x] Desain sistem Neobrutalism
-- [x] Autentikasi (Login, Register, Logout)
-- [x] CRUD Transaksi lengkap
-- [x] Upload gambar bukti transaksi
-- [x] Dashboard dengan ringkasan keuangan
-- [x] Statistik dengan pie chart
-- [x] Export ke Excel
-- [x] Mode offline dengan auto-sync
-- [x] Format mata uang Rupiah
-- [x] Category picker yang bisa di-collapse
-- [x] Tampilan versi aplikasi
-
-### Rencana Pengembangan
-- [ ] Dark mode
-- [ ] Budget bulanan dengan notifikasi
-- [ ] Multi-currency
-- [ ] Recurring transactions
-- [ ] Backup dan restore data
-- [ ] ...
-
----
-
-## Troubleshooting
-
-### Build gagal: "SDK location not found"
-Pastikan file `local.properties` ada dan berisi path SDK:
-```properties
-sdk.dir=/path/to/Android/sdk
-```
-
-### Error: "bucket not found"
-Pastikan storage bucket `receipts` sudah dibuat di Supabase.
-
-### Gambar tidak muncul
-- Periksa apakah bucket `receipts` sudah dibuat
-- Pastikan policy storage sudah dikonfigurasi
-- Cek log dengan tag `ImageRepository`
-
-### Sync tidak berjalan
-- Pastikan device terkoneksi internet
-- Cek log dengan tag `SyncManager`
-- Periksa pending operations di database lokal
-
----
-
-## Kontribusi
-
-Kontribusi sangat diterima! Silakan:
-1. Fork repository ini
-2. Buat branch fitur (`git checkout -b fitur-baru`)
-3. Commit perubahan (`git commit -m 'Tambah fitur baru'`)
-4. Push ke branch (`git push origin fitur-baru`)
-5. Buat Pull Request
 
 ---
 
@@ -321,6 +227,4 @@ Hak Cipta © 2025 DuitTracker
 
 ---
 
-## Pengembang
-
-Dibuat dengan Kotlin, Jetpack Compose, dan Supabase
+Dibuat dengan ❤️ menggunakan Kotlin, Jetpack Compose, dan Supabase
