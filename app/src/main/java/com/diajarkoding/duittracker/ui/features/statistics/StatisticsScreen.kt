@@ -1,7 +1,11 @@
 package com.diajarkoding.duittracker.ui.features.statistics
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +27,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.FileDownload
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,7 +39,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,11 +65,13 @@ import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
 import com.diajarkoding.duittracker.utils.CurrencyFormatter
+import com.diajarkoding.duittracker.utils.DateFormatter
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun StatisticsScreen(
     onNavigateBack: () -> Unit,
+    onCategoryClick: (category: String, year: Int, month: Int, isExpense: Boolean) -> Unit = { _, _, _, _ -> },
     viewModel: StatisticsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -261,7 +271,21 @@ fun StatisticsScreen(
                     }
 
                     items(uiState.expenseByCategory) { categoryData ->
-                        CategoryRow(categoryData = categoryData, isExpense = true)
+                        val selectedMonth = uiState.availableMonths.getOrNull(uiState.selectedMonthIndex)
+                        CategoryRow(
+                            categoryData = categoryData,
+                            isExpense = true,
+                            onClick = {
+                                selectedMonth?.let {
+                                    onCategoryClick(
+                                        categoryData.category.name,
+                                        it.year,
+                                        it.month.ordinal + 1,
+                                        true
+                                    )
+                                }
+                            }
+                        )
                     }
                 } else {
                     item { EmptyChartState(message = "No expenses this month") }
@@ -301,7 +325,21 @@ fun StatisticsScreen(
                     }
 
                     items(uiState.incomeByCategory) { categoryData ->
-                        CategoryRow(categoryData = categoryData, isExpense = false)
+                        val selectedMonth = uiState.availableMonths.getOrNull(uiState.selectedMonthIndex)
+                        CategoryRow(
+                            categoryData = categoryData,
+                            isExpense = false,
+                            onClick = {
+                                selectedMonth?.let {
+                                    onCategoryClick(
+                                        categoryData.category.name,
+                                        it.year,
+                                        it.month.ordinal + 1,
+                                        false
+                                    )
+                                }
+                            }
+                        )
                     }
                 }
 
@@ -427,13 +465,16 @@ private fun PieChart(
 @Composable
 private fun CategoryRow(
     categoryData: CategoryData,
-    isExpense: Boolean
+    isExpense: Boolean,
+    onClick: () -> Unit
 ) {
     val categoryColor = CategoryUtils.getColor(categoryData.category)
     val categoryIcon = CategoryUtils.getIcon(categoryData.category)
 
     NeoCardFlat(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
         cornerRadius = NeoDimens.cornerRadius,
         borderWidth = NeoDimens.borderWidth
     ) {
@@ -487,6 +528,15 @@ private fun CategoryRow(
                     color = NeoColors.MediumGray
                 )
             }
+
+            Spacer(modifier = Modifier.width(NeoSpacing.xs))
+
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = "View transactions",
+                modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                tint = NeoColors.MediumGray
+            )
         }
     }
 }

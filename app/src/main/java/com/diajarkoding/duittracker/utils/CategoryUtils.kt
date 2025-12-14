@@ -2,9 +2,12 @@ package com.diajarkoding.duittracker.utils
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AttachMoney
+import androidx.compose.material.icons.filled.CardGiftcard
+import androidx.compose.material.icons.filled.ChairAlt
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.FitnessCenter
+import androidx.compose.material.icons.filled.LocalGroceryStore
 import androidx.compose.material.icons.filled.MoreHoriz
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.Payments
@@ -31,6 +34,8 @@ object CategoryUtils {
             TransactionCategory.SOCIAL -> Icons.Default.Face
             TransactionCategory.SALARY -> Icons.Default.Payments
             TransactionCategory.INVESTMENT -> Icons.Default.AttachMoney
+            TransactionCategory.DAILY_NEEDS -> Icons.Default.ChairAlt
+            TransactionCategory.GIFT -> Icons.Default.CardGiftcard
             TransactionCategory.OTHER -> Icons.Default.MoreHoriz
         }
     }
@@ -47,11 +52,17 @@ object CategoryUtils {
             TransactionCategory.SOCIAL -> NeoColors.HotPink
             TransactionCategory.SALARY -> NeoColors.IncomeGreen
             TransactionCategory.INVESTMENT -> NeoColors.DeepPurple
+            TransactionCategory.DAILY_NEEDS -> NeoColors.DailyNeedsBlue
+            TransactionCategory.GIFT -> NeoColors.GiftMagenta
             TransactionCategory.OTHER -> NeoColors.OtherGray
         }
     }
 
     fun getDisplayName(category: TransactionCategory): String {
-        return category.name.lowercase().replaceFirstChar { it.uppercase() }
+        return category.name
+            .split("_")
+            .joinToString(" ") { word ->
+                word.lowercase().replaceFirstChar { it.uppercase() }
+            }
     }
 }

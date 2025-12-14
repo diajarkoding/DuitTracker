@@ -413,6 +413,8 @@ private fun CategoryPicker(
             TransactionCategory.HEALTH,
             TransactionCategory.EDUCATION,
             TransactionCategory.SOCIAL,
+            TransactionCategory.GIFT,
+            TransactionCategory.DAILY_NEEDS,
             TransactionCategory.OTHER
         )
     } else {

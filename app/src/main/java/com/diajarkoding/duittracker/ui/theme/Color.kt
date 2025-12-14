@@ -42,6 +42,8 @@ object NeoColors {
     val BillsRed = Color(0xFFEF4444)
     val HealthGreen = Color(0xFF14B8A6)
     val EducationYellow = Color(0xFFEAB308)
+    val DailyNeedsBlue = Color(0xFF0EA5E9)
+    val GiftMagenta = Color(0xFFD946EF)
     val OtherGray = Color(0xFF6B7280)
 }
 

@@ -31,7 +31,8 @@ data class CategoryData(
     val category: TransactionCategory,
     val amount: Double,
     val percentage: Float,
-    val transactionCount: Int
+    val transactionCount: Int,
+    val transactions: List<Transaction> = emptyList()
 )
 
 data class MonthOption(
@@ -161,7 +162,8 @@ class StatisticsViewModel @Inject constructor(
                     category = category,
                     amount = amount,
                     percentage = if (totalExpense > 0) (amount / totalExpense * 100).toFloat() else 0f,
-                    transactionCount = txList.size
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
                 )
             }
             .sortedByDescending { it.amount }
@@ -175,7 +177,8 @@ class StatisticsViewModel @Inject constructor(
                     category = category,
                     amount = amount,
                     percentage = if (totalIncome > 0) (amount / totalIncome * 100).toFloat() else 0f,
-                    transactionCount = txList.size
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
                 )
             }
             .sortedByDescending { it.amount }

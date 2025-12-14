@@ -26,4 +26,12 @@ sealed interface Routes {
 
     @Serializable
     data object Statistics : Routes
+
+    @Serializable
+    data class CategoryTransactions(
+        val category: String,
+        val year: Int,
+        val month: Int,
+        val isExpense: Boolean
+    ) : Routes
 }

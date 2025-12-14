@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.diajarkoding.duittracker.ui.features.auth.LoginScreen
 import com.diajarkoding.duittracker.ui.features.auth.RegisterScreen
+import com.diajarkoding.duittracker.ui.features.categorytransactions.CategoryTransactionsScreen
 import com.diajarkoding.duittracker.ui.features.dashboard.DashboardScreen
 import com.diajarkoding.duittracker.ui.features.detail.TransactionDetailScreen
 import com.diajarkoding.duittracker.ui.features.edit.EditTransactionScreen
@@ -136,6 +137,20 @@ fun DuitTrackerNavGraph(
             StatisticsScreen(
                 onNavigateBack = {
                     navController.popBackStack()
+                },
+                onCategoryClick = { category, year, month, isExpense ->
+                    navController.navigate(Routes.CategoryTransactions(category, year, month, isExpense))
+                }
+            )
+        }
+
+        composable<Routes.CategoryTransactions> {
+            CategoryTransactionsScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onTransactionClick = { transactionId ->
+                    navController.navigate(Routes.TransactionDetail(transactionId))
                 }
             )
         }

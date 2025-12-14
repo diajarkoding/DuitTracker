@@ -58,6 +58,10 @@ enum class TransactionCategory {
     SALARY,
     @SerialName("investment")
     INVESTMENT,
+    @SerialName("daily_needs")
+    DAILY_NEEDS,
+    @SerialName("gift")
+    GIFT,
     @SerialName("other")
     OTHER
 }
