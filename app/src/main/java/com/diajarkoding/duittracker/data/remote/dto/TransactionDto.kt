@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 /**
  * Data Transfer Object for Transaction.
  * Maps exactly to Supabase 'transactions' table schema.
- * 
+ *
  * Supabase Table Schema:
  * - id: UUID PRIMARY KEY
  * - user_id: UUID NOT NULL (references auth.users)
- * - amount: DECIMAL(15,2) NOT NULL
+ * - amount: NUMERIC NOT NULL
  * - category: transaction_category ENUM NOT NULL
  * - type: transaction_type ENUM ('expense', 'income')
  * - account_source: account_source ENUM ('cash', 'bank', 'ewallet')
@@ -18,7 +18,6 @@ import kotlinx.serialization.Serializable
  * - description: TEXT
  * - image_path: TEXT
  * - transaction_date: TIMESTAMPTZ NOT NULL
- * - is_synced: BOOLEAN DEFAULT true
  * - created_at: TIMESTAMPTZ DEFAULT NOW()
  * - updated_at: TIMESTAMPTZ DEFAULT NOW()
  */
@@ -53,9 +52,6 @@ data class TransactionDto(
 
     @SerialName("transaction_date")
     val transactionDate: String,
-
-    @SerialName("is_synced")
-    val isSynced: Boolean = true,
 
     @SerialName("created_at")
     val createdAt: String? = null,
@@ -106,7 +102,7 @@ data class TransactionInsertDto(
 
 /**
  * DTO for User Profile.
- * Maps to Supabase 'profiles' table.
+ * Maps to Supabase 'profiles' table schema.
  */
 @Serializable
 data class ProfileDto(
@@ -124,12 +120,6 @@ data class ProfileDto(
 
     @SerialName("currency")
     val currency: String = "IDR",
-
-    @SerialName("language")
-    val language: String = "id",
-
-    @SerialName("notifications_enabled")
-    val notificationsEnabled: Boolean = true,
 
     @SerialName("monthly_budget")
     val monthlyBudget: Double? = null,

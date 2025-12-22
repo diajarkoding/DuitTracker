@@ -9,10 +9,11 @@ Panduan lengkap untuk setup database Supabase agar bisa terintegrasi dengan apli
 1. [Membuat Akun Supabase](#1-membuat-akun-supabase)
 2. [Membuat Project Baru](#2-membuat-project-baru)
 3. [Membuat Tabel Transactions](#3-membuat-tabel-transactions)
-4. [Mengaktifkan Row Level Security](#4-mengaktifkan-row-level-security)
-5. [Membuat Storage Bucket](#5-membuat-storage-bucket)
-6. [Mendapatkan API Keys](#6-mendapatkan-api-keys)
-7. [Konfigurasi Aplikasi](#7-konfigurasi-aplikasi)
+4. [Membuat Tabel Profiles](#4-membuat-tabel-profiles)
+5. [Mengaktifkan Row Level Security](#5-mengaktifkan-row-level-security)
+6. [Membuat Storage Bucket](#6-membuat-storage-bucket)
+7. [Mendapatkan API Keys](#7-mendapatkan-api-keys)
+8. [Konfigurasi Aplikasi](#8-konfigurasi-aplikasi)
 
 ---
 
@@ -71,29 +72,33 @@ CREATE TYPE transaction_type AS ENUM (
     'expense'
 );
 
--- Buat enum untuk sumber akun
+-- Buat enum untuk sumber akun (lowercase)
 CREATE TYPE account_source AS ENUM (
-    'CASH',
-    'BANK',
-    'EWALLET'
+    'cash',
+    'bank',
+    'ewallet'
 );
 
 -- Buat tabel transactions
 CREATE TABLE transactions (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    amount DOUBLE PRECISION NOT NULL,
+    user_id UUID NOT NULL,
+    amount NUMERIC NOT NULL CHECK (amount > 0),
     category transaction_category NOT NULL,
     type transaction_type NOT NULL,
-    account_source account_source NOT NULL DEFAULT 'CASH',
+    account_source account_source NOT NULL DEFAULT 'cash',
     note TEXT NOT NULL DEFAULT '',
     description TEXT,
-    image_url TEXT,
+    image_path TEXT,
     transaction_date TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    is_synced BOOLEAN NOT NULL DEFAULT TRUE
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Tambahkan foreign key dengan ON DELETE CASCADE
+ALTER TABLE transactions
+ADD CONSTRAINT transactions_user_id_fkey
+    FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE;
 
 -- Buat index untuk performa query
 CREATE INDEX idx_transactions_user_id ON transactions(user_id);
@@ -107,7 +112,50 @@ CREATE INDEX idx_transactions_category ON transactions(category);
 
 ---
 
-## 4. Mengaktifkan Row Level Security
+## 4. Membuat Tabel Profiles
+
+Tabel ini untuk menyimpan data profil pengguna.
+
+```sql
+-- Buat tabel profiles
+CREATE TABLE profiles (
+    id UUID PRIMARY KEY,
+    email TEXT NOT NULL,
+    name TEXT NOT NULL,
+    avatar_url TEXT,
+    currency TEXT DEFAULT 'IDR',
+    monthly_budget NUMERIC,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Tambahkan foreign key dengan ON DELETE CASCADE
+ALTER TABLE profiles
+ADD CONSTRAINT profiles_id_fkey
+    FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE;
+
+-- Trigger untuk auto-create profile saat user register
+CREATE OR REPLACE FUNCTION public.handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO public.profiles (id, email, name)
+    VALUES (
+        NEW.id,
+        NEW.email,
+        COALESCE(NEW.raw_user_meta_data->>'name', split_part(NEW.email, '@', 1))
+    );
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+```
+
+---
+
+## 5. Mengaktifkan Row Level Security
 
 Row Level Security (RLS) memastikan setiap user hanya bisa mengakses data miliknya sendiri.
 
@@ -139,6 +187,20 @@ WITH CHECK (auth.uid() = user_id);
 CREATE POLICY "Users can delete own transactions"
 ON transactions FOR DELETE
 USING (auth.uid() = user_id);
+
+-- Aktifkan RLS pada tabel profiles
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+-- Policy: User hanya bisa view profile miliknya
+CREATE POLICY "Users can view own profile"
+ON profiles FOR SELECT
+USING (auth.uid() = id);
+
+-- Policy: User hanya bisa update profile miliknya
+CREATE POLICY "Users can update own profile"
+ON profiles FOR UPDATE
+USING (auth.uid() = id)
+WITH CHECK (auth.uid() = id);
 ```
 
 2. Klik **Run**
@@ -152,7 +214,7 @@ USING (auth.uid() = user_id);
 
 ---
 
-## 5. Membuat Storage Bucket
+## 6. Membuat Storage Bucket
 
 Storage bucket digunakan untuk menyimpan gambar bukti transaksi (struk/nota).
 
@@ -218,7 +280,7 @@ USING (bucket_id = 'receipts');
 
 ---
 
-## 6. Mendapatkan API Keys
+## 7. Mendapatkan API Keys
 
 1. Di sidebar kiri, klik **Project Settings** (ikon gear)
 2. Klik **API** di submenu
@@ -226,12 +288,11 @@ USING (bucket_id = 'receipts');
    - **Project URL**: `https://xxxxx.supabase.co`
    - **anon public key**: String panjang yang dimulai dengan `eyJ...`
 
-> ⚠️ **Penting**: Jangan share `service_role key` di aplikasi client!
-
+**Penting**: Jangan share `service_role key` di aplikasi client!
 ---
 
 ## 7. Konfigurasi Aplikasi
-
+## 8. Konfigurasi Aplikasi
 ### Edit local.properties
 
 1. Buka project DuitTracker di Android Studio
@@ -254,7 +315,7 @@ Ganti dengan nilai yang Anda catat dari langkah sebelumnya.
 ---
 
 ## Selesai! 🎉
-
+## Selesai!
 Database Supabase sudah siap digunakan. Sekarang Anda bisa:
 
 1. Jalankan aplikasi DuitTracker
@@ -276,3 +337,49 @@ Database Supabase sudah siap digunakan. Sekarang Anda bisa:
 - Pastikan bucket `receipts` sudah dibuat
 - Pastikan bucket bersifat **public**
 - Pastikan storage policies sudah dikonfigurasi
+
+
+### Error: "invalid input value for enum account_source"
+- Pastikan nilai account_source menggunakan lowercase: `cash`, `bank`, `ewallet`
+
+---
+
+## Schema Reference
+
+### Tabel transactions
+
+| Column | Type | Nullable | Default |
+|--------|------|----------|---------|
+| id | UUID | NO | gen_random_uuid() |
+| user_id | UUID | NO | - |
+| amount | NUMERIC | NO | - |
+| category | transaction_category | NO | - |
+| type | transaction_type | NO | - |
+| account_source | account_source | NO | 'cash' |
+| note | TEXT | NO | '' |
+| description | TEXT | YES | - |
+| image_path | TEXT | YES | - |
+| transaction_date | TIMESTAMPTZ | NO | NOW() |
+| created_at | TIMESTAMPTZ | NO | NOW() |
+| updated_at | TIMESTAMPTZ | NO | NOW() |
+
+### Tabel profiles
+
+| Column | Type | Nullable | Default |
+|--------|------|----------|---------|
+| id | UUID | NO | - |
+| email | TEXT | NO | - |
+| name | TEXT | NO | - |
+| avatar_url | TEXT | YES | - |
+| currency | TEXT | YES | 'IDR' |
+| monthly_budget | NUMERIC | YES | - |
+| created_at | TIMESTAMPTZ | YES | NOW() |
+| updated_at | TIMESTAMPTZ | YES | NOW() |
+
+### Enum Values
+
+**transaction_category**: `food`, `transport`, `shopping`, `entertainment`, `bills`, `health`, `education`, `social`, `salary`, `investment`, `gift`, `daily_needs`, `other`
+
+**transaction_type**: `income`, `expense`
+
+**account_source**: `cash`, `bank`, `ewallet`

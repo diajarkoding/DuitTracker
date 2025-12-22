@@ -39,7 +39,6 @@ object TransactionMapper {
             description = description,
             imagePath = imagePath,
             transactionDate = transactionDate,
-            isSynced = true,
             createdAt = createdAt,
             updatedAt = updatedAt ?: getCurrentTimestamp()
         )
@@ -154,7 +153,7 @@ object TransactionMapper {
             description = description,
             imagePath = imagePath,
             transactionDate = LocalDateTime.parse(transactionDate.substringBefore("+")),
-            isSynced = isSynced,
+            isSynced = true,
             createdAt = createdAt?.let { parseTimestamp(it) },
             updatedAt = updatedAt?.let { parseTimestamp(it) }
         )
@@ -175,7 +174,6 @@ object TransactionMapper {
             description = description,
             imagePath = imagePath,
             transactionDate = transactionDate.toString(),
-            isSynced = isSynced,
             createdAt = createdAt?.toString(),
             updatedAt = updatedAt?.toString() ?: getCurrentTimestamp()
         )
