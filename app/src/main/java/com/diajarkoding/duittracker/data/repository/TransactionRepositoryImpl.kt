@@ -4,6 +4,8 @@ import com.diajarkoding.duittracker.data.local.dao.PendingOperationDao
 import com.diajarkoding.duittracker.data.local.dao.TransactionDao
 import com.diajarkoding.duittracker.data.local.entity.OperationType
 import com.diajarkoding.duittracker.data.local.entity.PendingOperationEntity
+import com.diajarkoding.duittracker.data.local.entity.TransactionEntity
+import com.diajarkoding.duittracker.data.local.preferences.SyncPreferences
 import com.diajarkoding.duittracker.data.mapper.TransactionMapper.toDomain
 import com.diajarkoding.duittracker.data.mapper.TransactionMapper.toEntity
 import com.diajarkoding.duittracker.data.mapper.TransactionMapper.toInsertDto
@@ -32,6 +34,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,7 +44,8 @@ class TransactionRepositoryImpl @Inject constructor(
     private val pendingOperationDao: PendingOperationDao,
     private val supabaseClient: SupabaseClient,
     private val networkMonitor: NetworkMonitor,
-    private val imageRepository: ImageRepository
+    private val imageRepository: ImageRepository,
+    private val syncPreferences: SyncPreferences
 ) : ITransactionRepository {
 
     companion object {
@@ -52,8 +56,19 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override val pendingCount: Flow<Int> = pendingOperationDao.getPendingCount()
 
-    private fun getCurrentUserId(): String? {
-        return supabaseClient.auth.currentUserOrNull()?.id
+    /**
+     * Gets the current user ID with offline fallback.
+     * First tries Supabase auth, then falls back to cached user ID from SyncPreferences.
+     */
+    private suspend fun getCurrentUserIdWithFallback(): String? {
+        // First try to get from Supabase auth (works when online or session is loaded)
+        val supabaseUserId = supabaseClient.auth.currentUserOrNull()?.id
+        if (supabaseUserId != null) {
+            return supabaseUserId
+        }
+        
+        // Fallback to cached user ID when offline
+        return syncPreferences.currentUserId.first()
     }
 
     // ==================== READ OPERATIONS ====================
@@ -61,7 +76,7 @@ class TransactionRepositoryImpl @Inject constructor(
     override fun getAllTransactions(): Flow<TransactionResult<List<Transaction>>> = flow {
         emit(TransactionResult.Loading)
 
-        val userId = getCurrentUserId()
+        val userId = getCurrentUserIdWithFallback()
         if (userId == null) {
             emit(TransactionResult.Error("User not authenticated"))
             return@flow
@@ -145,7 +160,7 @@ class TransactionRepositoryImpl @Inject constructor(
     // ==================== WRITE OPERATIONS ====================
 
     override suspend fun addTransaction(transaction: Transaction): TransactionResult<Transaction> = withContext(Dispatchers.IO) {
-        val userId = getCurrentUserId()
+        val userId = getCurrentUserIdWithFallback()
         if (userId == null) {
             return@withContext TransactionResult.Error("User not authenticated")
         }
@@ -172,23 +187,16 @@ class TransactionRepositoryImpl @Inject constructor(
                     message = "Transaction added successfully"
                 )
             } catch (e: Exception) {
-                TransactionResult.Error("Failed to save transaction: ${e.message}")
+                // Fallback to offline mode if network error occurs
+                if (isNetworkError(e)) {
+                    saveTransactionOffline(transactionWithUser)
+                } else {
+                    TransactionResult.Error("Failed to save transaction: ${e.message}")
+                }
             }
         } else {
             // OFFLINE: Save to Room + Add to pending queue
-            try {
-                val entity = transactionWithUser.toEntity(isSynced = false)
-                transactionDao.insertTransaction(entity)
-                
-                addToPendingQueue(OperationType.INSERT, transactionWithUser)
-
-                TransactionResult.Success(
-                    data = transactionWithUser,
-                    message = "Saved offline. Will sync when online."
-                )
-            } catch (e: Exception) {
-                TransactionResult.Error("Failed to save offline: ${e.message}")
-            }
+            saveTransactionOffline(transactionWithUser)
         }
     }
 
@@ -214,25 +222,16 @@ class TransactionRepositoryImpl @Inject constructor(
                     message = "Transaction updated successfully"
                 )
             } catch (e: Exception) {
-                TransactionResult.Error("Failed to update transaction: ${e.message}")
+                // Fallback to offline mode if network error occurs
+                if (isNetworkError(e)) {
+                    updateTransactionOffline(updatedTransaction)
+                } else {
+                    TransactionResult.Error("Failed to update transaction: ${e.message}")
+                }
             }
         } else {
             // OFFLINE: Update Room + Add to pending queue
-            try {
-                val entity = updatedTransaction.toEntity(isSynced = false)
-                transactionDao.updateTransaction(entity)
-                
-                // Remove any existing pending operation for this entity
-                pendingOperationDao.deleteByEntityId(transaction.id)
-                addToPendingQueue(OperationType.UPDATE, updatedTransaction)
-
-                TransactionResult.Success(
-                    data = updatedTransaction,
-                    message = "Updated offline. Will sync when online."
-                )
-            } catch (e: Exception) {
-                TransactionResult.Error("Failed to update offline: ${e.message}")
-            }
+            updateTransactionOffline(updatedTransaction)
         }
     }
 
@@ -265,53 +264,23 @@ class TransactionRepositoryImpl @Inject constructor(
                     message = "Transaction deleted successfully"
                 )
             } catch (e: Exception) {
-                TransactionResult.Error("Failed to delete transaction: ${e.message}")
+                // Fallback to offline mode if network error occurs
+                if (isNetworkError(e)) {
+                    deleteTransactionOffline(id, existingTransaction, imagePath)
+                } else {
+                    TransactionResult.Error("Failed to delete transaction: ${e.message}")
+                }
             }
         } else {
             // OFFLINE: Mark for deletion + Add to pending queue
-            try {
-                if (existingTransaction != null) {
-                    // Remove from local cache
-                    transactionDao.deleteTransactionById(id)
-                    
-                    // Delete local image cache
-                    imageRepository.deleteLocalImage(id)
-                    
-                    // Only add to pending if it was synced (exists on server)
-                    if (existingTransaction.isSynced) {
-                        // Store image path in payload for later deletion when syncing
-                        val payload = if (!imagePath.isNullOrBlank() && !imagePath.startsWith("/")) {
-                            "$id|$imagePath"
-                        } else {
-                            id
-                        }
-                        val pendingOp = PendingOperationEntity(
-                            operationType = OperationType.DELETE.name,
-                            entityId = id,
-                            payload = payload,
-                            createdAt = Clock.System.now().toString()
-                        )
-                        pendingOperationDao.insert(pendingOp)
-                    } else {
-                        // Remove any pending INSERT/UPDATE for this entity
-                        pendingOperationDao.deleteByEntityId(id)
-                    }
-                }
-
-                TransactionResult.Success(
-                    data = Unit,
-                    message = "Deleted offline. Will sync when online."
-                )
-            } catch (e: Exception) {
-                TransactionResult.Error("Failed to delete offline: ${e.message}")
-            }
+            deleteTransactionOffline(id, existingTransaction, imagePath)
         }
     }
 
     // ==================== SYNC OPERATIONS ====================
 
     override suspend fun refreshFromRemote(): TransactionResult<Unit> = withContext(Dispatchers.IO) {
-        val userId = getCurrentUserId()
+        val userId = getCurrentUserIdWithFallback()
         if (userId == null) {
             return@withContext TransactionResult.Error("User not authenticated")
         }
@@ -412,5 +381,103 @@ class TransactionRepositoryImpl @Inject constructor(
             createdAt = Clock.System.now().toString()
         )
         pendingOperationDao.insert(pendingOp)
+    }
+
+    /**
+     * Check if the exception is a network-related error.
+     */
+    private fun isNetworkError(e: Exception): Boolean {
+        return e is UnknownHostException ||
+               e.cause is UnknownHostException ||
+               e.message?.contains("Unable to resolve host") == true ||
+               e.message?.contains("No address associated with hostname") == true ||
+               e.message?.contains("Failed to connect") == true ||
+               e.message?.contains("Network is unreachable") == true ||
+               e.message?.contains("timeout") == true
+    }
+
+    /**
+     * Save transaction offline with pending sync queue.
+     */
+    private suspend fun saveTransactionOffline(transaction: Transaction): TransactionResult<Transaction> {
+        return try {
+            val entity = transaction.toEntity(isSynced = false)
+            transactionDao.insertTransaction(entity)
+            addToPendingQueue(OperationType.INSERT, transaction)
+
+            TransactionResult.Success(
+                data = transaction,
+                message = "Saved offline. Will sync when online."
+            )
+        } catch (e: Exception) {
+            TransactionResult.Error("Failed to save offline: ${e.message}")
+        }
+    }
+
+    /**
+     * Update transaction offline with pending sync queue.
+     */
+    private suspend fun updateTransactionOffline(transaction: Transaction): TransactionResult<Transaction> {
+        return try {
+            val entity = transaction.toEntity(isSynced = false)
+            transactionDao.updateTransaction(entity)
+            
+            // Remove any existing pending operation for this entity
+            pendingOperationDao.deleteByEntityId(transaction.id)
+            addToPendingQueue(OperationType.UPDATE, transaction)
+
+            TransactionResult.Success(
+                data = transaction,
+                message = "Updated offline. Will sync when online."
+            )
+        } catch (e: Exception) {
+            TransactionResult.Error("Failed to update offline: ${e.message}")
+        }
+    }
+
+    /**
+     * Delete transaction offline with pending sync queue.
+     */
+    private suspend fun deleteTransactionOffline(
+        id: String,
+        existingTransaction: TransactionEntity?,
+        imagePath: String?
+    ): TransactionResult<Unit> {
+        return try {
+            if (existingTransaction != null) {
+                // Remove from local cache
+                transactionDao.deleteTransactionById(id)
+                
+                // Delete local image cache
+                imageRepository.deleteLocalImage(id)
+                
+                // Only add to pending if it was synced (exists on server)
+                if (existingTransaction.isSynced) {
+                    // Store image path in payload for later deletion when syncing
+                    val payload = if (!imagePath.isNullOrBlank() && !imagePath.startsWith("/")) {
+                        "$id|$imagePath"
+                    } else {
+                        id
+                    }
+                    val pendingOp = PendingOperationEntity(
+                        operationType = OperationType.DELETE.name,
+                        entityId = id,
+                        payload = payload,
+                        createdAt = Clock.System.now().toString()
+                    )
+                    pendingOperationDao.insert(pendingOp)
+                } else {
+                    // Remove any pending INSERT/UPDATE for this entity
+                    pendingOperationDao.deleteByEntityId(id)
+                }
+            }
+
+            TransactionResult.Success(
+                data = Unit,
+                message = "Deleted offline. Will sync when online."
+            )
+        } catch (e: Exception) {
+            TransactionResult.Error("Failed to delete offline: ${e.message}")
+        }
     }
 }

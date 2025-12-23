@@ -56,6 +56,8 @@ class SupabaseAuthRepository @Inject constructor(
             
             val user = getCurrentUser()
             if (user != null) {
+                // Cache user ID for offline access
+                syncPreferences.setCurrentUserId(user.id)
                 AuthResult.Success(user)
             } else {
                 AuthResult.Error("Failed to get user after login")
@@ -106,7 +108,7 @@ class SupabaseAuthRepository @Inject constructor(
             val session = supabaseClient.auth.currentSessionOrNull()
             if (session != null) {
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
-                User(
+                val user = User(
                     id = session.user?.id ?: "",
                     email = session.user?.email ?: "",
                     name = session.user?.userMetadata?.get("name")?.toString()?.removeSurrounding("\"")
@@ -115,6 +117,11 @@ class SupabaseAuthRepository @Inject constructor(
                     createdAt = now,
                     updatedAt = now
                 )
+                // Cache user ID for offline access
+                if (user.id.isNotBlank()) {
+                    syncPreferences.setCurrentUserId(user.id)
+                }
+                user
             } else {
                 null
             }
