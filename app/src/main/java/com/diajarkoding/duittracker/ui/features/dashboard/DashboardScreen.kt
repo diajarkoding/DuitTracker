@@ -22,10 +22,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -48,7 +46,7 @@ import com.diajarkoding.duittracker.data.model.TransactionType
 import com.diajarkoding.duittracker.ui.components.NeoButton
 import com.diajarkoding.duittracker.ui.components.NeoCard
 import com.diajarkoding.duittracker.ui.components.NeoCardFlat
-import com.diajarkoding.duittracker.ui.components.NeoIconButton
+import com.diajarkoding.duittracker.ui.components.NeoAvatar
 import com.diajarkoding.duittracker.ui.components.NeoSkeletonDashboard
 import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.OfflineIndicator
@@ -67,7 +65,7 @@ import kotlinx.datetime.LocalDate
 fun DashboardScreen(
     onAddClick: () -> Unit,
     onTransactionClick: (String) -> Unit,
-    onStatsClick: () -> Unit = {},
+    onProfileClick: () -> Unit = {},
     onLogout: () -> Unit = {},
     shouldRefresh: Boolean = false,
     onRefreshHandled: () -> Unit = {},
@@ -120,29 +118,10 @@ fun DashboardScreen(
                         color = NeoColors.PureBlack
                     )
                 }
-                Row(horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
-                    NeoIconButton(
-                        onClick = onStatsClick,
-                        backgroundColor = NeoColors.PureWhite
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.BarChart,
-                            contentDescription = "Statistics",
-                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                        )
-                    }
-                    NeoIconButton(
-                        onClick = viewModel::logout,
-                        backgroundColor = NeoColors.PureBlack,
-                        contentColor = NeoColors.PureWhite
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.Logout,
-                            contentDescription = "Logout",
-                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                        )
-                    }
-                }
+                NeoAvatar(
+                    userName = uiState.userName,
+                    onClick = onProfileClick
+                )
             }
         },
         floatingActionButton = {

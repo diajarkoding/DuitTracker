@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DuitTracker</string>
+
+    <!-- Common -->
+    <string name="cancel">Batal</string>
+    <string name="confirm">Konfirmasi</string>
+    <string name="save">Simpan</string>
+    <string name="delete">Hapus</string>
+    <string name="edit">Ubah</string>
+    <string name="back">Kembali</string>
+    <string name="loading">Memuat...</string>
+    <string name="error">Error</string>
+    <string name="success">Berhasil</string>
+
+    <!-- Greetings -->
+    <string name="greeting_morning">Selamat Pagi</string>
+    <string name="greeting_afternoon">Selamat Siang</string>
+    <string name="greeting_evening">Selamat Malam</string>
+
+    <!-- Dashboard -->
+    <string name="balance">Saldo</string>
+    <string name="income">Pemasukan</string>
+    <string name="expense">Pengeluaran</string>
+    <string name="no_transactions_month">Belum ada transaksi bulan ini</string>
+    <string name="no_transactions">Belum ada transaksi</string>
+    <string name="transactions_count">%d transaksi</string>
+    <string name="offline_message">Anda offline. Menampilkan data tersimpan.</string>
+    <string name="pending_sync">%d menunggu sinkronisasi</string>
+    <string name="daily">Harian</string>
+    <string name="monthly">Bulanan</string>
+    <string name="weekly">Mingguan</string>
+    <string name="all">Semua</string>
+
+    <!-- Profile -->
+    <string name="profile">Profil</string>
+    <string name="statistics">Statistik</string>
+    <string name="language">Bahasa</string>
+    <string name="daily_reminder">Pengingat Harian</string>
+    <string name="reminder_time">Waktu Pengingat</string>
+    <string name="set_reminder_time">Atur Waktu Pengingat</string>
+    <string name="logout">Keluar</string>
+    <string name="logout_confirmation">Apakah Anda yakin ingin keluar?</string>
+
+    <!-- Notification -->
+    <string name="notification_channel_name">Pengingat Harian</string>
+    <string name="notification_channel_description">Mengingatkan Anda untuk mencatat pengeluaran harian</string>
+    <string name="notification_title">Pengingat DuitTracker</string>
+    <string name="notification_message">Jangan lupa catat pengeluaran hari ini! 📝</string>
+
+    <!-- Add/Edit Transaction -->
+    <string name="add_transaction">Tambah Transaksi</string>
+    <string name="edit_transaction">Ubah Transaksi</string>
+    <string name="amount">Jumlah</string>
+    <string name="enter_amount">Masukkan jumlah</string>
+    <string name="note">Catatan</string>
+    <string name="enter_note">Masukkan catatan</string>
+    <string name="description">Deskripsi</string>
+    <string name="enter_description">Masukkan deskripsi (opsional)</string>
+    <string name="category">Kategori</string>
+    <string name="account_source">Sumber Akun</string>
+    <string name="add_image">Tambah Gambar</string>
+    <string name="remove_image">Hapus Gambar</string>
+    <string name="transaction_added">Transaksi berhasil ditambahkan</string>
+    <string name="transaction_updated">Transaksi berhasil diperbarui</string>
+    <string name="transaction_deleted">Transaksi berhasil dihapus</string>
+    <string name="saved_offline">Disimpan offline. Akan disinkronkan saat online.</string>
+
+    <!-- Transaction Detail -->
+    <string name="transaction_detail">Detail Transaksi</string>
+    <string name="delete_confirmation">Apakah Anda yakin ingin menghapus transaksi ini?</string>
+
+    <!-- Statistics -->
+    <string name="expense_by_category">Pengeluaran per Kategori</string>
+    <string name="income_by_category">Pemasukan per Kategori</string>
+    <string name="no_expenses_month">Tidak ada pengeluaran bulan ini</string>
+    <string name="no_income_month">Tidak ada pemasukan bulan ini</string>
+    <string name="total">Total</string>
+    <string name="export_to_excel">Ekspor ke Excel</string>
+    <string name="export_report">Ekspor Laporan</string>
+    <string name="export_all_data">Semua Data (Lengkap)</string>
+    <string name="export_monthly">Laporan Bulanan</string>
+    <string name="export_weekly">Laporan Mingguan</string>
+    <string name="export_by_category">Per Kategori</string>
+    <string name="export_success">Laporan berhasil diekspor</string>
+    <string name="export_failed">Gagal mengekspor laporan</string>
+
+    <!-- Categories -->
+    <string name="category_food">Makanan</string>
+    <string name="category_transport">Transportasi</string>
+    <string name="category_shopping">Belanja</string>
+    <string name="category_entertainment">Hiburan</string>
+    <string name="category_bills">Tagihan</string>
+    <string name="category_health">Kesehatan</string>
+    <string name="category_education">Pendidikan</string>
+    <string name="category_social">Sosial</string>
+    <string name="category_salary">Gaji</string>
+    <string name="category_investment">Investasi</string>
+    <string name="category_daily_needs">Kebutuhan Harian</string>
+    <string name="category_gift">Hadiah</string>
+    <string name="category_other">Lainnya</string>
+
+    <!-- Account Sources -->
+    <string name="account_cash">Tunai</string>
+    <string name="account_bank">Bank</string>
+    <string name="account_ewallet">E-Wallet</string>
+
+    <!-- Auth -->
+    <string name="login">Masuk</string>
+    <string name="register">Daftar</string>
+    <string name="email">Email</string>
+    <string name="password">Kata Sandi</string>
+    <string name="confirm_password">Konfirmasi Kata Sandi</string>
+    <string name="name">Nama</string>
+    <string name="dont_have_account">Belum punya akun?</string>
+    <string name="already_have_account">Sudah punya akun?</string>
+    <string name="login_success">Berhasil masuk</string>
+    <string name="register_success">Pendaftaran berhasil</string>
+
+    <!-- Validation -->
+    <string name="error_invalid_amount">Masukkan jumlah yang valid</string>
+    <string name="error_empty_note">Masukkan catatan</string>
+    <string name="error_empty_email">Masukkan email Anda</string>
+    <string name="error_empty_password">Masukkan kata sandi Anda</string>
+    <string name="error_password_mismatch">Kata sandi tidak cocok</string>
+    <string name="error_user_not_authenticated">Pengguna tidak terautentikasi</string>
+</resources>

@@ -16,6 +16,7 @@ import com.diajarkoding.duittracker.ui.features.dashboard.DashboardScreen
 import com.diajarkoding.duittracker.ui.features.detail.TransactionDetailScreen
 import com.diajarkoding.duittracker.ui.features.edit.EditTransactionScreen
 import com.diajarkoding.duittracker.ui.features.input.AddTransactionScreen
+import com.diajarkoding.duittracker.ui.features.profile.ProfileScreen
 import com.diajarkoding.duittracker.ui.features.splash.SplashScreen
 import com.diajarkoding.duittracker.ui.features.statistics.StatisticsScreen
 
@@ -80,8 +81,8 @@ fun DuitTrackerNavGraph(
                 onTransactionClick = { transactionId ->
                     navController.navigate(Routes.TransactionDetail(transactionId))
                 },
-                onStatsClick = {
-                    navController.navigate(Routes.Statistics)
+                onProfileClick = {
+                    navController.navigate(Routes.Profile)
                 },
                 onLogout = {
                     navController.navigate(Routes.Login) {
@@ -151,6 +152,22 @@ fun DuitTrackerNavGraph(
                 },
                 onTransactionClick = { transactionId ->
                     navController.navigate(Routes.TransactionDetail(transactionId))
+                }
+            )
+        }
+
+        composable<Routes.Profile> {
+            ProfileScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                },
+                onNavigateToStatistics = {
+                    navController.navigate(Routes.Statistics)
+                },
+                onLogout = {
+                    navController.navigate(Routes.Login) {
+                        popUpTo(Routes.Dashboard) { inclusive = true }
+                    }
                 }
             )
         }

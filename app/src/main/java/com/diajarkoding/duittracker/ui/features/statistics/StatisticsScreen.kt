@@ -51,10 +51,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.diajarkoding.duittracker.R
+import com.diajarkoding.duittracker.ui.components.NeoButtonText
+import com.diajarkoding.duittracker.ui.components.NeoCard
 import com.diajarkoding.duittracker.ui.components.NeoCardFlat
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
 import com.diajarkoding.duittracker.ui.components.NeoSkeletonStatistics
@@ -93,6 +98,17 @@ fun StatisticsScreen(
         }
     }
 
+    // Export Dialog
+    if (uiState.showExportDialog) {
+        ExportOptionsDialog(
+            onDismiss = { viewModel.hideExportDialog() },
+            onExportType = { exportType ->
+                viewModel.exportWithType(exportType)
+            },
+            isExporting = uiState.isExporting
+        )
+    }
+
     Scaffold(
         topBar = {
             Row(
@@ -122,7 +138,7 @@ fun StatisticsScreen(
                 )
                 // Export Button
                 NeoIconButton(
-                    onClick = { if (!uiState.isExporting) viewModel.exportToExcel() },
+                    onClick = { if (!uiState.isExporting) viewModel.showExportDialog() },
                     backgroundColor = NeoColors.IncomeGreen
                 ) {
                     if (uiState.isExporting) {
@@ -161,15 +177,35 @@ fun StatisticsScreen(
                     .padding(horizontal = NeoSpacing.lg),
                 verticalArrangement = Arrangement.spacedBy(NeoSpacing.md)
             ) {
-                // Month Selector
+                // Period Selector (All / Monthly / Weekly)
                 item {
-                    MonthSelector(
-                        currentMonth = uiState.selectedMonthName,
-                        canGoNext = uiState.selectedMonthIndex > 0,
-                        canGoPrevious = uiState.selectedMonthIndex < uiState.availableMonths.size - 1,
-                        onPrevious = viewModel::previousMonth,
-                        onNext = viewModel::nextMonth
+                    PeriodSelector(
+                        selectedPeriod = uiState.selectedPeriod,
+                        onPeriodChange = viewModel::setPeriod
                     )
+                }
+
+                // Date Range Selector based on period
+                if (uiState.selectedPeriod != StatisticsPeriod.ALL) {
+                    item {
+                        when (uiState.selectedPeriod) {
+                            StatisticsPeriod.MONTHLY -> MonthSelector(
+                                currentMonth = uiState.selectedMonthName,
+                                canGoNext = uiState.selectedMonthIndex > 0,
+                                canGoPrevious = uiState.selectedMonthIndex < uiState.availableMonths.size - 1,
+                                onPrevious = viewModel::previousMonth,
+                                onNext = viewModel::nextMonth
+                            )
+                            StatisticsPeriod.WEEKLY -> MonthSelector(
+                                currentMonth = uiState.selectedWeekName,
+                                canGoNext = uiState.selectedWeekIndex > 0,
+                                canGoPrevious = uiState.selectedWeekIndex < uiState.availableWeeks.size - 1,
+                                onPrevious = viewModel::previousWeek,
+                                onNext = viewModel::nextWeek
+                            )
+                            else -> {}
+                        }
+                    }
                 }
 
                 // Summary Cards - Neobrutalism style
@@ -553,6 +589,131 @@ private fun EmptyChartState(message: String) {
             text = message,
             style = MaterialTheme.typography.bodyMedium,
             color = NeoColors.MediumGray
+        )
+    }
+}
+
+@Composable
+private fun PeriodSelector(
+    selectedPeriod: StatisticsPeriod,
+    onPeriodChange: (StatisticsPeriod) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+            .background(NeoColors.LightGray.copy(alpha = 0.5f))
+            .padding(NeoSpacing.xs),
+        horizontalArrangement = Arrangement.spacedBy(NeoSpacing.xs)
+    ) {
+        StatisticsPeriod.entries.forEach { period ->
+            val isSelected = period == selectedPeriod
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                    .background(if (isSelected) NeoColors.PureBlack else Color.Transparent)
+                    .clickable { onPeriodChange(period) }
+                    .padding(vertical = NeoSpacing.md),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = when (period) {
+                        StatisticsPeriod.ALL -> stringResource(R.string.all)
+                        StatisticsPeriod.MONTHLY -> stringResource(R.string.monthly)
+                        StatisticsPeriod.WEEKLY -> stringResource(R.string.weekly)
+                    },
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isSelected) NeoColors.PureWhite else NeoColors.MediumGray
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExportOptionsDialog(
+    onDismiss: () -> Unit,
+    onExportType: (ExportType) -> Unit,
+    isExporting: Boolean
+) {
+    Dialog(onDismissRequest = onDismiss) {
+        NeoCard(
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = NeoColors.PureWhite,
+            shadowOffset = NeoDimens.shadowOffset,
+            cornerRadius = NeoDimens.cornerRadius
+        ) {
+            Column(
+                modifier = Modifier.padding(NeoSpacing.xl),
+                verticalArrangement = Arrangement.spacedBy(NeoSpacing.md)
+            ) {
+                Text(
+                    text = stringResource(R.string.export_report),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = NeoColors.PureBlack
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.sm))
+
+                ExportOptionItem(
+                    title = stringResource(R.string.export_all_data),
+                    onClick = { onExportType(ExportType.ALL_DATA) },
+                    enabled = !isExporting
+                )
+                ExportOptionItem(
+                    title = stringResource(R.string.export_monthly),
+                    onClick = { onExportType(ExportType.MONTHLY) },
+                    enabled = !isExporting
+                )
+                ExportOptionItem(
+                    title = stringResource(R.string.export_weekly),
+                    onClick = { onExportType(ExportType.WEEKLY) },
+                    enabled = !isExporting
+                )
+                ExportOptionItem(
+                    title = stringResource(R.string.export_by_category),
+                    onClick = { onExportType(ExportType.BY_CATEGORY) },
+                    enabled = !isExporting
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.sm))
+
+                NeoButtonText(
+                    text = stringResource(R.string.cancel),
+                    onClick = onDismiss,
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.LightGray,
+                    contentColor = NeoColors.PureBlack,
+                    enabled = !isExporting
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExportOptionItem(
+    title: String,
+    onClick: () -> Unit,
+    enabled: Boolean = true
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+            .background(if (enabled) NeoColors.Background else NeoColors.LightGray)
+            .clickable(enabled = enabled, onClick = onClick)
+            .padding(NeoSpacing.lg),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Medium,
+            color = if (enabled) NeoColors.PureBlack else NeoColors.MediumGray
         )
     }
 }

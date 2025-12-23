@@ -34,4 +34,7 @@ sealed interface Routes {
         val month: Int,
         val isExpense: Boolean
     ) : Routes
+
+    @Serializable
+    data object Profile : Routes
 }

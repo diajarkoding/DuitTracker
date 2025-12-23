@@ -21,11 +21,23 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.isoDayNumber
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import javax.inject.Inject
+
+enum class StatisticsPeriod {
+    ALL, MONTHLY, WEEKLY
+}
+
+enum class ExportType {
+    ALL_DATA, MONTHLY, WEEKLY, BY_CATEGORY
+}
 
 data class CategoryData(
     val category: TransactionCategory,
@@ -41,17 +53,31 @@ data class MonthOption(
     val displayName: String
 )
 
+data class WeekOption(
+    val startDate: LocalDate,
+    val endDate: LocalDate,
+    val displayName: String
+)
+
 data class StatisticsUiState(
     val expenseByCategory: List<CategoryData> = emptyList(),
     val incomeByCategory: List<CategoryData> = emptyList(),
     val totalExpense: Double = 0.0,
     val totalIncome: Double = 0.0,
+    val selectedPeriod: StatisticsPeriod = StatisticsPeriod.MONTHLY,
     val selectedMonthName: String = "",
     val availableMonths: List<MonthOption> = emptyList(),
     val selectedMonthIndex: Int = 0,
+    val availableWeeks: List<WeekOption> = emptyList(),
+    val selectedWeekIndex: Int = 0,
+    val selectedWeekName: String = "",
     val isLoading: Boolean = true,
     val isExporting: Boolean = false,
-    val error: String? = null
+    val error: String? = null,
+    val showExportDialog: Boolean = false,
+    val transactionCount: Int = 0,
+    val allTimeIncome: Double = 0.0,
+    val allTimeExpense: Double = 0.0
 )
 
 sealed class StatisticsEvent {
@@ -245,6 +271,267 @@ class StatisticsViewModel @Inject constructor(
                 totalIncome = state.totalIncome,
                 monthName = state.selectedMonthName
             )
+
+            result.onSuccess { uri ->
+                val shareIntent = excelExportRepository.createShareIntent(uri)
+                _events.emit(StatisticsEvent.ShareExcel(shareIntent))
+                _events.emit(StatisticsEvent.ShowSnackbar("Report exported successfully!", SnackbarType.SUCCESS))
+            }.onFailure { error ->
+                _events.emit(StatisticsEvent.ShowSnackbar("Export failed: ${error.message}", SnackbarType.ERROR))
+            }
+
+            _uiState.update { it.copy(isExporting = false) }
+        }
+    }
+
+    fun setPeriod(period: StatisticsPeriod) {
+        _uiState.update { it.copy(selectedPeriod = period) }
+        when (period) {
+            StatisticsPeriod.ALL -> processAllTimeStatistics()
+            StatisticsPeriod.MONTHLY -> processTransactions()
+            StatisticsPeriod.WEEKLY -> processWeeklyStatistics()
+        }
+    }
+
+    private fun processAllTimeStatistics() {
+        val expenses = allTransactions.filter { it.type == TransactionType.EXPENSE }
+        val incomes = allTransactions.filter { it.type == TransactionType.INCOME }
+
+        val totalExpense = expenses.sumOf { it.amount }
+        val totalIncome = incomes.sumOf { it.amount }
+
+        val expenseByCategory = expenses
+            .groupBy { it.category }
+            .map { (category, txList) ->
+                val amount = txList.sumOf { it.amount }
+                CategoryData(
+                    category = category,
+                    amount = amount,
+                    percentage = if (totalExpense > 0) (amount / totalExpense * 100).toFloat() else 0f,
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
+                )
+            }
+            .sortedByDescending { it.amount }
+
+        val incomeByCategory = incomes
+            .groupBy { it.category }
+            .map { (category, txList) ->
+                val amount = txList.sumOf { it.amount }
+                CategoryData(
+                    category = category,
+                    amount = amount,
+                    percentage = if (totalIncome > 0) (amount / totalIncome * 100).toFloat() else 0f,
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
+                )
+            }
+            .sortedByDescending { it.amount }
+
+        _uiState.update { state ->
+            state.copy(
+                expenseByCategory = expenseByCategory,
+                incomeByCategory = incomeByCategory,
+                totalExpense = totalExpense,
+                totalIncome = totalIncome,
+                selectedMonthName = "All Time",
+                transactionCount = allTransactions.size,
+                allTimeIncome = totalIncome,
+                allTimeExpense = totalExpense
+            )
+        }
+    }
+
+    private fun processWeeklyStatistics() {
+        val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val today = now.date
+        val selectedIndex = _uiState.value.selectedWeekIndex
+
+        // Generate available weeks from transactions
+        val availableWeeks = allTransactions
+            .map { it.transactionDate.date }
+            .map { getWeekRange(it) }
+            .distinctBy { "${it.first}" }
+            .map { (start, end) ->
+                WeekOption(
+                    startDate = start,
+                    endDate = end,
+                    displayName = "${formatShortDate(start)} - ${formatShortDate(end)}"
+                )
+            }
+            .sortedByDescending { it.startDate }
+            .ifEmpty {
+                val (start, end) = getWeekRange(today)
+                listOf(WeekOption(start, end, "${formatShortDate(start)} - ${formatShortDate(end)}"))
+            }
+
+        val safeIndex = selectedIndex.coerceIn(0, (availableWeeks.size - 1).coerceAtLeast(0))
+        val selectedWeek = availableWeeks.getOrNull(safeIndex) ?: availableWeeks.first()
+
+        val weekTransactions = allTransactions.filter { tx ->
+            val date = tx.transactionDate.date
+            date >= selectedWeek.startDate && date <= selectedWeek.endDate
+        }
+
+        val expenses = weekTransactions.filter { it.type == TransactionType.EXPENSE }
+        val incomes = weekTransactions.filter { it.type == TransactionType.INCOME }
+
+        val totalExpense = expenses.sumOf { it.amount }
+        val totalIncome = incomes.sumOf { it.amount }
+
+        val expenseByCategory = expenses
+            .groupBy { it.category }
+            .map { (category, txList) ->
+                val amount = txList.sumOf { it.amount }
+                CategoryData(
+                    category = category,
+                    amount = amount,
+                    percentage = if (totalExpense > 0) (amount / totalExpense * 100).toFloat() else 0f,
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
+                )
+            }
+            .sortedByDescending { it.amount }
+
+        val incomeByCategory = incomes
+            .groupBy { it.category }
+            .map { (category, txList) ->
+                val amount = txList.sumOf { it.amount }
+                CategoryData(
+                    category = category,
+                    amount = amount,
+                    percentage = if (totalIncome > 0) (amount / totalIncome * 100).toFloat() else 0f,
+                    transactionCount = txList.size,
+                    transactions = txList.sortedByDescending { it.transactionDate }
+                )
+            }
+            .sortedByDescending { it.amount }
+
+        _uiState.update { state ->
+            state.copy(
+                expenseByCategory = expenseByCategory,
+                incomeByCategory = incomeByCategory,
+                totalExpense = totalExpense,
+                totalIncome = totalIncome,
+                availableWeeks = availableWeeks,
+                selectedWeekIndex = safeIndex,
+                selectedWeekName = selectedWeek.displayName,
+                transactionCount = weekTransactions.size
+            )
+        }
+    }
+
+    private fun getWeekRange(date: LocalDate): Pair<LocalDate, LocalDate> {
+        val dayOfWeek = date.dayOfWeek.isoDayNumber
+        val startOfWeek = date.minus(dayOfWeek - 1, DateTimeUnit.DAY)
+        val endOfWeek = startOfWeek.plus(6, DateTimeUnit.DAY)
+        return Pair(startOfWeek, endOfWeek)
+    }
+
+    private fun formatShortDate(date: LocalDate): String {
+        return "${date.dayOfMonth}/${date.monthNumber}"
+    }
+
+    fun selectWeek(index: Int) {
+        _uiState.update { it.copy(selectedWeekIndex = index) }
+        processWeeklyStatistics()
+    }
+
+    fun previousWeek() {
+        val currentIndex = _uiState.value.selectedWeekIndex
+        val maxIndex = _uiState.value.availableWeeks.size - 1
+        if (currentIndex < maxIndex) {
+            selectWeek(currentIndex + 1)
+        }
+    }
+
+    fun nextWeek() {
+        val currentIndex = _uiState.value.selectedWeekIndex
+        if (currentIndex > 0) {
+            selectWeek(currentIndex - 1)
+        }
+    }
+
+    fun showExportDialog() {
+        _uiState.update { it.copy(showExportDialog = true) }
+    }
+
+    fun hideExportDialog() {
+        _uiState.update { it.copy(showExportDialog = false) }
+    }
+
+    fun exportWithType(exportType: ExportType) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isExporting = true, showExportDialog = false) }
+
+            val state = _uiState.value
+
+            val result = when (exportType) {
+                ExportType.ALL_DATA -> {
+                    excelExportRepository.exportToExcel(
+                        transactions = allTransactions,
+                        expenseByCategory = state.expenseByCategory,
+                        incomeByCategory = state.incomeByCategory,
+                        totalExpense = allTransactions.filter { it.type == TransactionType.EXPENSE }.sumOf { it.amount },
+                        totalIncome = allTransactions.filter { it.type == TransactionType.INCOME }.sumOf { it.amount },
+                        monthName = "All_Data"
+                    )
+                }
+                ExportType.MONTHLY -> {
+                    val selectedMonth = state.availableMonths.getOrNull(state.selectedMonthIndex)
+                    if (selectedMonth != null) {
+                        val startOfMonth = LocalDate(selectedMonth.year, selectedMonth.month, 1)
+                        val endOfMonth = if (selectedMonth.month == Month.DECEMBER) {
+                            LocalDate(selectedMonth.year + 1, Month.JANUARY, 1)
+                        } else {
+                            LocalDate(selectedMonth.year, selectedMonth.month.ordinal + 2, 1)
+                        }
+                        val monthTransactions = allTransactions.filter { tx ->
+                            val date = tx.transactionDate.date
+                            date >= startOfMonth && date < endOfMonth
+                        }
+                        excelExportRepository.exportToExcel(
+                            transactions = monthTransactions,
+                            expenseByCategory = state.expenseByCategory,
+                            incomeByCategory = state.incomeByCategory,
+                            totalExpense = state.totalExpense,
+                            totalIncome = state.totalIncome,
+                            monthName = state.selectedMonthName
+                        )
+                    } else {
+                        Result.failure(Exception("No month selected"))
+                    }
+                }
+                ExportType.WEEKLY -> {
+                    val selectedWeek = state.availableWeeks.getOrNull(state.selectedWeekIndex)
+                    if (selectedWeek != null) {
+                        val weekTransactions = allTransactions.filter { tx ->
+                            val date = tx.transactionDate.date
+                            date >= selectedWeek.startDate && date <= selectedWeek.endDate
+                        }
+                        excelExportRepository.exportToExcel(
+                            transactions = weekTransactions,
+                            expenseByCategory = state.expenseByCategory,
+                            incomeByCategory = state.incomeByCategory,
+                            totalExpense = state.totalExpense,
+                            totalIncome = state.totalIncome,
+                            monthName = "Week_${selectedWeek.displayName.replace("/", "-").replace(" ", "")}"
+                        )
+                    } else {
+                        Result.failure(Exception("No week selected"))
+                    }
+                }
+                ExportType.BY_CATEGORY -> {
+                    excelExportRepository.exportToExcel(
+                        transactions = allTransactions,
+                        expenseByCategory = state.expenseByCategory,
+                        incomeByCategory = state.incomeByCategory,
+                        totalExpense = state.totalExpense,
+                        totalIncome = state.totalIncome,
+                        monthName = "By_Category"
+                    )
+                }
+            }
 
             result.onSuccess { uri ->
                 val shareIntent = excelExportRepository.createShareIntent(uri)
