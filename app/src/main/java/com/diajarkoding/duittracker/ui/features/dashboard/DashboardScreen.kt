@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicText
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.BarChart
@@ -35,12 +37,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diajarkoding.duittracker.data.model.Transaction
@@ -278,26 +286,17 @@ private fun SummaryCard(
         cornerRadius = NeoDimens.cornerRadius
     ) {
         Column(modifier = Modifier.padding(NeoSpacing.lg)) {
-            // Month and Balance
+            // 1. Month (top left) and Balance indicator (top right)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.Top
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column {
-                    Text(
-                        text = currentMonthName,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = NeoColors.MediumGray
-                    )
-                    Spacer(modifier = Modifier.height(NeoSpacing.xs))
-                    Text(
-                        text = CurrencyFormatter.format(balance),
-                        style = MoneyLargeTextStyle,
-                        color = NeoColors.PureBlack
-                    )
-                }
-                // Balance indicator
+                Text(
+                    text = currentMonthName,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = NeoColors.MediumGray
+                )
                 Box(
                     modifier = Modifier
                         .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
@@ -313,9 +312,23 @@ private fun SummaryCard(
                 }
             }
 
+            // 2. Small space
+            Spacer(modifier = Modifier.height(NeoSpacing.sm))
+
+            // 3. Balance amount with auto-sizing for long amounts
+            AutoResizeText(
+                text = CurrencyFormatter.format(balance),
+                style = MoneyLargeTextStyle,
+                color = NeoColors.PureBlack,
+                maxFontSize = 32.sp,
+                minFontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            // 4. Current spacing
             Spacer(modifier = Modifier.height(NeoSpacing.lg))
 
-            // Income and Expense row - Neobrutalism style
+            // 5. Income and Expense row
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
@@ -559,4 +572,36 @@ private fun TransactionItem(
             )
         }
     }
+}
+
+@Composable
+private fun AutoResizeText(
+    text: String,
+    style: TextStyle,
+    color: androidx.compose.ui.graphics.Color,
+    maxFontSize: androidx.compose.ui.unit.TextUnit,
+    minFontSize: androidx.compose.ui.unit.TextUnit,
+    modifier: Modifier = Modifier
+) {
+    var fontSize by remember { androidx.compose.runtime.mutableStateOf(maxFontSize) }
+    var readyToDraw by remember { androidx.compose.runtime.mutableStateOf(false) }
+
+    Text(
+        text = text,
+        style = style.copy(fontSize = fontSize),
+        color = color,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        softWrap = false,
+        modifier = modifier.drawWithContent {
+            if (readyToDraw) drawContent()
+        },
+        onTextLayout = { textLayoutResult ->
+            if (textLayoutResult.didOverflowWidth && fontSize > minFontSize) {
+                fontSize = (fontSize.value - 1f).sp
+            } else {
+                readyToDraw = true
+            }
+        }
+    )
 }
