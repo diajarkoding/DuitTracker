@@ -39,7 +39,8 @@ fun DuitTrackerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = NeoBackground.toArgb()
+            window.statusBarColor = NeoColors.Background.toArgb()
+            window.navigationBarColor = NeoColors.Background.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
         }
     }

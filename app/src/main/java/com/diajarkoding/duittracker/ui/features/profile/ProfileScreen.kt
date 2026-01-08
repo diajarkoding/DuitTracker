@@ -1,9 +1,5 @@
  package com.diajarkoding.duittracker.ui.features.profile
- 
- import android.Manifest
- import android.os.Build
- import androidx.activity.compose.rememberLauncherForActivityResult
- import androidx.activity.result.contract.ActivityResultContracts
+
  import androidx.compose.foundation.background
  import androidx.compose.foundation.clickable
  import androidx.compose.foundation.layout.Arrangement
@@ -23,19 +19,13 @@
  import androidx.compose.foundation.verticalScroll
  import androidx.compose.material.icons.Icons
  import androidx.compose.material.icons.automirrored.filled.ArrowBack
- import androidx.compose.material.icons.automirrored.filled.Logout
  import androidx.compose.material.icons.filled.BarChart
  import androidx.compose.material.icons.filled.ChevronRight
- import androidx.compose.material.icons.filled.Language
- import androidx.compose.material.icons.filled.Notifications
- import androidx.compose.material.icons.filled.Schedule
  import androidx.compose.material3.AlertDialog
  import androidx.compose.material3.Icon
  import androidx.compose.material3.MaterialTheme
  import androidx.compose.material3.Scaffold
  import androidx.compose.material3.SnackbarHostState
- import androidx.compose.material3.Switch
- import androidx.compose.material3.SwitchDefaults
  import androidx.compose.material3.Text
  import androidx.compose.material3.TextButton
  import androidx.compose.runtime.Composable
@@ -52,14 +42,12 @@
  import androidx.hilt.navigation.compose.hiltViewModel
  import androidx.lifecycle.compose.collectAsStateWithLifecycle
  import com.diajarkoding.duittracker.R
- import com.diajarkoding.duittracker.data.local.preferences.AppLanguage
  import com.diajarkoding.duittracker.ui.components.NeoAvatar
  import com.diajarkoding.duittracker.ui.components.NeoButtonText
  import com.diajarkoding.duittracker.ui.components.NeoCard
  import com.diajarkoding.duittracker.ui.components.NeoCardFlat
  import com.diajarkoding.duittracker.ui.components.NeoIconButton
  import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
- import com.diajarkoding.duittracker.ui.components.NeoTimePickerDialog
  import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
  import com.diajarkoding.duittracker.ui.theme.NeoColors
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
@@ -76,14 +64,6 @@
      val uiState by viewModel.uiState.collectAsStateWithLifecycle()
      val snackbarHostState = remember { SnackbarHostState() }
  
-     val notificationPermissionLauncher = rememberLauncherForActivityResult(
-         ActivityResultContracts.RequestPermission()
-     ) { granted ->
-         if (granted) {
-             viewModel.setReminderEnabled(true)
-         }
-     }
- 
      LaunchedEffect(Unit) {
          viewModel.events.collectLatest { event ->
              when (event) {
@@ -91,22 +71,9 @@
                  is ProfileEvent.ShowSnackbar -> {
                      snackbarHostState.showNeoSnackbar(event.message, event.type)
                  }
-                 is ProfileEvent.LanguageChanged -> {
-                     // Language change will be handled by Activity recreation
-                 }
+                is ProfileEvent.LanguageChanged -> { }
              }
          }
-     }
- 
-     if (uiState.showTimePickerDialog) {
-         NeoTimePickerDialog(
-             initialHour = uiState.reminderHour,
-             initialMinute = uiState.reminderMinute,
-             onTimeSelected = { hour, minute ->
-                 viewModel.setReminderTime(hour, minute)
-             },
-             onDismiss = { viewModel.hideTimePickerDialog() }
-         )
      }
  
      if (uiState.showLogoutDialog) {
@@ -225,174 +192,8 @@
                  onClick = onNavigateToStatistics
              )
  
-             Spacer(modifier = Modifier.height(NeoSpacing.md))
- 
-             // Language Section
-             NeoCardFlat(
-                 modifier = Modifier.fillMaxWidth(),
-                 backgroundColor = NeoColors.PureWhite,
-                 cornerRadius = NeoDimens.cornerRadius
-             ) {
-                 Column(
-                     modifier = Modifier.padding(NeoSpacing.lg)
-                 ) {
-                     Row(
-                         verticalAlignment = Alignment.CenterVertically
-                     ) {
-                         Box(
-                             modifier = Modifier
-                                 .size(40.dp)
-                                 .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                 .background(NeoColors.DeepPurple),
-                             contentAlignment = Alignment.Center
-                         ) {
-                             Icon(
-                                 imageVector = Icons.Default.Language,
-                                 contentDescription = null,
-                                 tint = NeoColors.PureWhite,
-                                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                             )
-                         }
-                         Spacer(modifier = Modifier.width(NeoSpacing.md))
-                         Text(
-                             text = stringResource(R.string.language),
-                             style = MaterialTheme.typography.titleMedium,
-                             fontWeight = FontWeight.SemiBold,
-                             color = NeoColors.PureBlack
-                         )
-                     }
-                     Spacer(modifier = Modifier.height(NeoSpacing.md))
-                     Row(
-                         modifier = Modifier.fillMaxWidth(),
-                         horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
-                     ) {
-                         AppLanguage.entries.forEach { language ->
-                             val isSelected = language == uiState.selectedLanguage
-                             Box(
-                                 modifier = Modifier
-                                     .weight(1f)
-                                     .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                     .background(
-                                         if (isSelected) NeoColors.PureBlack
-                                         else NeoColors.LightGray.copy(alpha = 0.5f)
-                                     )
-                                     .clickable { viewModel.setLanguage(language) }
-                                     .padding(vertical = NeoSpacing.md),
-                                 contentAlignment = Alignment.Center
-                             ) {
-                                 Text(
-                                     text = language.displayName,
-                                     style = MaterialTheme.typography.labelLarge,
-                                     fontWeight = FontWeight.SemiBold,
-                                     color = if (isSelected) NeoColors.PureWhite
-                                     else NeoColors.MediumGray
-                                 )
-                             }
-                         }
-                     }
-                 }
-             }
- 
-             Spacer(modifier = Modifier.height(NeoSpacing.md))
- 
-             // Reminder Section
-             NeoCardFlat(
-                 modifier = Modifier.fillMaxWidth(),
-                 backgroundColor = NeoColors.PureWhite,
-                 cornerRadius = NeoDimens.cornerRadius
-             ) {
-                 Column(
-                     modifier = Modifier.padding(NeoSpacing.lg)
-                 ) {
-                     Row(
-                         modifier = Modifier.fillMaxWidth(),
-                         verticalAlignment = Alignment.CenterVertically,
-                         horizontalArrangement = Arrangement.SpaceBetween
-                     ) {
-                         Row(verticalAlignment = Alignment.CenterVertically) {
-                             Box(
-                                 modifier = Modifier
-                                     .size(40.dp)
-                                     .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                     .background(NeoColors.VividOrange),
-                                 contentAlignment = Alignment.Center
-                             ) {
-                                 Icon(
-                                     imageVector = Icons.Default.Notifications,
-                                     contentDescription = null,
-                                     tint = NeoColors.PureWhite,
-                                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                                 )
-                             }
-                             Spacer(modifier = Modifier.width(NeoSpacing.md))
-                             Text(
-                                 text = stringResource(R.string.daily_reminder),
-                                 style = MaterialTheme.typography.titleMedium,
-                                 fontWeight = FontWeight.SemiBold,
-                                 color = NeoColors.PureBlack
-                             )
-                         }
-                         Switch(
-                             checked = uiState.isReminderEnabled,
-                             onCheckedChange = { enabled ->
-                                 if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                     if (!viewModel.hasNotificationPermission()) {
-                                         notificationPermissionLauncher.launch(
-                                             Manifest.permission.POST_NOTIFICATIONS
-                                         )
-                                         return@Switch
-                                     }
-                                 }
-                                 viewModel.setReminderEnabled(enabled)
-                             },
-                             colors = SwitchDefaults.colors(
-                                 checkedThumbColor = NeoColors.PureWhite,
-                                 checkedTrackColor = NeoColors.IncomeGreen,
-                                 uncheckedThumbColor = NeoColors.PureWhite,
-                                 uncheckedTrackColor = NeoColors.LightGray
-                             )
-                         )
-                     }
-                     if (uiState.isReminderEnabled) {
-                         Spacer(modifier = Modifier.height(NeoSpacing.md))
-                         Row(
-                             modifier = Modifier
-                                 .fillMaxWidth()
-                                 .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                 .background(NeoColors.LightGray.copy(alpha = 0.3f))
-                                 .clickable { viewModel.showTimePickerDialog() }
-                                 .padding(NeoSpacing.md),
-                             verticalAlignment = Alignment.CenterVertically,
-                             horizontalArrangement = Arrangement.SpaceBetween
-                         ) {
-                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                 Icon(
-                                     imageVector = Icons.Default.Schedule,
-                                     contentDescription = null,
-                                     tint = NeoColors.MediumGray,
-                                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                                 )
-                                 Spacer(modifier = Modifier.width(NeoSpacing.sm))
-                                 Text(
-                                     text = stringResource(R.string.reminder_time),
-                                     style = MaterialTheme.typography.bodyMedium,
-                                     color = NeoColors.MediumGray
-                                 )
-                             }
-                             Text(
-                                 text = String.format(
-                                     "%02d:%02d",
-                                     uiState.reminderHour,
-                                     uiState.reminderMinute
-                                 ),
-                                 style = MaterialTheme.typography.titleMedium,
-                                 fontWeight = FontWeight.Bold,
-                                 color = NeoColors.PureBlack
-                             )
-                         }
-                     }
-                 }
-             }
+            // TODO: Language Section - Hidden temporarily
+            // TODO: Reminder Section - Hidden temporarily
  
              Spacer(modifier = Modifier.height(NeoSpacing.xl))
  

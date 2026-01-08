@@ -9,7 +9,7 @@
 
     <!-- Splash Screen Theme - Clean OffWhite background -->
     <style name="Theme.DuitTracker.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/neo_off_white</item>
+        <item name="windowSplashScreenBackground">@color/neo_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash_icon</item>
         <item name="windowSplashScreenIconBackgroundColor">@color/neo_pure_black</item>
         <item name="postSplashScreenTheme">@style/Theme.DuitTracker</item>
