@@ -23,6 +23,8 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
 import javax.inject.Inject
 
 data class EditTransactionUiState(
@@ -36,6 +38,8 @@ data class EditTransactionUiState(
     val isExpense: Boolean = true,
     val category: TransactionCategory = TransactionCategory.FOOD,
     val accountSource: AccountSource = AccountSource.CASH,
+    val selectedDate: LocalDate? = null,
+    val showDatePicker: Boolean = false,
     val isLoading: Boolean = true,
     val isSaving: Boolean = false,
     val isOffline: Boolean = false,
@@ -114,6 +118,7 @@ class EditTransactionViewModel @Inject constructor(
                                 isExpense = transaction.type == TransactionType.EXPENSE,
                                 category = transaction.category,
                                 accountSource = transaction.accountSource,
+                                selectedDate = transaction.transactionDate.date,
                                 isLoading = false,
                                 originalTransaction = transaction
                             )
@@ -173,6 +178,18 @@ class EditTransactionViewModel @Inject constructor(
 
     fun onAccountSourceChange(accountSource: AccountSource) {
         _uiState.update { it.copy(accountSource = accountSource) }
+    }
+
+    fun onDateChange(date: LocalDate) {
+        _uiState.update { it.copy(selectedDate = date, showDatePicker = false) }
+    }
+
+    fun showDatePicker() {
+        _uiState.update { it.copy(showDatePicker = true) }
+    }
+
+    fun hideDatePicker() {
+        _uiState.update { it.copy(showDatePicker = false) }
     }
 
     fun saveTransaction() {
@@ -242,6 +259,10 @@ class EditTransactionViewModel @Inject constructor(
 
             Log.d(TAG, "saveTransaction: Final imagePath: $imagePath")
 
+            val newTransactionDate = state.selectedDate?.let { date ->
+                LocalDateTime(date, originalTransaction.transactionDate.time)
+            } ?: originalTransaction.transactionDate
+
             val updatedTransaction = originalTransaction.copy(
                 amount = amount,
                 category = state.category,
@@ -249,7 +270,8 @@ class EditTransactionViewModel @Inject constructor(
                 accountSource = state.accountSource,
                 note = state.note,
                 description = state.description.ifBlank { null },
-                imagePath = imagePath
+                imagePath = imagePath,
+                transactionDate = newTransactionDate
             )
 
             Log.d(TAG, "saveTransaction: Updated transaction object: $updatedTransaction")

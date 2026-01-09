@@ -68,6 +68,8 @@ import com.diajarkoding.duittracker.data.model.TransactionCategory
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
 import com.diajarkoding.duittracker.ui.components.NeoCardFlat
 import com.diajarkoding.duittracker.ui.components.NeoCurrencyInput
+import com.diajarkoding.duittracker.ui.components.NeoDatePickerDialog
+import com.diajarkoding.duittracker.ui.components.NeoDatePickerField
 import com.diajarkoding.duittracker.ui.components.NeoExpenseIncomeToggle
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
 import com.diajarkoding.duittracker.ui.components.NeoInput
@@ -177,6 +179,16 @@ fun EditTransactionScreen(
         )
     }
 
+    // Date Picker Dialog
+    val selectedDate = uiState.selectedDate
+    if (uiState.showDatePicker && selectedDate != null) {
+        NeoDatePickerDialog(
+            initialDate = selectedDate,
+            onDateSelected = viewModel::onDateChange,
+            onDismiss = viewModel::hideDatePicker
+        )
+    }
+
     Scaffold(
         topBar = {
             Row(
@@ -267,6 +279,15 @@ fun EditTransactionScreen(
                     AccountSourcePicker(
                         selectedSource = uiState.accountSource,
                         onSourceSelect = viewModel::onAccountSourceChange
+                    )
+                }
+
+                // Date Picker
+                uiState.selectedDate?.let { date ->
+                    NeoDatePickerField(
+                        selectedDate = date,
+                        onDateClick = viewModel::showDatePicker,
+                        label = "Date"
                     )
                 }
 

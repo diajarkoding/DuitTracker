@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import java.util.UUID
@@ -34,6 +37,8 @@ data class AddTransactionUiState(
     val isExpense: Boolean = true,
     val category: TransactionCategory = TransactionCategory.FOOD,
     val accountSource: AccountSource = AccountSource.CASH,
+    val selectedDate: LocalDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+    val showDatePicker: Boolean = false,
     val isLoading: Boolean = false,
     val isOffline: Boolean = false
 )
@@ -109,6 +114,18 @@ class AddTransactionViewModel @Inject constructor(
         _uiState.update { it.copy(accountSource = accountSource) }
     }
 
+    fun onDateChange(date: LocalDate) {
+        _uiState.update { it.copy(selectedDate = date, showDatePicker = false) }
+    }
+
+    fun showDatePicker() {
+        _uiState.update { it.copy(showDatePicker = true) }
+    }
+
+    fun hideDatePicker() {
+        _uiState.update { it.copy(showDatePicker = false) }
+    }
+
     fun saveTransaction() {
         viewModelScope.launch {
             Log.d(TAG, "saveTransaction: Starting save process")
@@ -177,7 +194,10 @@ class AddTransactionViewModel @Inject constructor(
                 note = state.note,
                 description = state.description.ifBlank { null },
                 imagePath = imagePath,
-                transactionDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+                transactionDate = LocalDateTime(
+                    state.selectedDate,
+                    Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+                )
             )
 
             Log.d(TAG, "saveTransaction: Created transaction object: $transaction")
