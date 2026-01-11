@@ -392,7 +392,7 @@ fun NeoSkeletonStatistics(
         ) {
             NeoCardFlat(
                 modifier = Modifier.weight(1f),
-                backgroundColor = NeoColors.ExpenseRed.copy(alpha = 0.6f),
+                backgroundColor = NeoColors.IncomeGreen.copy(alpha = 0.6f),
                 cornerRadius = NeoDimens.cornerRadiusSmall,
                 borderWidth = NeoDimens.borderWidth
             ) {
@@ -409,7 +409,7 @@ fun NeoSkeletonStatistics(
             }
             NeoCardFlat(
                 modifier = Modifier.weight(1f),
-                backgroundColor = NeoColors.IncomeGreen.copy(alpha = 0.6f),
+                backgroundColor = NeoColors.ExpenseRed.copy(alpha = 0.6f),
                 cornerRadius = NeoDimens.cornerRadiusSmall,
                 borderWidth = NeoDimens.borderWidth
             ) {
