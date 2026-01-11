@@ -231,4 +231,16 @@
     <string name="month_october">Oktober</string>
     <string name="month_november">November</string>
     <string name="month_december">Desember</string>
+
+    <!-- Language & Reminder Settings -->
+    <string name="language_settings">Pengaturan Bahasa</string>
+    <string name="language_description">Pilih bahasa tampilan aplikasi yang Anda inginkan</string>
+    <string name="select_language">Pilih Bahasa</string>
+    <string name="reminder_settings">Pengaturan Pengingat</string>
+    <string name="reminder_description">Atur pengingat harian untuk mencatat pengeluaran</string>
+    <string name="enable_reminder">Aktifkan Pengingat</string>
+    <string name="reminder_active">Pengingat aktif</string>
+    <string name="reminder_inactive">Pengingat tidak aktif</string>
+    <string name="lunch_reminder_desc">Mengingatkan untuk mencatat pengeluaran pagi</string>
+    <string name="evening_reminder_desc">Pengingat sebelum tidur</string>
 </resources>

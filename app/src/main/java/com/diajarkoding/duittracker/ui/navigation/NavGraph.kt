@@ -16,7 +16,9 @@ import com.diajarkoding.duittracker.ui.features.dashboard.DashboardScreen
 import com.diajarkoding.duittracker.ui.features.detail.TransactionDetailScreen
 import com.diajarkoding.duittracker.ui.features.edit.EditTransactionScreen
 import com.diajarkoding.duittracker.ui.features.input.AddTransactionScreen
+import com.diajarkoding.duittracker.ui.features.language.LanguageScreen
 import com.diajarkoding.duittracker.ui.features.profile.ProfileScreen
+import com.diajarkoding.duittracker.ui.features.reminder.ReminderScreen
 import com.diajarkoding.duittracker.ui.features.splash.SplashScreen
 import com.diajarkoding.duittracker.ui.features.statistics.StatisticsScreen
 
@@ -164,10 +166,32 @@ fun DuitTrackerNavGraph(
                 onNavigateToStatistics = {
                     navController.navigate(Routes.Statistics)
                 },
+                onNavigateToLanguage = {
+                    navController.navigate(Routes.Language)
+                },
+                onNavigateToReminder = {
+                    navController.navigate(Routes.Reminder)
+                },
                 onLogout = {
                     navController.navigate(Routes.Login) {
                         popUpTo(Routes.Dashboard) { inclusive = true }
                     }
+                }
+            )
+        }
+
+        composable<Routes.Language> {
+            LanguageScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+
+        composable<Routes.Reminder> {
+            ReminderScreen(
+                onNavigateBack = {
+                    navController.popBackStack()
                 }
             )
         }

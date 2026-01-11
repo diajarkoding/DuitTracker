@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
@@ -237,6 +238,7 @@ fun EditTransactionScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
                     .imePadding()
+                    .imeNestedScroll()
                     .verticalScroll(rememberScrollState())
                     .padding(NeoSpacing.lg),
                 verticalArrangement = Arrangement.spacedBy(NeoSpacing.lg)

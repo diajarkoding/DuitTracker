@@ -168,4 +168,8 @@ class ProfileViewModel @Inject constructor(
     fun hasNotificationPermission(): Boolean {
         return reminderManager.hasNotificationPermission()
     }
+
+    fun showTestNotification(isLunchTime: Boolean = true) {
+        reminderManager.showReminderNotification(isLunchTime)
+    }
 }

@@ -37,4 +37,10 @@ sealed interface Routes {
 
     @Serializable
     data object Profile : Routes
+
+    @Serializable
+    data object Language : Routes
+
+    @Serializable
+    data object Reminder : Routes
 }

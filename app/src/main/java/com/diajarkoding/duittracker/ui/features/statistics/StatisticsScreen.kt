@@ -214,34 +214,6 @@ fun StatisticsScreen(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
                     ) {
-                        // Expense Card
-                        NeoCardFlat(
-                            modifier = Modifier.weight(1f),
-                            backgroundColor = NeoColors.ExpenseRed,
-                            cornerRadius = NeoDimens.cornerRadiusSmall,
-                            borderWidth = NeoDimens.borderWidth
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(NeoSpacing.lg),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.expense),
-                                    style = MaterialTheme.typography.labelSmall,
-                                    fontWeight = FontWeight.Medium,
-                                    color = NeoColors.PureWhite.copy(alpha = 0.8f)
-                                )
-                                Spacer(modifier = Modifier.height(NeoSpacing.xs))
-                                Text(
-                                    text = CurrencyFormatter.formatCompact(uiState.totalExpense),
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                    color = NeoColors.PureWhite
-                                )
-                            }
-                        }
                         // Income Card
                         NeoCardFlat(
                             modifier = Modifier.weight(1f),
@@ -264,6 +236,34 @@ fun StatisticsScreen(
                                 Spacer(modifier = Modifier.height(NeoSpacing.xs))
                                 Text(
                                     text = CurrencyFormatter.formatCompact(uiState.totalIncome),
+                                    style = MaterialTheme.typography.titleMedium,
+                                    fontWeight = FontWeight.Bold,
+                                    color = NeoColors.PureWhite
+                                )
+                            }
+                        }
+                        // Expense Card
+                        NeoCardFlat(
+                            modifier = Modifier.weight(1f),
+                            backgroundColor = NeoColors.ExpenseRed,
+                            cornerRadius = NeoDimens.cornerRadiusSmall,
+                            borderWidth = NeoDimens.borderWidth
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(NeoSpacing.lg),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.expense),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    fontWeight = FontWeight.Medium,
+                                    color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                                )
+                                Spacer(modifier = Modifier.height(NeoSpacing.xs))
+                                Text(
+                                    text = CurrencyFormatter.formatCompact(uiState.totalExpense),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = NeoColors.PureWhite

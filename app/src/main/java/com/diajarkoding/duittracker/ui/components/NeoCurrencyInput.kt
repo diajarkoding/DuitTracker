@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -20,10 +22,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.onFocusEvent
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.stringResource
@@ -40,6 +44,8 @@ import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -55,6 +61,7 @@ private fun formatNumber(value: String): String {
     return numberFormat.format(numericValue)
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun NeoCurrencyInput(
     value: String,
@@ -72,6 +79,8 @@ fun NeoCurrencyInput(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val shape = RoundedCornerShape(cornerRadius)
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
     
     // Format the display value and keep cursor at end
     val formattedValue = formatNumber(value)
@@ -84,7 +93,18 @@ fun NeoCurrencyInput(
         )
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .bringIntoViewRequester(bringIntoViewRequester)
+            .onFocusEvent { focusState ->
+                if (focusState.isFocused) {
+                    coroutineScope.launch {
+                        delay(200)
+                        bringIntoViewRequester.bringIntoView()
+                    }
+                }
+            }
+    ) {
         if (label != null) {
             Text(
                 text = label,
@@ -182,6 +202,7 @@ fun NeoCurrencyInput(
     }
 }
 
+@OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 @Composable
 fun NeoCurrencyInputFlat(
     value: String,
@@ -197,6 +218,8 @@ fun NeoCurrencyInputFlat(
     keyboardActions: KeyboardActions = KeyboardActions.Default
 ) {
     val shape = RoundedCornerShape(cornerRadius)
+    val bringIntoViewRequester = remember { BringIntoViewRequester() }
+    val coroutineScope = rememberCoroutineScope()
     
     val formattedValue = formatNumber(value)
     var textFieldValue by remember(value) {
@@ -208,7 +231,18 @@ fun NeoCurrencyInputFlat(
         )
     }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .bringIntoViewRequester(bringIntoViewRequester)
+            .onFocusEvent { focusState ->
+                if (focusState.isFocused) {
+                    coroutineScope.launch {
+                        delay(200)
+                        bringIntoViewRequester.bringIntoView()
+                    }
+                }
+            }
+    ) {
         if (label != null) {
             Text(
                 text = label,

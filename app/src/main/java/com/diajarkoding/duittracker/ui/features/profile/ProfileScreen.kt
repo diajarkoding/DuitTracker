@@ -1,12 +1,8 @@
 package com.diajarkoding.duittracker.ui.features.profile
 
-import android.Manifest
-import android.app.Activity
-import android.os.Build
 import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -28,16 +24,13 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.BarChart
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Language
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,15 +38,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diajarkoding.duittracker.R
-import com.diajarkoding.duittracker.data.local.preferences.AppLanguage
 import com.diajarkoding.duittracker.ui.components.NeoAvatar
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
 import com.diajarkoding.duittracker.ui.components.NeoCard
@@ -72,6 +68,8 @@ private const val TAG = "ProfileScreen"
 fun ProfileScreen(
     onNavigateBack: () -> Unit,
     onNavigateToStatistics: () -> Unit,
+    onNavigateToLanguage: () -> Unit,
+    onNavigateToReminder: () -> Unit,
     onLogout: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
@@ -82,14 +80,6 @@ fun ProfileScreen(
     Log.d(TAG, "ProfileScreen composing - selectedLanguage: ${uiState.selectedLanguage.code}")
     Log.d(TAG, "ProfileScreen - current Locale.getDefault(): ${java.util.Locale.getDefault()}")
     Log.d(TAG, "ProfileScreen - context resources locale: ${context.resources.configuration.locales[0]}")
-
-    val notificationPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { granted ->
-        if (granted) {
-            viewModel.setReminderEnabled(true)
-        }
-    }
 
     LaunchedEffect(Unit) {
         viewModel.events.collectLatest { event ->
@@ -102,45 +92,15 @@ fun ProfileScreen(
                     Log.d(TAG, "Event: ShowSnackbar - ${event.message}")
                     snackbarHostState.showNeoSnackbar(event.message, event.type)
                 }
-                is ProfileEvent.LanguageChanged -> {
-                    Log.d(TAG, "Event: LanguageChanged - calling LocaleHelper.setLocale()")
-                    Log.d(TAG, "Event: LanguageChanged - uiState.selectedLanguage: ${uiState.selectedLanguage.code}")
-                    Log.d(TAG, "Event: LanguageChanged - calling Activity.recreate()")
-                    (context as? Activity)?.recreate()
-                }
+                else -> {}
             }
         }
     }
 
     if (uiState.showLogoutDialog) {
-        AlertDialog(
-            onDismissRequest = { viewModel.hideLogoutDialog() },
-            title = {
-                Text(
-                    text = stringResource(R.string.logout),
-                    fontWeight = FontWeight.Bold
-                )
-            },
-            text = {
-                Text(stringResource(R.string.logout_confirmation))
-            },
-            confirmButton = {
-                TextButton(onClick = { viewModel.logout() }) {
-                    Text(
-                        stringResource(R.string.logout),
-                        color = NeoColors.ExpenseRed,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { viewModel.hideLogoutDialog() }) {
-                    Text(
-                        stringResource(R.string.cancel),
-                        color = NeoColors.PureBlack
-                    )
-                }
-            }
+        NeoLogoutDialog(
+            onDismiss = { viewModel.hideLogoutDialog() },
+            onConfirm = { viewModel.logout() }
         )
     }
 
@@ -230,188 +190,23 @@ fun ProfileScreen(
 
             Spacer(modifier = Modifier.height(NeoSpacing.md))
 
-            // Language Section
-            NeoCardFlat(
-                modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
-                cornerRadius = NeoDimens.cornerRadius
-            ) {
-                Column(
-                    modifier = Modifier.padding(NeoSpacing.lg)
-                ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .size(40.dp)
-                                .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                .background(NeoColors.DeepPurple),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Language,
-                                contentDescription = null,
-                                tint = NeoColors.PureWhite,
-                                modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                            )
-                        }
-                        Spacer(modifier = Modifier.width(NeoSpacing.md))
-                        Text(
-                            text = stringResource(R.string.language),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = NeoColors.PureBlack
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(NeoSpacing.md))
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
-                    ) {
-                        AppLanguage.entries.forEach { language ->
-                            val isSelected = language == uiState.selectedLanguage
-                            Box(
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                    .background(
-                                        if (isSelected) NeoColors.PureBlack
-                                        else NeoColors.LightGray.copy(alpha = 0.5f)
-                                    )
-                                    .clickable { viewModel.setLanguage(language) }
-                                    .padding(vertical = NeoSpacing.md),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Text(
-                                    text = language.displayName,
-                                    style = MaterialTheme.typography.labelLarge,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = if (isSelected) NeoColors.PureWhite
-                                    else NeoColors.MediumGray
-                                )
-                            }
-                        }
-                    }
-                }
-            }
+            // Language Menu
+            ProfileMenuItem(
+                icon = Icons.Default.Language,
+                title = stringResource(R.string.language),
+                iconBackgroundColor = NeoColors.DeepPurple,
+                onClick = onNavigateToLanguage
+            )
 
             Spacer(modifier = Modifier.height(NeoSpacing.md))
 
-            // Daily Reminder Section
-            NeoCardFlat(
-                modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
-                cornerRadius = NeoDimens.cornerRadius
-            ) {
-                Column(
-                    modifier = Modifier.padding(NeoSpacing.lg)
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Box(
-                                modifier = Modifier
-                                    .size(40.dp)
-                                    .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                    .background(NeoColors.VividOrange),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Notifications,
-                                    contentDescription = null,
-                                    tint = NeoColors.PureWhite,
-                                    modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                                )
-                            }
-                            Spacer(modifier = Modifier.width(NeoSpacing.md))
-                            Text(
-                                text = stringResource(R.string.daily_reminder),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                                color = NeoColors.PureBlack
-                            )
-                        }
-                        Switch(
-                            checked = uiState.isReminderEnabled,
-                            onCheckedChange = { enabled ->
-                                if (enabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    if (!viewModel.hasNotificationPermission()) {
-                                        notificationPermissionLauncher.launch(
-                                            Manifest.permission.POST_NOTIFICATIONS
-                                        )
-                                        return@Switch
-                                    }
-                                }
-                                viewModel.setReminderEnabled(enabled)
-                            },
-                            colors = SwitchDefaults.colors(
-                                checkedThumbColor = NeoColors.PureWhite,
-                                checkedTrackColor = NeoColors.IncomeGreen,
-                                uncheckedThumbColor = NeoColors.PureWhite,
-                                uncheckedTrackColor = NeoColors.LightGray
-                            )
-                        )
-                    }
-                    if (uiState.isReminderEnabled) {
-                        Spacer(modifier = Modifier.height(NeoSpacing.md))
-                        // Reminder Info
-                        NeoCardFlat(
-                            modifier = Modifier.fillMaxWidth(),
-                            backgroundColor = NeoColors.LightGray.copy(alpha = 0.3f),
-                            cornerRadius = NeoDimens.cornerRadiusSmall
-                        ) {
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(NeoSpacing.md)
-                            ) {
-                                Text(
-                                    text = stringResource(R.string.reminder_schedule),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = NeoColors.MediumGray
-                                )
-                                Spacer(modifier = Modifier.height(NeoSpacing.sm))
-                                Row(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    horizontalArrangement = Arrangement.SpaceBetween
-                                ) {
-                                    Column {
-                                        Text(
-                                            text = stringResource(R.string.lunch_reminder),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = NeoColors.MediumGray
-                                        )
-                                        Text(
-                                            text = "12:00",
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Bold,
-                                            color = NeoColors.PureBlack
-                                        )
-                                    }
-                                    Column(horizontalAlignment = Alignment.End) {
-                                        Text(
-                                            text = stringResource(R.string.evening_reminder),
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = NeoColors.MediumGray
-                                        )
-                                        Text(
-                                            text = "22:00",
-                                            style = MaterialTheme.typography.titleMedium,
-                                            fontWeight = FontWeight.Bold,
-                                            color = NeoColors.PureBlack
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            // Reminder Menu
+            ProfileMenuItem(
+                icon = Icons.Default.Notifications,
+                title = stringResource(R.string.daily_reminder),
+                iconBackgroundColor = NeoColors.VividOrange,
+                onClick = onNavigateToReminder
+            )
 
             Spacer(modifier = Modifier.height(NeoSpacing.xl))
 
@@ -479,6 +274,110 @@ private fun ProfileMenuItem(
                 tint = NeoColors.MediumGray,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
+        }
+    }
+}
+
+@Composable
+private fun NeoLogoutDialog(
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(
+            dismissOnBackPress = true,
+            dismissOnClickOutside = true
+        )
+    ) {
+        Box(
+            modifier = Modifier.padding(NeoSpacing.lg)
+        ) {
+            // Shadow layer
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .padding(top = 4.dp, start = 4.dp)
+                    .clip(RoundedCornerShape(NeoDimens.cornerRadius))
+                    .background(NeoColors.PureBlack)
+            )
+            
+            // Main dialog content
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(NeoDimens.cornerRadius))
+                    .background(NeoColors.PureWhite)
+                    .border(
+                        width = NeoDimens.borderWidth,
+                        color = NeoColors.PureBlack,
+                        shape = RoundedCornerShape(NeoDimens.cornerRadius)
+                    )
+                    .padding(NeoSpacing.xl),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // Icon
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                        .background(NeoColors.ExpenseRed),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = null,
+                        tint = NeoColors.PureWhite,
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
+                
+                Spacer(modifier = Modifier.height(NeoSpacing.lg))
+                
+                // Title
+                Text(
+                    text = stringResource(R.string.logout),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = NeoColors.PureBlack,
+                    textAlign = TextAlign.Center
+                )
+                
+                Spacer(modifier = Modifier.height(NeoSpacing.sm))
+                
+                // Message
+                Text(
+                    text = stringResource(R.string.logout_confirmation),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = NeoColors.MediumGray,
+                    textAlign = TextAlign.Center
+                )
+                
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+                
+                // Buttons
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
+                ) {
+                    // Cancel button
+                    NeoButtonText(
+                        text = stringResource(R.string.cancel),
+                        onClick = onDismiss,
+                        modifier = Modifier.weight(1f),
+                        backgroundColor = NeoColors.LightGray,
+                        contentColor = NeoColors.PureBlack
+                    )
+                    
+                    // Logout button
+                    NeoButtonText(
+                        text = stringResource(R.string.logout),
+                        onClick = onConfirm,
+                        modifier = Modifier.weight(1f),
+                        backgroundColor = NeoColors.ExpenseRed,
+                        contentColor = NeoColors.PureWhite
+                    )
+                }
+            }
         }
     }
 }

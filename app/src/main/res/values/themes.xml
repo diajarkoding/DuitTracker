@@ -2,9 +2,19 @@
 <resources>
     <!-- Main App Theme -->
     <style name="Theme.DuitTracker" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/neo_background</item>
         <item name="android:statusBarColor">@color/neo_background</item>
         <item name="android:navigationBarColor">@color/neo_background</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowAnimationStyle">@style/WindowAnimationTransition</item>
+    </style>
+
+    <!-- Custom animation for activity transitions to reduce flicker -->
+    <style name="WindowAnimationTransition">
+        <item name="android:activityOpenEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityOpenExitAnimation">@android:anim/fade_out</item>
+        <item name="android:activityCloseEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:activityCloseExitAnimation">@android:anim/fade_out</item>
     </style>
 
     <!-- Splash Screen Theme - Clean OffWhite background -->
