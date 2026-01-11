@@ -40,6 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diajarkoding.duittracker.R
@@ -63,6 +64,11 @@ import com.diajarkoding.duittracker.utils.DateFormatter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.datetime.LocalDate
 
+import kotlinx.datetime.LocalDateTime
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.data.model.AccountSource
+import com.diajarkoding.duittracker.data.model.TransactionCategory
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 @Composable
 fun DashboardScreen(
     onAddClick: () -> Unit,
@@ -253,7 +259,9 @@ private fun SummaryCard(
     currentMonthName: String
 ) {
     NeoCard(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth()
+            .padding(bottom = NeoSpacing.sm
+            ),
         backgroundColor = NeoColors.PureWhite,
         shadowOffset = NeoDimens.shadowOffset,
         cornerRadius = NeoDimens.cornerRadius
@@ -265,19 +273,12 @@ private fun SummaryCard(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
-                Column {
-                    Text(
-                        text = currentMonthName,
-                        style = MaterialTheme.typography.labelMedium,
-                        color = NeoColors.MediumGray
-                    )
-                    Spacer(modifier = Modifier.height(NeoSpacing.xs))
-                    Text(
-                        text = CurrencyFormatter.format(balance),
-                        style = MoneyLargeTextStyle,
-                        color = NeoColors.PureBlack
-                    )
-                }
+                Text(
+                    text = currentMonthName,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = NeoColors.MediumGray,
+                    maxLines = 1
+                )
                 // Balance indicator
                 Box(
                     modifier = Modifier
@@ -289,10 +290,22 @@ private fun SummaryCard(
                         text = stringResource(R.string.balance),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoColors.PureBlack,
+                        maxLines = 1,
+                        softWrap = false
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.width(NeoSpacing.lg))
+
+            Text(
+                text = CurrencyFormatter.format(balance),
+                style = MoneyLargeTextStyle,
+                color = NeoColors.PureBlack,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
 
             Spacer(modifier = Modifier.height(NeoSpacing.lg))
 
@@ -542,5 +555,332 @@ private fun TransactionItem(
                 color = if (isExpense) NeoColors.ExpenseRed else NeoColors.IncomeGreen
             )
         }
+    }
+}
+
+// Preview Data
+private object PreviewData {
+    val sampleTransactions = listOf(
+        Transaction(
+            id = "1",
+            userId = "user1",
+            amount = 50000.0,
+            category = TransactionCategory.FOOD,
+            type = TransactionType.EXPENSE,
+            accountSource = AccountSource.CASH,
+            note = "Makan siang",
+            transactionDate = LocalDateTime(2024, 1, 15, 12, 30, 0)
+        ),
+        Transaction(
+            id = "2",
+            userId = "user1",
+            amount = 5000000.0,
+            category = TransactionCategory.SALARY,
+            type = TransactionType.INCOME,
+            accountSource = AccountSource.BANK,
+            note = "Gaji bulanan",
+            transactionDate = LocalDateTime(2024, 1, 15, 9, 0, 0)
+        ),
+        Transaction(
+            id = "3",
+            userId = "user1",
+            amount = 150000.0,
+            category = TransactionCategory.TRANSPORT,
+            type = TransactionType.EXPENSE,
+            accountSource = AccountSource.EWALLET,
+            note = "Bensin motor",
+            transactionDate = LocalDateTime(2024, 1, 14, 18, 0, 0)
+        )
+    )
+}
+
+@Preview(showBackground = true, name = "Summary Card - Normal Balance")
+@Composable
+private fun SummaryCardPreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            balance = 4800000.0,
+            totalExpense = 200000.0,
+            totalIncome = 5000000.0,
+            currentMonthName = "January 2024"
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Dashboard - Full Screen with Transactions"
+)
+@Composable
+private fun DashboardFullScreenPreview() {
+    DuitTrackerTheme {
+        DashboardContentPreview(
+            userName = "John",
+            balance = 4800000.0,
+            totalExpense = 200000.0,
+            totalIncome = 5000000.0,
+            transactions = PreviewData.sampleTransactions
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Dashboard - Full Screen Empty"
+)
+@Composable
+private fun DashboardFullScreenEmptyPreview() {
+    DuitTrackerTheme {
+        DashboardContentPreview(
+            userName = "John",
+            balance = 0.0,
+            totalExpense = 0.0,
+            totalIncome = 0.0,
+            transactions = emptyList()
+        )
+    }
+}
+
+@Composable
+private fun DashboardContentPreview(
+    userName: String,
+    balance: Double,
+    totalExpense: Double,
+    totalIncome: Double,
+    transactions: List<Transaction>
+) {
+    Scaffold(
+        topBar = {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .systemBarsPadding()
+                    .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Good Morning,",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = NeoColors.MediumGray
+                    )
+                    Text(
+                        text = userName,
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            }
+        },
+        floatingActionButton = {
+            NeoButton(
+                onClick = {},
+                backgroundColor = NeoColors.PureBlack,
+                contentColor = NeoColors.SunYellow,
+                shadowOffset = NeoDimens.shadowOffset,
+                cornerRadius = NeoDimens.cornerRadius
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add",
+                    modifier = Modifier.size(NeoDimens.iconSizeLarge)
+                )
+            }
+        },
+        containerColor = NeoColors.Background
+    ) { paddingValues ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .padding(horizontal = NeoSpacing.lg),
+            verticalArrangement = Arrangement.spacedBy(NeoSpacing.md)
+        ) {
+            item {
+                SummaryCard(
+                    balance = balance,
+                    totalExpense = totalExpense,
+                    totalIncome = totalIncome,
+                    currentMonthName = "January 2024"
+                )
+            }
+
+            item {
+                ViewModeToggle(
+                    selectedMode = ViewMode.DAILY,
+                    onModeChange = {}
+                )
+            }
+
+            if (transactions.isEmpty()) {
+                item { EmptyState(message = "Tidak ada transaksi bulan ini") }
+            } else {
+                transactions.groupBy { it.transactionDate.date }.forEach { (date, txList) ->
+                    item { DateHeader(date = date) }
+                    items(txList) { transaction ->
+                        TransactionItem(
+                            transaction = transaction,
+                            onClick = {}
+                        )
+                    }
+                }
+            }
+
+            item { Spacer(modifier = Modifier.height(80.dp)) }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Summary Card - Large Balance")
+@Composable
+private fun SummaryCardLargeBalancePreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            balance = 999999999.0,
+            totalExpense = 50000000.0,
+            totalIncome = 1049999999.0,
+            currentMonthName = "January 2024"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Summary Card - Negative Balance")
+@Composable
+private fun SummaryCardNegativeBalancePreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            balance = -500000.0,
+            totalExpense = 1500000.0,
+            totalIncome = 1000000.0,
+            currentMonthName = "January 2024"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Summary Card - Zero Balance")
+@Composable
+private fun SummaryCardZeroBalancePreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            balance = 0.0,
+            totalExpense = 0.0,
+            totalIncome = 0.0,
+            currentMonthName = "January 2024"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "View Mode Toggle - Daily")
+@Composable
+private fun ViewModeToggleDailyPreview() {
+    DuitTrackerTheme {
+        ViewModeToggle(
+            selectedMode = ViewMode.DAILY,
+            onModeChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "View Mode Toggle - Monthly")
+@Composable
+private fun ViewModeToggleMonthlyPreview() {
+    DuitTrackerTheme {
+        ViewModeToggle(
+            selectedMode = ViewMode.MONTHLY,
+            onModeChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transaction Item - Expense")
+@Composable
+private fun TransactionItemExpensePreview() {
+    DuitTrackerTheme {
+        TransactionItem(
+            transaction = PreviewData.sampleTransactions[0],
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transaction Item - Income")
+@Composable
+private fun TransactionItemIncomePreview() {
+    DuitTrackerTheme {
+        TransactionItem(
+            transaction = PreviewData.sampleTransactions[1],
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Date Header")
+@Composable
+private fun DateHeaderPreview() {
+    DuitTrackerTheme {
+        DateHeader(date = LocalDate(2024, 1, 15))
+    }
+}
+
+@Preview(showBackground = true, name = "Empty State")
+@Composable
+private fun EmptyStatePreview() {
+    DuitTrackerTheme {
+        EmptyState(message = "Tidak ada transaksi bulan ini")
+    }
+}
+
+@Preview(showBackground = true, name = "Month Header - Collapsed")
+@Composable
+private fun ExpandableMonthHeaderCollapsedPreview() {
+    DuitTrackerTheme {
+        ExpandableMonthHeader(
+            monthData = MonthData(
+                monthKey = "JAN 2024",
+                year = 2024,
+                month = kotlinx.datetime.Month.JANUARY,
+                transactions = PreviewData.sampleTransactions,
+                totalExpense = 200000.0,
+                totalIncome = 5000000.0,
+                isExpanded = false
+            ),
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Month Header - Expanded")
+@Composable
+private fun ExpandableMonthHeaderExpandedPreview() {
+    DuitTrackerTheme {
+        ExpandableMonthHeader(
+            monthData = MonthData(
+                monthKey = "JAN 2024",
+                year = 2024,
+                month = kotlinx.datetime.Month.JANUARY,
+                transactions = PreviewData.sampleTransactions,
+                totalExpense = 200000.0,
+                totalIncome = 5000000.0,
+                isExpanded = true
+            ),
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Summary Card - Small Screen", widthDp = 320)
+@Composable
+private fun SummaryCardSmallScreenPreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            balance = 999999999.0,
+            totalExpense = 50000000.0,
+            totalIncome = 1049999999.0,
+            currentMonthName = "January 2024"
+        )
     }
 }

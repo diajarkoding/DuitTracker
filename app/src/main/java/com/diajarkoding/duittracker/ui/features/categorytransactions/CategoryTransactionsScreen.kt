@@ -45,6 +45,12 @@ import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
 import com.diajarkoding.duittracker.utils.CurrencyFormatter
 import com.diajarkoding.duittracker.utils.DateFormatter
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
+import com.diajarkoding.duittracker.data.model.AccountSource
+import com.diajarkoding.duittracker.data.model.TransactionCategory
+import com.diajarkoding.duittracker.data.model.TransactionType
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun CategoryTransactionsScreen(
@@ -330,6 +336,165 @@ private fun LoadingSkeleton(modifier: Modifier = Modifier) {
                     }
                     NeoSkeletonBox(width = 70.dp, height = 16.dp)
                 }
+            }
+        }
+    }
+}
+
+// Preview Data
+private object CategoryPreviewData {
+    val sampleTransaction = Transaction(
+        id = "1",
+        userId = "user1",
+        amount = 50000.0,
+        category = TransactionCategory.FOOD,
+        type = TransactionType.EXPENSE,
+        accountSource = AccountSource.CASH,
+        note = "Makan siang di warung",
+        description = "Nasi goreng spesial",
+        transactionDate = LocalDateTime(2024, 1, 15, 12, 30, 0)
+    )
+}
+
+@Preview(showBackground = true, name = "Summary Card - Expense")
+@Composable
+private fun SummaryCardExpensePreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            transactionCount = 15,
+            totalAmount = 500000.0,
+            isExpense = true,
+            category = TransactionCategory.FOOD
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Summary Card - Income")
+@Composable
+private fun SummaryCardIncomePreview() {
+    DuitTrackerTheme {
+        SummaryCard(
+            transactionCount = 3,
+            totalAmount = 5000000.0,
+            isExpense = false,
+            category = TransactionCategory.SALARY
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transaction Item - Expense")
+@Composable
+private fun TransactionItemExpensePreview() {
+    DuitTrackerTheme {
+        TransactionItem(
+            transaction = CategoryPreviewData.sampleTransaction,
+            isExpense = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transaction Item - Income")
+@Composable
+private fun TransactionItemIncomePreview() {
+    DuitTrackerTheme {
+        TransactionItem(
+            transaction = CategoryPreviewData.sampleTransaction.copy(
+                type = TransactionType.INCOME,
+                category = TransactionCategory.SALARY,
+                amount = 5000000.0,
+                note = "Gaji bulanan"
+            ),
+            isExpense = false,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Loading Skeleton")
+@Composable
+private fun LoadingSkeletonPreview() {
+    DuitTrackerTheme {
+        LoadingSkeleton()
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Category Transactions - Full Screen"
+)
+@Composable
+private fun CategoryTransactionsScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = "Makanan",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = NeoColors.PureBlack
+                        )
+                        Text(
+                            text = "January 2024",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = NeoColors.MediumGray
+                        )
+                    }
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = NeoSpacing.lg),
+                verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
+            ) {
+                item {
+                    SummaryCard(
+                        transactionCount = 15,
+                        totalAmount = 500000.0,
+                        isExpense = true,
+                        category = TransactionCategory.FOOD
+                    )
+                }
+
+                item { Spacer(modifier = Modifier.height(NeoSpacing.sm)) }
+
+                items(listOf(
+                    CategoryPreviewData.sampleTransaction,
+                    CategoryPreviewData.sampleTransaction.copy(id = "2", note = "Makan malam"),
+                    CategoryPreviewData.sampleTransaction.copy(id = "3", note = "Sarapan pagi")
+                )) { transaction ->
+                    TransactionItem(
+                        transaction = transaction,
+                        isExpense = true,
+                        onClick = {}
+                    )
+                }
+
+                item { Spacer(modifier = Modifier.height(NeoSpacing.xxl)) }
             }
         }
     }

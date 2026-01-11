@@ -86,6 +86,8 @@ import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
 import kotlinx.coroutines.flow.collectLatest
 import java.io.File
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -250,6 +252,15 @@ fun EditTransactionScreen(
                     modifier = Modifier.align(Alignment.CenterHorizontally)
                 )
 
+                // Date Picker
+                uiState.selectedDate?.let { date ->
+                    NeoDatePickerField(
+                        selectedDate = date,
+                        onDateClick = viewModel::showDatePicker,
+                        label = stringResource(R.string.date)
+                    )
+                }
+
                 // Amount Input with currency format
                 NeoCurrencyInput(
                     value = uiState.amount,
@@ -283,15 +294,6 @@ fun EditTransactionScreen(
                     AccountSourcePicker(
                         selectedSource = uiState.accountSource,
                         onSourceSelect = viewModel::onAccountSourceChange
-                    )
-                }
-
-                // Date Picker
-                uiState.selectedDate?.let { date ->
-                    NeoDatePickerField(
-                        selectedDate = date,
-                        onDateClick = viewModel::showDatePicker,
-                        label = stringResource(R.string.date)
                     )
                 }
 
@@ -414,6 +416,361 @@ fun EditTransactionScreen(
                 }
 
                 Spacer(modifier = Modifier.height(NeoSpacing.xxl))
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Edit Transaction - Full Screen Income"
+)
+@Composable
+private fun EditTransactionScreenIncomePreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Text(
+                        text = "Edit Transaksi",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(NeoSpacing.lg),
+                verticalArrangement = Arrangement.spacedBy(NeoSpacing.lg)
+            ) {
+                NeoExpenseIncomeToggle(
+                    isExpense = false,
+                    onToggle = {},
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                NeoCurrencyInput(
+                    value = "5000000",
+                    onValueChange = {},
+                    label = "Jumlah"
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Kategori",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    CategoryPicker(
+                        selectedCategory = TransactionCategory.SALARY,
+                        onCategorySelect = {},
+                        isExpense = false
+                    )
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Akun",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    AccountSourcePicker(
+                        selectedSource = AccountSource.BANK,
+                        onSourceSelect = {}
+                    )
+                }
+
+                NeoDatePickerField(
+                    selectedDate = kotlinx.datetime.LocalDate(2024, 1, 25),
+                    onDateClick = {},
+                    label = "Tanggal"
+                )
+
+                NeoInput(
+                    value = "Gaji bulanan Januari",
+                    onValueChange = {},
+                    label = "Catatan",
+                    placeholder = "Masukkan catatan"
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Deskripsi & Struk (Opsional)",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        NeoInput(
+                            value = "Transfer dari PT ABC",
+                            onValueChange = {},
+                            placeholder = "Tambah detail...",
+                            singleLine = false,
+                            maxLines = 2,
+                            modifier = Modifier.weight(1f)
+                        )
+                        NeoIconButton(
+                            onClick = {},
+                            backgroundColor = NeoColors.PureWhite,
+                            size = 56.dp
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "Tambah gambar",
+                                modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                                tint = NeoColors.MediumGray
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                NeoButtonText(
+                    text = "Simpan Perubahan",
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.IncomeGreen
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xxl))
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Preview(showBackground = true, name = "Edit - Category Picker Income")
+@Composable
+private fun EditCategoryPickerIncomePreview() {
+    DuitTrackerTheme {
+        CategoryPicker(
+            selectedCategory = TransactionCategory.SALARY,
+            onCategorySelect = {},
+            isExpense = false
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Expense Income Toggle Expense")
+@Composable
+private fun EditExpenseIncomeToggleExpensePreview() {
+    DuitTrackerTheme {
+        NeoExpenseIncomeToggle(
+            isExpense = true,
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Expense Income Toggle Income")
+@Composable
+private fun EditExpenseIncomeToggleIncomePreview() {
+    DuitTrackerTheme {
+        NeoExpenseIncomeToggle(
+            isExpense = false,
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Currency Input")
+@Composable
+private fun EditCurrencyInputPreview() {
+    DuitTrackerTheme {
+        NeoCurrencyInput(
+            value = "150000",
+            onValueChange = {},
+            label = "Jumlah"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Note Input")
+@Composable
+private fun EditNoteInputPreview() {
+    DuitTrackerTheme {
+        NeoInput(
+            value = "Bensin motor ke kantor",
+            onValueChange = {},
+            label = "Catatan",
+            placeholder = "Masukkan catatan"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Save Button Expense")
+@Composable
+private fun EditSaveButtonExpensePreview() {
+    DuitTrackerTheme {
+        NeoButtonText(
+            text = "Simpan Perubahan",
+            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = NeoColors.ExpenseRed
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Save Button Income")
+@Composable
+private fun EditSaveButtonIncomePreview() {
+    DuitTrackerTheme {
+        NeoButtonText(
+            text = "Simpan Perubahan",
+            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = NeoColors.IncomeGreen
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Save Button Loading")
+@Composable
+private fun EditSaveButtonLoadingPreview() {
+    DuitTrackerTheme {
+        NeoButtonText(
+            text = "Menyimpan...",
+            onClick = {},
+            modifier = Modifier.fillMaxWidth(),
+            backgroundColor = NeoColors.ExpenseRed,
+            enabled = false
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Date Picker Field")
+@Composable
+private fun EditDatePickerFieldPreview() {
+    DuitTrackerTheme {
+        NeoDatePickerField(
+            selectedDate = kotlinx.datetime.LocalDate(2024, 1, 15),
+            onDateClick = {},
+            label = "Tanggal"
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Date Picker Dialog")
+@Composable
+private fun EditDatePickerDialogPreview() {
+    DuitTrackerTheme {
+        NeoDatePickerDialog(
+            initialDate = kotlinx.datetime.LocalDate(2024, 1, 15),
+            onDateSelected = {},
+            onDismiss = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Description Row Empty")
+@Composable
+private fun EditDescriptionRowEmptyPreview() {
+    DuitTrackerTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+            Text(
+                text = "Deskripsi & Struk (Opsional)",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = NeoColors.MediumGray
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm),
+                verticalAlignment = Alignment.Top
+            ) {
+                NeoInput(
+                    value = "",
+                    onValueChange = {},
+                    placeholder = "Tambah detail...",
+                    singleLine = false,
+                    maxLines = 2,
+                    modifier = Modifier.weight(1f)
+                )
+                NeoIconButton(
+                    onClick = {},
+                    backgroundColor = NeoColors.PureWhite,
+                    size = 56.dp
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CameraAlt,
+                        contentDescription = "Tambah gambar",
+                        modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                        tint = NeoColors.MediumGray
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Description Row Filled")
+@Composable
+private fun EditDescriptionRowFilledPreview() {
+    DuitTrackerTheme {
+        Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+            Text(
+                text = "Deskripsi & Struk (Opsional)",
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.SemiBold,
+                color = NeoColors.MediumGray
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm),
+                verticalAlignment = Alignment.Top
+            ) {
+                NeoInput(
+                    value = "Bensin motor untuk ke kantor",
+                    onValueChange = {},
+                    placeholder = "Tambah detail...",
+                    singleLine = false,
+                    maxLines = 2,
+                    modifier = Modifier.weight(1f)
+                )
+                NeoIconButton(
+                    onClick = {},
+                    backgroundColor = NeoColors.IncomeGreen,
+                    size = 56.dp
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CameraAlt,
+                        contentDescription = "Tambah gambar",
+                        modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                        tint = NeoColors.PureWhite
+                    )
+                }
             }
         }
     }
@@ -666,6 +1023,191 @@ private fun ImagePickerDialog(
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = NeoColors.LightGray
                 )
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Preview(showBackground = true, name = "Edit - Category Picker Expense")
+@Composable
+private fun EditCategoryPickerExpensePreview() {
+    DuitTrackerTheme {
+        CategoryPicker(
+            selectedCategory = TransactionCategory.TRANSPORT,
+            onCategorySelect = {},
+            isExpense = true
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Account Source Picker")
+@Composable
+private fun EditAccountSourcePickerPreview() {
+    DuitTrackerTheme {
+        AccountSourcePicker(
+            selectedSource = AccountSource.EWALLET,
+            onSourceSelect = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Edit - Image Picker Dialog")
+@Composable
+private fun EditImagePickerDialogPreview() {
+    DuitTrackerTheme {
+        ImagePickerDialog(
+            onDismiss = {},
+            onCameraClick = {},
+            onGalleryClick = {}
+        )
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Edit Transaction - Full Screen"
+)
+@Composable
+private fun EditTransactionScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Text(
+                        text = "Edit Transaksi",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .verticalScroll(rememberScrollState())
+                    .padding(NeoSpacing.lg),
+                verticalArrangement = Arrangement.spacedBy(NeoSpacing.lg)
+            ) {
+                NeoExpenseIncomeToggle(
+                    isExpense = true,
+                    onToggle = {},
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                NeoCurrencyInput(
+                    value = "150000",
+                    onValueChange = {},
+                    label = "Jumlah"
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Kategori",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    CategoryPicker(
+                        selectedCategory = TransactionCategory.TRANSPORT,
+                        onCategorySelect = {},
+                        isExpense = true
+                    )
+                }
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Akun",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    AccountSourcePicker(
+                        selectedSource = AccountSource.EWALLET,
+                        onSourceSelect = {}
+                    )
+                }
+
+                NeoDatePickerField(
+                    selectedDate = kotlinx.datetime.LocalDate(2024, 1, 14),
+                    onDateClick = {},
+                    label = "Tanggal"
+                )
+
+                NeoInput(
+                    value = "Bensin motor",
+                    onValueChange = {},
+                    label = "Catatan",
+                    placeholder = "Masukkan catatan"
+                )
+
+                Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
+                    Text(
+                        text = "Deskripsi & Struk (Opsional)",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray
+                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm),
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        NeoInput(
+                            value = "Isi bensin full tank",
+                            onValueChange = {},
+                            placeholder = "Tambah detail...",
+                            singleLine = false,
+                            maxLines = 2,
+                            modifier = Modifier.weight(1f)
+                        )
+                        NeoIconButton(
+                            onClick = {},
+                            backgroundColor = NeoColors.IncomeGreen,
+                            size = 56.dp
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.CameraAlt,
+                                contentDescription = "Tambah gambar",
+                                modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                                tint = NeoColors.PureWhite
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                NeoButtonText(
+                    text = "Simpan Perubahan",
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.ExpenseRed
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xxl))
             }
         }
     }

@@ -58,6 +58,10 @@ import com.diajarkoding.duittracker.utils.CategoryUtils
 import com.diajarkoding.duittracker.utils.CurrencyFormatter
 import com.diajarkoding.duittracker.utils.DateFormatter
 import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
+import com.diajarkoding.duittracker.data.model.AccountSource
+import kotlinx.datetime.LocalDateTime
 
 @Composable
 fun TransactionDetailScreen(
@@ -351,5 +355,128 @@ private fun DetailRow(
             fontWeight = FontWeight.Medium,
             color = NeoColors.PureBlack
         )
+    }
+}
+
+// Preview Data
+private object DetailPreviewData {
+    val sampleExpenseTransaction = Transaction(
+        id = "1",
+        userId = "user1",
+        amount = 150000.0,
+        category = com.diajarkoding.duittracker.data.model.TransactionCategory.FOOD,
+        type = TransactionType.EXPENSE,
+        accountSource = AccountSource.CASH,
+        note = "Makan siang di restoran",
+        description = "Makan bersama keluarga",
+        transactionDate = LocalDateTime(2024, 1, 15, 12, 30, 0),
+        isSynced = true
+    )
+    
+    val sampleIncomeTransaction = Transaction(
+        id = "2",
+        userId = "user1",
+        amount = 5000000.0,
+        category = com.diajarkoding.duittracker.data.model.TransactionCategory.SALARY,
+        type = TransactionType.INCOME,
+        accountSource = AccountSource.BANK,
+        note = "Gaji bulanan Januari",
+        transactionDate = LocalDateTime(2024, 1, 25, 9, 0, 0),
+        isSynced = false
+    )
+}
+
+@Preview(showBackground = true, name = "Transaction Detail - Expense")
+@Composable
+private fun TransactionDetailExpensePreview() {
+    DuitTrackerTheme {
+        TransactionDetailContent(
+            transaction = DetailPreviewData.sampleExpenseTransaction,
+            imageUrl = null,
+            onDelete = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Transaction Detail - Income")
+@Composable
+private fun TransactionDetailIncomePreview() {
+    DuitTrackerTheme {
+        TransactionDetailContent(
+            transaction = DetailPreviewData.sampleIncomeTransaction,
+            imageUrl = null,
+            onDelete = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Detail Row")
+@Composable
+private fun DetailRowPreview() {
+    DuitTrackerTheme {
+        DetailRow(
+            label = "Catatan",
+            value = "Makan siang di restoran favorit"
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Transaction Detail - Full Screen"
+)
+@Composable
+private fun TransactionDetailScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Text(
+                        text = "Transaksi",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack,
+                        modifier = Modifier.weight(1f)
+                    )
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.SunYellow
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Edit,
+                            contentDescription = "Edit",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                            tint = NeoColors.PureBlack
+                        )
+                    }
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            TransactionDetailContent(
+                transaction = DetailPreviewData.sampleExpenseTransaction,
+                imageUrl = null,
+                onDelete = {},
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
     }
 }

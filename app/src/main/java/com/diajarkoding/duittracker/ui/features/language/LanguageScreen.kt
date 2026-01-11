@@ -48,6 +48,8 @@ import com.diajarkoding.duittracker.ui.features.profile.ProfileEvent
 import com.diajarkoding.duittracker.ui.features.profile.ProfileViewModel
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.flow.collectLatest
 
@@ -237,5 +239,228 @@ fun LanguageScreen(
 
             Spacer(modifier = Modifier.height(NeoSpacing.xxl))
         }
+    }
+}
+
+@Composable
+private fun LanguageOptionItem(
+    language: AppLanguage,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    NeoCardFlat(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        backgroundColor = if (isSelected) NeoColors.DeepPurple else NeoColors.PureWhite,
+        cornerRadius = NeoDimens.cornerRadius
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(NeoSpacing.lg),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column {
+                Text(
+                    text = language.displayName,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = if (isSelected) NeoColors.PureWhite else NeoColors.PureBlack
+                )
+                Text(
+                    text = if (language == AppLanguage.ENGLISH) "English" else "Bahasa Indonesia",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (isSelected) NeoColors.PureWhite.copy(alpha = 0.8f) else NeoColors.MediumGray
+                )
+            }
+            if (isSelected) {
+                Box(
+                    modifier = Modifier
+                        .size(28.dp)
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(NeoColors.PureWhite),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = null,
+                        tint = NeoColors.DeepPurple,
+                        modifier = Modifier.size(18.dp)
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Language Option - English Selected")
+@Composable
+private fun LanguageOptionEnglishSelectedPreview() {
+    DuitTrackerTheme {
+        LanguageOptionItem(
+            language = AppLanguage.ENGLISH,
+            isSelected = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Language - Full Screen"
+)
+@Composable
+private fun LanguageScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Text(
+                        text = "Bahasa",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = NeoSpacing.lg)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(NeoSpacing.lg))
+
+                NeoCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.DeepPurple,
+                    shadowOffset = NeoDimens.shadowOffset,
+                    cornerRadius = NeoDimens.cornerRadius
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(NeoSpacing.xl),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                                .background(NeoColors.PureWhite.copy(alpha = 0.2f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Language,
+                                contentDescription = null,
+                                tint = NeoColors.PureWhite,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(NeoSpacing.lg))
+                        Column {
+                            Text(
+                                text = "Pengaturan Bahasa",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = NeoColors.PureWhite
+                            )
+                            Spacer(modifier = Modifier.height(NeoSpacing.xs))
+                            Text(
+                                text = "Pilih bahasa yang ingin digunakan",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+
+                Text(
+                    text = "Pilih Bahasa",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = NeoColors.MediumGray
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                LanguageOptionItem(
+                    language = AppLanguage.INDONESIAN,
+                    isSelected = true,
+                    onClick = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                LanguageOptionItem(
+                    language = AppLanguage.ENGLISH,
+                    isSelected = false,
+                    onClick = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xxl))
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Language Option - English Unselected")
+@Composable
+private fun LanguageOptionEnglishUnselectedPreview() {
+    DuitTrackerTheme {
+        LanguageOptionItem(
+            language = AppLanguage.ENGLISH,
+            isSelected = false,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Language Option - Indonesian Selected")
+@Composable
+private fun LanguageOptionIndonesianSelectedPreview() {
+    DuitTrackerTheme {
+        LanguageOptionItem(
+            language = AppLanguage.INDONESIAN,
+            isSelected = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Language Option - Indonesian Unselected")
+@Composable
+private fun LanguageOptionIndonesianUnselectedPreview() {
+    DuitTrackerTheme {
+        LanguageOptionItem(
+            language = AppLanguage.INDONESIAN,
+            isSelected = false,
+            onClick = {}
+        )
     }
 }

@@ -44,6 +44,8 @@ import com.diajarkoding.duittracker.ui.components.SnackbarType
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -189,5 +191,253 @@ fun LoginScreen(
                     .padding(bottom = 24.dp)
             )
         }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun LoginScreenContent(
+    email: String,
+    password: String,
+    emailError: String?,
+    passwordError: String?,
+    isLoading: Boolean,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onLoginClick: () -> Unit,
+    onNavigateToRegister: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .imePadding()
+            .imeNestedScroll()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.Center)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Duit Tracker",
+                style = MaterialTheme.typography.displaySmall,
+                fontWeight = FontWeight.Black,
+                color = NeoColors.PureBlack
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "Mulai kelola keuanganmu",
+                style = MaterialTheme.typography.bodyLarge,
+                color = NeoColors.DarkGray
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            NeoCard(
+                modifier = Modifier.fillMaxWidth(),
+                backgroundColor = NeoColors.PureWhite,
+                shadowOffset = 6.dp
+            ) {
+                Column(
+                    modifier = Modifier.padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    Text(
+                        text = "Masuk",
+                        style = MaterialTheme.typography.headlineMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    NeoInput(
+                        value = email,
+                        onValueChange = onEmailChange,
+                        label = "Email",
+                        placeholder = "Masukkan email",
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Email,
+                            imeAction = ImeAction.Next
+                        )
+                    )
+                    if (emailError != null) {
+                        Text(
+                            text = emailError,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = NeoColors.ExpenseRed
+                        )
+                    }
+
+                    NeoPasswordInput(
+                        value = password,
+                        onValueChange = onPasswordChange,
+                        label = "Password",
+                        placeholder = "Masukkan password",
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password,
+                            imeAction = ImeAction.Done
+                        )
+                    )
+                    if (passwordError != null) {
+                        Text(
+                            text = passwordError,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = NeoColors.ExpenseRed
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    NeoButtonText(
+                        text = if (isLoading) "LOGGING IN..." else "MASUK",
+                        onClick = onLoginClick,
+                        modifier = Modifier.fillMaxWidth(),
+                        enabled = !isLoading,
+                        backgroundColor = NeoColors.ElectricBlue
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            TextButton(onClick = onNavigateToRegister) {
+                Text(
+                    text = "Belum punya akun? Daftar",
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = NeoColors.ElectricBlue
+                )
+            }
+        }
+
+        Text(
+            text = "Version 1.0.0",
+            style = MaterialTheme.typography.bodySmall,
+            color = NeoColors.MediumGray,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 24.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Login - Empty State")
+@Composable
+private fun LoginScreenEmptyPreview() {
+    DuitTrackerTheme {
+        LoginScreenContent(
+            email = "",
+            password = "",
+            emailError = null,
+            passwordError = null,
+            isLoading = false,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onNavigateToRegister = {}
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Login - Full Screen"
+)
+@Composable
+private fun LoginScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Box(modifier = Modifier.padding(paddingValues)) {
+                LoginScreenContent(
+                    email = "",
+                    password = "",
+                    emailError = null,
+                    passwordError = null,
+                    isLoading = false,
+                    onEmailChange = {},
+                    onPasswordChange = {},
+                    onLoginClick = {},
+                    onNavigateToRegister = {}
+                )
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Login - Filled State")
+@Composable
+private fun LoginScreenFilledPreview() {
+    DuitTrackerTheme {
+        LoginScreenContent(
+            email = "user@example.com",
+            password = "password123",
+            emailError = null,
+            passwordError = null,
+            isLoading = false,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onNavigateToRegister = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Login - Error State")
+@Composable
+private fun LoginScreenErrorPreview() {
+    DuitTrackerTheme {
+        LoginScreenContent(
+            email = "invalid-email",
+            password = "123",
+            emailError = "Format email tidak valid",
+            passwordError = "Password minimal 6 karakter",
+            isLoading = false,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onNavigateToRegister = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Login - Loading State")
+@Composable
+private fun LoginScreenLoadingPreview() {
+    DuitTrackerTheme {
+        LoginScreenContent(
+            email = "user@example.com",
+            password = "password123",
+            emailError = null,
+            passwordError = null,
+            isLoading = true,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onNavigateToRegister = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Login - Small Screen", widthDp = 320)
+@Composable
+private fun LoginScreenSmallPreview() {
+    DuitTrackerTheme {
+        LoginScreenContent(
+            email = "user@example.com",
+            password = "password123",
+            emailError = null,
+            passwordError = null,
+            isLoading = false,
+            onEmailChange = {},
+            onPasswordChange = {},
+            onLoginClick = {},
+            onNavigateToRegister = {}
+        )
     }
 }

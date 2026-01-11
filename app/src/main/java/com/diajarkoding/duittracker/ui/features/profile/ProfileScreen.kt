@@ -61,6 +61,8 @@ import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 
 private const val TAG = "ProfileScreen"
 
@@ -377,6 +379,175 @@ private fun NeoLogoutDialog(
                         contentColor = NeoColors.PureWhite
                     )
                 }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Profile Menu Item")
+@Composable
+private fun ProfileMenuItemPreview() {
+    DuitTrackerTheme {
+        ProfileMenuItem(
+            icon = Icons.Default.BarChart,
+            title = "Statistik",
+            iconBackgroundColor = NeoColors.ElectricBlue,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile Menu Item - Language")
+@Composable
+private fun ProfileMenuItemLanguagePreview() {
+    DuitTrackerTheme {
+        ProfileMenuItem(
+            icon = Icons.Default.Language,
+            title = "Bahasa",
+            iconBackgroundColor = NeoColors.DeepPurple,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Profile Menu Item - Reminder")
+@Composable
+private fun ProfileMenuItemReminderPreview() {
+    DuitTrackerTheme {
+        ProfileMenuItem(
+            icon = Icons.Default.Notifications,
+            title = "Pengingat Harian",
+            iconBackgroundColor = NeoColors.VividOrange,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Logout Dialog")
+@Composable
+private fun NeoLogoutDialogPreview() {
+    DuitTrackerTheme {
+        NeoLogoutDialog(
+            onDismiss = {},
+            onConfirm = {}
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Profile - Full Screen"
+)
+@Composable
+private fun ProfileScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Text(
+                        text = "Profile",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = NeoSpacing.lg)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+
+                NeoCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.PureWhite,
+                    shadowOffset = NeoDimens.shadowOffset,
+                    cornerRadius = NeoDimens.cornerRadius
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(NeoSpacing.xl),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        NeoAvatar(userName = "John Doe", size = 80.dp)
+                        Spacer(modifier = Modifier.height(NeoSpacing.lg))
+                        Text(
+                            text = "John Doe",
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            color = NeoColors.PureBlack
+                        )
+                        Text(
+                            text = "john@example.com",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = NeoColors.MediumGray
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+
+                ProfileMenuItem(
+                    icon = Icons.Default.BarChart,
+                    title = "Statistik",
+                    iconBackgroundColor = NeoColors.ElectricBlue,
+                    onClick = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                ProfileMenuItem(
+                    icon = Icons.Default.Language,
+                    title = "Bahasa",
+                    iconBackgroundColor = NeoColors.DeepPurple,
+                    onClick = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                ProfileMenuItem(
+                    icon = Icons.Default.Notifications,
+                    title = "Pengingat Harian",
+                    iconBackgroundColor = NeoColors.VividOrange,
+                    onClick = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+
+                NeoButtonText(
+                    text = "Logout",
+                    onClick = {},
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.ExpenseRed,
+                    contentColor = NeoColors.PureWhite
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xxl))
             }
         }
     }

@@ -58,6 +58,8 @@ import com.diajarkoding.duittracker.ui.features.profile.ProfileViewModel
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -445,6 +447,305 @@ fun ReminderScreen(
             }
 
             Spacer(modifier = Modifier.height(NeoSpacing.xxl))
+        }
+    }
+}
+
+@Composable
+private fun ReminderToggleCard(
+    isEnabled: Boolean,
+    onToggle: (Boolean) -> Unit
+) {
+    NeoCardFlat(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = NeoColors.PureWhite,
+        cornerRadius = NeoDimens.cornerRadius
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(NeoSpacing.lg),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(40.dp)
+                        .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                        .background(
+                            if (isEnabled) NeoColors.IncomeGreen
+                            else NeoColors.LightGray
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = null,
+                        tint = NeoColors.PureWhite,
+                        modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                    )
+                }
+                Spacer(modifier = Modifier.width(NeoSpacing.md))
+                Column {
+                    Text(
+                        text = "Aktifkan Pengingat",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.PureBlack
+                    )
+                    Text(
+                        text = if (isEnabled) "Pengingat aktif" else "Pengingat tidak aktif",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = NeoColors.MediumGray
+                    )
+                }
+            }
+            Switch(
+                checked = isEnabled,
+                onCheckedChange = onToggle,
+                colors = SwitchDefaults.colors(
+                    checkedThumbColor = NeoColors.PureWhite,
+                    checkedTrackColor = NeoColors.IncomeGreen,
+                    uncheckedThumbColor = NeoColors.PureWhite,
+                    uncheckedTrackColor = NeoColors.LightGray
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun ReminderScheduleCard(
+    title: String,
+    description: String,
+    time: String,
+    iconBackgroundColor: androidx.compose.ui.graphics.Color
+) {
+    NeoCardFlat(
+        modifier = Modifier.fillMaxWidth(),
+        backgroundColor = NeoColors.PureWhite,
+        cornerRadius = NeoDimens.cornerRadius
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(NeoSpacing.lg),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                    .background(iconBackgroundColor),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Schedule,
+                    contentDescription = null,
+                    tint = if (iconBackgroundColor == NeoColors.SunYellow) NeoColors.PureBlack else NeoColors.PureWhite,
+                    modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                )
+            }
+            Spacer(modifier = Modifier.width(NeoSpacing.md))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = NeoColors.PureBlack
+                )
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = NeoColors.MediumGray
+                )
+            }
+            Text(
+                text = time,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+                color = NeoColors.PureBlack
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, name = "Reminder Toggle - Enabled")
+@Composable
+private fun ReminderToggleEnabledPreview() {
+    DuitTrackerTheme {
+        ReminderToggleCard(
+            isEnabled = true,
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Reminder Toggle - Disabled")
+@Composable
+private fun ReminderToggleDisabledPreview() {
+    DuitTrackerTheme {
+        ReminderToggleCard(
+            isEnabled = false,
+            onToggle = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Reminder Schedule - Lunch")
+@Composable
+private fun ReminderScheduleLunchPreview() {
+    DuitTrackerTheme {
+        ReminderScheduleCard(
+            title = "Pengingat Makan Siang",
+            description = "Jangan lupa catat pengeluaran makan siang",
+            time = "12:00",
+            iconBackgroundColor = NeoColors.SunYellow
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Reminder Schedule - Evening")
+@Composable
+private fun ReminderScheduleEveningPreview() {
+    DuitTrackerTheme {
+        ReminderScheduleCard(
+            title = "Pengingat Malam",
+            description = "Rekap pengeluaran hari ini",
+            time = "22:00",
+            iconBackgroundColor = NeoColors.DeepPurple
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Reminder - Full Screen"
+)
+@Composable
+private fun ReminderScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Text(
+                        text = "Pengingat Harian",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack
+                    )
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = NeoSpacing.lg)
+                    .verticalScroll(rememberScrollState())
+            ) {
+                Spacer(modifier = Modifier.height(NeoSpacing.lg))
+
+                NeoCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    backgroundColor = NeoColors.VividOrange,
+                    shadowOffset = NeoDimens.shadowOffset,
+                    cornerRadius = NeoDimens.cornerRadius
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(NeoSpacing.xl),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .size(56.dp)
+                                .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                                .background(NeoColors.PureWhite.copy(alpha = 0.2f)),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.NotificationsActive,
+                                contentDescription = null,
+                                tint = NeoColors.PureWhite,
+                                modifier = Modifier.size(32.dp)
+                            )
+                        }
+                        Spacer(modifier = Modifier.width(NeoSpacing.lg))
+                        Column {
+                            Text(
+                                text = "Pengaturan Pengingat",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = NeoColors.PureWhite
+                            )
+                            Spacer(modifier = Modifier.height(NeoSpacing.xs))
+                            Text(
+                                text = "Atur pengingat untuk mencatat transaksi",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                            )
+                        }
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xl))
+
+                ReminderToggleCard(
+                    isEnabled = true,
+                    onToggle = {}
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.lg))
+
+                Text(
+                    text = "Jadwal Pengingat",
+                    style = MaterialTheme.typography.labelMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = NeoColors.MediumGray
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                ReminderScheduleCard(
+                    title = "Pengingat Makan Siang",
+                    description = "Jangan lupa catat pengeluaran makan siang",
+                    time = "12:00",
+                    iconBackgroundColor = NeoColors.SunYellow
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+                ReminderScheduleCard(
+                    title = "Pengingat Malam",
+                    description = "Rekap pengeluaran hari ini",
+                    time = "22:00",
+                    iconBackgroundColor = NeoColors.DeepPurple
+                )
+
+                Spacer(modifier = Modifier.height(NeoSpacing.xxl))
+            }
         }
     }
 }

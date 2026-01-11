@@ -72,6 +72,9 @@ import com.diajarkoding.duittracker.utils.CategoryUtils
 import com.diajarkoding.duittracker.utils.CurrencyFormatter
 import com.diajarkoding.duittracker.utils.DateFormatter
 import kotlinx.coroutines.flow.collectLatest
+import androidx.compose.ui.tooling.preview.Preview
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
+import com.diajarkoding.duittracker.data.model.TransactionCategory
 
 @Composable
 fun StatisticsScreen(
@@ -715,5 +718,328 @@ private fun ExportOptionItem(
             fontWeight = FontWeight.Medium,
             color = if (enabled) NeoColors.PureBlack else NeoColors.MediumGray
         )
+    }
+}
+
+// Preview Data
+private object StatisticsPreviewData {
+    val sampleExpenseCategories = listOf(
+        CategoryData(
+            category = TransactionCategory.FOOD,
+            amount = 500000.0,
+            percentage = 40.0f,
+            transactionCount = 15
+        ),
+        CategoryData(
+            category = TransactionCategory.TRANSPORT,
+            amount = 300000.0,
+            percentage = 24.0f,
+            transactionCount = 10
+        ),
+        CategoryData(
+            category = TransactionCategory.SHOPPING,
+            amount = 450000.0,
+            percentage = 36.0f,
+            transactionCount = 5
+        )
+    )
+    
+    val sampleIncomeCategories = listOf(
+        CategoryData(
+            category = TransactionCategory.SALARY,
+            amount = 5000000.0,
+            percentage = 80.0f,
+            transactionCount = 1
+        ),
+        CategoryData(
+            category = TransactionCategory.INVESTMENT,
+            amount = 1250000.0,
+            percentage = 20.0f,
+            transactionCount = 2
+        )
+    )
+}
+
+@Preview(showBackground = true, name = "Period Selector - All")
+@Composable
+private fun PeriodSelectorAllPreview() {
+    DuitTrackerTheme {
+        PeriodSelector(
+            selectedPeriod = StatisticsPeriod.ALL,
+            onPeriodChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Period Selector - Monthly")
+@Composable
+private fun PeriodSelectorMonthlyPreview() {
+    DuitTrackerTheme {
+        PeriodSelector(
+            selectedPeriod = StatisticsPeriod.MONTHLY,
+            onPeriodChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Period Selector - Weekly")
+@Composable
+private fun PeriodSelectorWeeklyPreview() {
+    DuitTrackerTheme {
+        PeriodSelector(
+            selectedPeriod = StatisticsPeriod.WEEKLY,
+            onPeriodChange = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Month Selector")
+@Composable
+private fun MonthSelectorPreview() {
+    DuitTrackerTheme {
+        MonthSelector(
+            currentMonth = "January 2024",
+            canGoNext = true,
+            canGoPrevious = true,
+            onPrevious = {},
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Month Selector - No Navigation")
+@Composable
+private fun MonthSelectorNoNavPreview() {
+    DuitTrackerTheme {
+        MonthSelector(
+            currentMonth = "January 2024",
+            canGoNext = false,
+            canGoPrevious = false,
+            onPrevious = {},
+            onNext = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Pie Chart")
+@Composable
+private fun PieChartPreview() {
+    DuitTrackerTheme {
+        PieChart(
+            data = StatisticsPreviewData.sampleExpenseCategories,
+            totalAmount = 1250000.0,
+            modifier = androidx.compose.ui.Modifier.size(180.dp)
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Category Row - Expense")
+@Composable
+private fun CategoryRowExpensePreview() {
+    DuitTrackerTheme {
+        CategoryRow(
+            categoryData = StatisticsPreviewData.sampleExpenseCategories[0],
+            isExpense = true,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Category Row - Income")
+@Composable
+private fun CategoryRowIncomePreview() {
+    DuitTrackerTheme {
+        CategoryRow(
+            categoryData = StatisticsPreviewData.sampleIncomeCategories[0],
+            isExpense = false,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Empty Chart State")
+@Composable
+private fun EmptyChartStatePreview() {
+    DuitTrackerTheme {
+        EmptyChartState(message = "Tidak ada pengeluaran bulan ini")
+    }
+}
+
+@Preview(showBackground = true, name = "Export Options Dialog")
+@Composable
+private fun ExportOptionsDialogPreview() {
+    DuitTrackerTheme {
+        ExportOptionsDialog(
+            onDismiss = {},
+            onExportType = {},
+            isExporting = false
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Export Option Item")
+@Composable
+private fun ExportOptionItemPreview() {
+    DuitTrackerTheme {
+        ExportOptionItem(
+            title = "Ekspor Semua Data",
+            onClick = {},
+            enabled = true
+        )
+    }
+}
+
+@Preview(
+    showBackground = true,
+    showSystemUi = true,
+    name = "Statistics - Full Screen"
+)
+@Composable
+private fun StatisticsScreenFullPreview() {
+    DuitTrackerTheme {
+        Scaffold(
+            topBar = {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .systemBarsPadding()
+                        .padding(horizontal = NeoSpacing.lg, vertical = NeoSpacing.md),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.PureWhite
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                        )
+                    }
+                    Spacer(modifier = Modifier.width(NeoSpacing.md))
+                    Text(
+                        text = "Statistik",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold,
+                        color = NeoColors.PureBlack,
+                        modifier = Modifier.weight(1f)
+                    )
+                    NeoIconButton(
+                        onClick = {},
+                        backgroundColor = NeoColors.IncomeGreen
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.FileDownload,
+                            contentDescription = "Export",
+                            modifier = Modifier.size(NeoDimens.iconSizeMedium),
+                            tint = NeoColors.PureWhite
+                        )
+                    }
+                }
+            },
+            containerColor = NeoColors.Background
+        ) { paddingValues ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+                    .padding(horizontal = NeoSpacing.lg),
+                verticalArrangement = Arrangement.spacedBy(NeoSpacing.md)
+            ) {
+                item {
+                    PeriodSelector(
+                        selectedPeriod = StatisticsPeriod.MONTHLY,
+                        onPeriodChange = {}
+                    )
+                }
+
+                item {
+                    MonthSelector(
+                        currentMonth = "January 2024",
+                        canGoNext = true,
+                        canGoPrevious = true,
+                        onPrevious = {},
+                        onNext = {}
+                    )
+                }
+
+                item {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
+                    ) {
+                        NeoCardFlat(
+                            modifier = Modifier.weight(1f),
+                            backgroundColor = NeoColors.IncomeGreen,
+                            cornerRadius = NeoDimens.cornerRadiusSmall,
+                            borderWidth = NeoDimens.borderWidth
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(NeoSpacing.lg),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text("Pemasukan", style = MaterialTheme.typography.labelSmall, color = NeoColors.PureWhite.copy(alpha = 0.8f))
+                                Spacer(modifier = Modifier.height(NeoSpacing.xs))
+                                Text("Rp 5jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoColors.PureWhite)
+                            }
+                        }
+                        NeoCardFlat(
+                            modifier = Modifier.weight(1f),
+                            backgroundColor = NeoColors.ExpenseRed,
+                            cornerRadius = NeoDimens.cornerRadiusSmall,
+                            borderWidth = NeoDimens.borderWidth
+                        ) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth().padding(NeoSpacing.lg),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text("Pengeluaran", style = MaterialTheme.typography.labelSmall, color = NeoColors.PureWhite.copy(alpha = 0.8f))
+                                Spacer(modifier = Modifier.height(NeoSpacing.xs))
+                                Text("Rp 1.2jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoColors.PureWhite)
+                            }
+                        }
+                    }
+                }
+
+                item {
+                    Text(
+                        text = "Pengeluaran per Kategori",
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.SemiBold,
+                        color = NeoColors.MediumGray,
+                        modifier = Modifier.padding(top = NeoSpacing.sm)
+                    )
+                }
+
+                item {
+                    NeoCardFlat(
+                        modifier = Modifier.fillMaxWidth(),
+                        backgroundColor = NeoColors.PureWhite,
+                        cornerRadius = NeoDimens.cornerRadius
+                    ) {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(NeoSpacing.xl),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            PieChart(
+                                data = StatisticsPreviewData.sampleExpenseCategories,
+                                totalAmount = 1250000.0,
+                                modifier = Modifier.size(180.dp)
+                            )
+                        }
+                    }
+                }
+
+                items(StatisticsPreviewData.sampleExpenseCategories) { categoryData ->
+                    CategoryRow(
+                        categoryData = categoryData,
+                        isExpense = true,
+                        onClick = {}
+                    )
+                }
+
+                item { Spacer(modifier = Modifier.height(NeoSpacing.xxl)) }
+            }
+        }
     }
 }
