@@ -1,7 +1,5 @@
 package com.diajarkoding.duittracker.ui.features.language
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,62 +26,36 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.local.preferences.AppLanguage
 import com.diajarkoding.duittracker.ui.components.NeoCard
 import com.diajarkoding.duittracker.ui.components.NeoCardFlat
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
-import com.diajarkoding.duittracker.ui.features.profile.ProfileEvent
-import com.diajarkoding.duittracker.ui.features.profile.ProfileViewModel
+import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
-import androidx.compose.ui.tooling.preview.Preview
-import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
-import kotlinx.coroutines.flow.collectLatest
+import com.diajarkoding.duittracker.utils.LocaleManager
 
 @Composable
 fun LanguageScreen(
-    onNavigateBack: () -> Unit,
-    viewModel: ProfileViewModel = hiltViewModel()
+    onNavigateBack: () -> Unit
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-
-    // Listen for LanguageChanged event to recreate activity
-    LaunchedEffect(Unit) {
-        viewModel.events.collectLatest { event ->
-            when (event) {
-                is ProfileEvent.LanguageChanged -> {
-                    (context as? Activity)?.let { activity ->
-                        activity.recreate()
-                        @Suppress("DEPRECATION")
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-                            activity.overrideActivityTransition(
-                                Activity.OVERRIDE_TRANSITION_OPEN,
-                                android.R.anim.fade_in,
-                                android.R.anim.fade_out
-                            )
-                        } else {
-                            activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                        }
-                    }
-                }
-                else -> {}
-            }
-        }
-    }
+    
+    // Observe configurationVersion to trigger recomposition when language changes
+    val configVersion = LocaleManager.configurationVersion
+    
+    // Get current language - will update when configVersion changes
+    val currentLanguage = LocaleManager.getCurrentLanguage()
 
     Scaffold(
         topBar = {
@@ -182,14 +154,15 @@ fun LanguageScreen(
 
             // Language Options
             AppLanguage.entries.forEach { language ->
-                val isSelected = language == uiState.selectedLanguage
+                val isSelected = language == currentLanguage
                 
                 NeoCardFlat(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable {
                             if (!isSelected) {
-                                viewModel.setLanguage(language)
+                                // Use LocaleManager - triggers recomposition without Activity.recreate()
+                                LocaleManager.setLanguage(context, language)
                             }
                         },
                     backgroundColor = if (isSelected) NeoColors.DeepPurple else NeoColors.PureWhite,

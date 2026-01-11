@@ -1,15 +1,20 @@
 package com.diajarkoding.duittracker.ui.features.auth
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.imeNestedScroll
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -80,6 +85,9 @@ fun LoginScreen(
                 .imePadding()
                 .imeNestedScroll()
         ) {
+            // Check if keyboard is visible
+            val isKeyboardVisible = WindowInsets.isImeVisible
+
             // Centered content
             Column(
                 modifier = Modifier
@@ -181,15 +189,20 @@ fun LoginScreen(
                 }
             }
 
-            // Version at bottom
-            Text(
-                text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
-                style = MaterialTheme.typography.bodySmall,
-                color = NeoColors.MediumGray,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 24.dp)
-            )
+            // Version at bottom - hide when keyboard is visible
+            AnimatedVisibility(
+                visible = !isKeyboardVisible,
+                enter = fadeIn(),
+                exit = fadeOut(),
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Text(
+                    text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = NeoColors.MediumGray,
+                    modifier = Modifier.padding(bottom = 24.dp)
+                )
+            }
         }
     }
 }
@@ -313,14 +326,21 @@ private fun LoginScreenContent(
             }
         }
 
-        Text(
-            text = "Version 1.0.0",
-            style = MaterialTheme.typography.bodySmall,
-            color = NeoColors.MediumGray,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp)
-        )
+        // Version at bottom - hide when keyboard is visible
+        val isKeyboardVisible = WindowInsets.isImeVisible
+        AnimatedVisibility(
+            visible = !isKeyboardVisible,
+            enter = fadeIn(),
+            exit = fadeOut(),
+            modifier = Modifier.align(Alignment.BottomCenter)
+        ) {
+            Text(
+                text = "Version 1.0.0",
+                style = MaterialTheme.typography.bodySmall,
+                color = NeoColors.MediumGray,
+                modifier = Modifier.padding(bottom = 24.dp)
+            )
+        }
     }
 }
 

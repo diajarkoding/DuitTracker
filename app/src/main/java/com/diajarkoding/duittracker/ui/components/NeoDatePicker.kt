@@ -50,75 +50,106 @@ import com.diajarkoding.duittracker.R
  import kotlinx.datetime.minus
  import kotlinx.datetime.plus
  import kotlinx.datetime.toLocalDateTime
- 
- @Composable
- fun NeoDatePickerField(
-     selectedDate: LocalDate,
-     onDateClick: () -> Unit,
-     modifier: Modifier = Modifier,
-     label: String = "Date"
- ) {
-     Column(
-         modifier = modifier,
-         verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
-     ) {
-         Text(
-             text = label,
-             style = MaterialTheme.typography.labelMedium,
-             fontWeight = FontWeight.SemiBold,
-             color = NeoColors.MediumGray
-         )
-         NeoCardFlat(
-             modifier = Modifier
-                 .fillMaxWidth()
-                 .clickable { onDateClick() },
-             backgroundColor = NeoColors.PureWhite,
-             cornerRadius = NeoDimens.cornerRadiusSmall,
-             borderWidth = NeoDimens.borderWidth
-         ) {
-             Row(
-                 modifier = Modifier
-                     .fillMaxWidth()
-                     .padding(NeoSpacing.md),
-                 verticalAlignment = Alignment.CenterVertically,
-                 horizontalArrangement = Arrangement.SpaceBetween
-             ) {
-                 Row(
-                     verticalAlignment = Alignment.CenterVertically,
-                     horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
-                 ) {
-                     Box(
-                         modifier = Modifier
-                             .size(36.dp)
-                             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                             .background(NeoColors.ElectricBlue),
-                         contentAlignment = Alignment.Center
-                     ) {
-                         Icon(
-                             imageVector = Icons.Default.CalendarMonth,
-                             contentDescription = null,
-                             tint = NeoColors.PureWhite,
-                             modifier = Modifier.size(NeoDimens.iconSizeSmall)
-                         )
-                     }
-                     Text(
+
+// Simple NeoDatePickerField - just label and date text
+@Composable
+fun NeoDatePickerField(
+    selectedDate: LocalDate,
+    onDateClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "Date"
+) {
+    Column(
+        modifier = modifier.clickable { onDateClick() },
+        verticalArrangement = Arrangement.spacedBy(NeoSpacing.xs)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = NeoColors.MediumGray
+        )
+        Text(
+            text = formatDateLocalized(selectedDate),
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Medium,
+            color = NeoColors.PureBlack
+        )
+    }
+}
+
+/*
+ * Old NeoDatePickerField with card and icon - kept for reference
+ *
+@Composable
+fun NeoDatePickerFieldWithCard(
+    selectedDate: LocalDate,
+    onDateClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    label: String = "Date"
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = NeoColors.MediumGray
+        )
+        NeoCardFlat(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { onDateClick() },
+            backgroundColor = NeoColors.PureWhite,
+            cornerRadius = NeoDimens.cornerRadiusSmall,
+            borderWidth = NeoDimens.borderWidth
+        ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(NeoSpacing.md),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .size(36.dp)
+                            .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
+                            .background(NeoColors.ElectricBlue),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.CalendarMonth,
+                            contentDescription = null,
+                            tint = NeoColors.PureWhite,
+                            modifier = Modifier.size(NeoDimens.iconSizeSmall)
+                        )
+                    }
+                    Text(
                         text = formatDateLocalized(selectedDate),
-                         style = MaterialTheme.typography.bodyMedium,
-                         fontWeight = FontWeight.Medium,
-                         color = NeoColors.PureBlack
-                     )
-                 }
-                 Icon(
-                     imageVector = Icons.Default.ChevronRight,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Medium,
+                        color = NeoColors.PureBlack
+                    )
+                }
+                Icon(
+                    imageVector = Icons.Default.ChevronRight,
                     contentDescription = stringResource(R.string.select_date),
-                     tint = NeoColors.MediumGray,
-                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
-                 )
-             }
-         }
-     }
- }
- 
+                    tint = NeoColors.MediumGray,
+                    modifier = Modifier.size(NeoDimens.iconSizeMedium)
+                )
+            }
+        }
+    }
+}
+*/
+
  @Composable
  fun NeoDatePickerDialog(
      initialDate: LocalDate,

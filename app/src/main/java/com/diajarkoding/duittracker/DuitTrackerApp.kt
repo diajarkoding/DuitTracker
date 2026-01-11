@@ -16,7 +16,7 @@ import com.diajarkoding.duittracker.data.local.preferences.AppPreferences
 import com.diajarkoding.duittracker.data.network.NetworkMonitor
 import com.diajarkoding.duittracker.data.notification.ReminderNotificationManager
 import com.diajarkoding.duittracker.data.sync.SyncWorker
-import com.diajarkoding.duittracker.utils.LocaleHelper
+import com.diajarkoding.duittracker.utils.LocaleManager
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -44,8 +44,6 @@ class DuitTrackerApp : Application(), Configuration.Provider {
 
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     
-    private var currentLanguage: AppLanguage = AppLanguage.ENGLISH
-
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
@@ -57,22 +55,15 @@ class DuitTrackerApp : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        // Initialize LocaleManager first for proper locale handling
+        LocaleManager.init(this)
         setupNotificationChannel()
         setupNetworkMonitoring()
         setupPeriodicSync()
-        observeLanguageChanges()
     }
 
     private fun setupNotificationChannel() {
         reminderNotificationManager.createNotificationChannel()
-    }
-
-    private fun observeLanguageChanges() {
-        applicationScope.launch {
-            appPreferences.language.collect { language ->
-                currentLanguage = language
-            }
-        }
     }
 
     private fun setupNetworkMonitoring() {

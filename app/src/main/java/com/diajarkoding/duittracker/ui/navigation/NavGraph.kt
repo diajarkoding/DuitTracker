@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.diajarkoding.duittracker.ui.features.auth.LoginScreen
 import com.diajarkoding.duittracker.ui.features.auth.RegisterScreen
 import com.diajarkoding.duittracker.ui.features.categorytransactions.CategoryTransactionsScreen
@@ -24,9 +25,10 @@ import com.diajarkoding.duittracker.ui.features.statistics.StatisticsScreen
 
 @Composable
 fun DuitTrackerNavGraph(
-    navController: NavHostController,
+    navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier
 ) {
+    // rememberNavController() will preserve navigation state across recompositions
     // State to signal dashboard refresh after transaction changes
     var shouldRefreshDashboard by rememberSaveable { mutableStateOf(false) }
     NavHost(

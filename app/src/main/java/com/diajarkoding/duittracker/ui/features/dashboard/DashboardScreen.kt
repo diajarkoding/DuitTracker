@@ -269,7 +269,8 @@ private fun SummaryCard(
         Column(modifier = Modifier.padding(NeoSpacing.lg)) {
             // Month and Balance
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                ,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Top
             ) {
@@ -297,7 +298,7 @@ private fun SummaryCard(
                 }
             }
 
-            Spacer(modifier = Modifier.width(NeoSpacing.lg))
+            Spacer(modifier = Modifier.height(NeoSpacing.md))
 
             Text(
                 text = CurrencyFormatter.format(balance),

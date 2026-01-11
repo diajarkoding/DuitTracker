@@ -7,41 +7,20 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.compose.rememberNavController
-import com.diajarkoding.duittracker.data.local.preferences.AppLanguage
-import com.diajarkoding.duittracker.data.local.preferences.AppPreferences
-import com.diajarkoding.duittracker.data.local.preferences.appPreferencesDataStore
+import androidx.compose.runtime.LaunchedEffect
 import com.diajarkoding.duittracker.ui.navigation.DuitTrackerNavGraph
 import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
-import com.diajarkoding.duittracker.utils.LocaleHelper
+import com.diajarkoding.duittracker.utils.LocaleManager
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
 
 private const val TAG = "MainActivity"
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var appPreferences: AppPreferences
-
     override fun attachBaseContext(newBase: Context) {
         Log.d(TAG, "attachBaseContext() called")
-        // Read language preference synchronously from DataStore
-        val languageCode = runBlocking {
-            newBase.appPreferencesDataStore.data.map { preferences ->
-                preferences[AppPreferences.LANGUAGE_KEY] ?: AppLanguage.ENGLISH.code
-            }.first()
-        }
-        Log.d(TAG, "attachBaseContext() - languageCode from DataStore: $languageCode")
-        val language = LocaleHelper.getLanguageFromCode(languageCode)
-        Log.d(TAG, "attachBaseContext() - language: ${language.code}, ${language.displayName}")
-        val context = LocaleHelper.wrapContext(newBase, language)
-        Log.d(TAG, "attachBaseContext() - wrapped context locale: ${context.resources.configuration.locales[0]}")
-        super.attachBaseContext(context)
+        super.attachBaseContext(LocaleManager.attachBaseContext(newBase))
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,10 +30,23 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Log.d(TAG, "setContent() - Locale.getDefault(): ${java.util.Locale.getDefault()}")
+            
+            // Observe configurationVersion to trigger recomposition on language change  
+            // Reading this state creates a dependency that triggers recomposition
+            val configVersion = LocaleManager.configurationVersion
+            Log.d(TAG, "setContent() - configVersion: $configVersion")
 
+            // Update Activity locale when configVersion changes
+            LaunchedEffect(configVersion) {
+                if (configVersion > 0) {
+                    LocaleManager.updateActivityLocale(this@MainActivity)
+                }
+            }
+
+            // Don't use key() here - it resets navigation to splash screen
+            // Instead rely on state observation for recomposition
             DuitTrackerTheme {
-                val navController = rememberNavController()
-                DuitTrackerNavGraph(navController = navController)
+                DuitTrackerNavGraph()
             }
         }
     }
