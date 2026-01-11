@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.diajarkoding.duittracker.BuildConfig
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
 import com.diajarkoding.duittracker.ui.components.NeoCard
 import com.diajarkoding.duittracker.ui.components.NeoInput
@@ -82,7 +84,7 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "DuitTracker",
+                    text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Black,
                     color = NeoColors.PureBlack
@@ -91,7 +93,7 @@ fun LoginScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text(
-                    text = "Track your money, own your future",
+                    text = stringResource(R.string.start_tracking),
                     style = MaterialTheme.typography.bodyLarge,
                     color = NeoColors.DarkGray
                 )
@@ -108,7 +110,7 @@ fun LoginScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         Text(
-                            text = "Login",
+                            text = stringResource(R.string.login),
                             style = MaterialTheme.typography.headlineMedium,
                             fontWeight = FontWeight.Bold
                         )
@@ -116,8 +118,8 @@ fun LoginScreen(
                         NeoInput(
                             value = uiState.email,
                             onValueChange = viewModel::onEmailChange,
-                            label = "Email",
-                            placeholder = "Enter your email",
+                            label = stringResource(R.string.email),
+                            placeholder = stringResource(R.string.enter_your_email),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Email,
                                 imeAction = ImeAction.Next
@@ -134,8 +136,8 @@ fun LoginScreen(
                         NeoPasswordInput(
                             value = uiState.password,
                             onValueChange = viewModel::onPasswordChange,
-                            label = "Password",
-                            placeholder = "Enter your password",
+                            label = stringResource(R.string.password),
+                            placeholder = stringResource(R.string.create_password),
                             keyboardOptions = KeyboardOptions(
                                 keyboardType = KeyboardType.Password,
                                 imeAction = ImeAction.Done
@@ -152,7 +154,7 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.height(8.dp))
 
                         NeoButtonText(
-                            text = if (uiState.isLoading) "LOGGING IN..." else "LOGIN",
+                            text = if (uiState.isLoading) stringResource(R.string.logging_in) else stringResource(R.string.login).uppercase(),
                             onClick = viewModel::login,
                             modifier = Modifier.fillMaxWidth(),
                             enabled = !uiState.isLoading,
@@ -165,7 +167,7 @@ fun LoginScreen(
 
                 TextButton(onClick = onNavigateToRegister) {
                     Text(
-                        text = "Don't have an account? Register",
+                        text = "${stringResource(R.string.dont_have_account)} ${stringResource(R.string.register)}",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = NeoColors.ElectricBlue
@@ -175,7 +177,7 @@ fun LoginScreen(
 
             // Version at bottom
             Text(
-                text = "Version ${BuildConfig.VERSION_NAME}",
+                text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
                 style = MaterialTheme.typography.bodySmall,
                 color = NeoColors.MediumGray,
                 modifier = Modifier

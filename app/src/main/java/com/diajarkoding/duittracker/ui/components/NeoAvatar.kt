@@ -14,10 +14,12 @@
  import androidx.compose.ui.draw.clip
  import androidx.compose.ui.graphics.Color
  import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.text.font.FontWeight
  import androidx.compose.ui.unit.Dp
  import androidx.compose.ui.unit.dp
  import coil.compose.AsyncImage
+import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  
@@ -54,7 +56,7 @@
          if (!avatarUrl.isNullOrBlank()) {
              AsyncImage(
                  model = avatarUrl,
-                 contentDescription = "Profile picture",
+                contentDescription = stringResource(R.string.profile_picture),
                  modifier = Modifier
                      .size(size)
                      .clip(CircleShape),

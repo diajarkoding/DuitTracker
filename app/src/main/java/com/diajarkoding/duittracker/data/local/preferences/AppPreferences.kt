@@ -13,7 +13,7 @@
  import javax.inject.Inject
  import javax.inject.Singleton
  
- private val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
+val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataStore(name = "app_preferences")
  
  enum class AppLanguage(val code: String, val displayName: String) {
      ENGLISH("en", "English"),
@@ -25,7 +25,7 @@
      @ApplicationContext private val context: Context
  ) {
      companion object {
-         private val LANGUAGE_KEY = stringPreferencesKey("app_language")
+        val LANGUAGE_KEY = stringPreferencesKey("app_language")
          private val REMINDER_ENABLED_KEY = booleanPreferencesKey("reminder_enabled")
          private val REMINDER_HOUR_KEY = stringPreferencesKey("reminder_hour")
          private val REMINDER_MINUTE_KEY = stringPreferencesKey("reminder_minute")

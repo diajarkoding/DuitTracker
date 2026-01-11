@@ -29,11 +29,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.BuildConfig
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.delay
@@ -119,7 +121,7 @@ fun SplashScreen(
             
             // App Name
             Text(
-                text = "DuitTracker",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Black,
                 color = NeoColors.PureBlack,
@@ -130,7 +132,7 @@ fun SplashScreen(
             
             // Tagline
             Text(
-                text = "Track your money, own your future",
+                text = stringResource(R.string.tagline),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
                 color = NeoColors.MediumGray,
@@ -153,7 +155,7 @@ fun SplashScreen(
 
         // Version at bottom
         Text(
-            text = "Version ${BuildConfig.VERSION_NAME}",
+            text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
             style = MaterialTheme.typography.bodySmall,
             color = NeoColors.MediumGray,
             modifier = Modifier

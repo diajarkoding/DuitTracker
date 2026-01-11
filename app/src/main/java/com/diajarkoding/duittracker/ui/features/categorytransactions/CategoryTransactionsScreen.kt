@@ -28,11 +28,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.model.Transaction
 import com.diajarkoding.duittracker.ui.components.NeoCardFlat
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
@@ -67,7 +69,7 @@ fun CategoryTransactionsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
@@ -136,7 +138,7 @@ fun CategoryTransactionsScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Text(
-                                text = "No transactions found",
+                                text = stringResource(R.string.no_transactions_found),
                                 style = MaterialTheme.typography.bodyMedium,
                                 color = NeoColors.MediumGray
                             )
@@ -199,7 +201,7 @@ private fun SummaryCard(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "$transactionCount transactions",
+                    text = stringResource(R.string.transactions_count, transactionCount),
                     style = MaterialTheme.typography.bodyMedium,
                     color = NeoColors.PureWhite.copy(alpha = 0.8f)
                 )
@@ -236,7 +238,7 @@ private fun TransactionItem(
         ) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = transaction.note.ifEmpty { "No note" },
+                    text = transaction.note.ifEmpty { stringResource(R.string.no_note) },
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = NeoColors.PureBlack,
@@ -253,7 +255,7 @@ private fun TransactionItem(
                     )
                 }
                 Text(
-                    text = DateFormatter.formatDateHeader(transaction.transactionDate.date),
+                    text = DateFormatter.formatDateHeaderLocalized(transaction.transactionDate.date),
                     style = MaterialTheme.typography.labelSmall,
                     color = NeoColors.MediumGray
                 )

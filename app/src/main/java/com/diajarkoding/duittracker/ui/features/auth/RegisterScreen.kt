@@ -26,12 +26,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
 import com.diajarkoding.duittracker.ui.components.NeoCard
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
@@ -96,7 +98,7 @@ fun RegisterScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back"
+                        contentDescription = stringResource(R.string.back)
                     )
                 }
             }
@@ -104,7 +106,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = "Create Account",
+                text = stringResource(R.string.create_account),
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Black,
                 color = NeoColors.PureBlack
@@ -113,7 +115,7 @@ fun RegisterScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Start tracking your finances today",
+                text = stringResource(R.string.start_tracking),
                 style = MaterialTheme.typography.bodyLarge,
                 color = NeoColors.DarkGray
             )
@@ -130,7 +132,7 @@ fun RegisterScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Text(
-                        text = "Register",
+                        text = stringResource(R.string.register),
                         style = MaterialTheme.typography.headlineMedium,
                         fontWeight = FontWeight.Bold
                     )
@@ -138,8 +140,8 @@ fun RegisterScreen(
                     NeoInput(
                         value = uiState.name,
                         onValueChange = viewModel::onNameChange,
-                        label = "Full Name",
-                        placeholder = "Enter your name",
+                        label = stringResource(R.string.full_name),
+                        placeholder = stringResource(R.string.enter_your_name),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text,
                             imeAction = ImeAction.Next
@@ -156,8 +158,8 @@ fun RegisterScreen(
                     NeoInput(
                         value = uiState.email,
                         onValueChange = viewModel::onEmailChange,
-                        label = "Email",
-                        placeholder = "Enter your email",
+                        label = stringResource(R.string.email),
+                        placeholder = stringResource(R.string.enter_your_email),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Email,
                             imeAction = ImeAction.Next
@@ -174,8 +176,8 @@ fun RegisterScreen(
                     NeoPasswordInput(
                         value = uiState.password,
                         onValueChange = viewModel::onPasswordChange,
-                        label = "Password",
-                        placeholder = "Create a password",
+                        label = stringResource(R.string.password),
+                        placeholder = stringResource(R.string.create_password),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Next
@@ -192,8 +194,8 @@ fun RegisterScreen(
                     NeoPasswordInput(
                         value = uiState.confirmPassword,
                         onValueChange = viewModel::onConfirmPasswordChange,
-                        label = "Confirm Password",
-                        placeholder = "Confirm your password",
+                        label = stringResource(R.string.confirm_password),
+                        placeholder = stringResource(R.string.confirm_your_password),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Password,
                             imeAction = ImeAction.Done
@@ -210,7 +212,7 @@ fun RegisterScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     NeoButtonText(
-                        text = if (uiState.isLoading) "CREATING ACCOUNT..." else "REGISTER",
+                        text = if (uiState.isLoading) stringResource(R.string.creating_account) else stringResource(R.string.register).uppercase(),
                         onClick = viewModel::register,
                         modifier = Modifier.fillMaxWidth(),
                         enabled = !uiState.isLoading,
@@ -223,7 +225,7 @@ fun RegisterScreen(
 
             TextButton(onClick = onNavigateBack) {
                 Text(
-                    text = "Already have an account? Login",
+                    text = "${stringResource(R.string.already_have_account)} ${stringResource(R.string.login)}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.ElectricBlue

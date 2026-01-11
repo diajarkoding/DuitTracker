@@ -18,9 +18,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 
 @Composable
@@ -122,7 +124,7 @@ fun NeoExpenseIncomeToggle(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "EXPENSE",
+                    text = stringResource(R.string.expense).uppercase(),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = if (isExpense) NeoColors.PureWhite else NeoColors.PureBlack
@@ -137,7 +139,7 @@ fun NeoExpenseIncomeToggle(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "INCOME",
+                    text = stringResource(R.string.income).uppercase(),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
                     color = if (!isExpense) NeoColors.PureWhite else NeoColors.PureBlack

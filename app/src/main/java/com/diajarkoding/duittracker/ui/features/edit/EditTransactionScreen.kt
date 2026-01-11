@@ -53,6 +53,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -63,6 +64,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.model.AccountSource
 import com.diajarkoding.duittracker.data.model.TransactionCategory
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
@@ -205,12 +207,12 @@ fun EditTransactionScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
                 Text(
-                    text = "Edit Transaction",
+                    text = stringResource(R.string.edit_transaction),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.PureBlack
@@ -250,13 +252,13 @@ fun EditTransactionScreen(
                 NeoCurrencyInput(
                     value = uiState.amount,
                     onValueChange = viewModel::onAmountChange,
-                    label = "Amount"
+                    label = stringResource(R.string.amount)
                 )
 
                 // Category Picker
                 Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
                     Text(
-                        text = "Category",
+                        text = stringResource(R.string.category),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = NeoColors.MediumGray
@@ -271,7 +273,7 @@ fun EditTransactionScreen(
                 // Account Source
                 Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
                     Text(
-                        text = "Account",
+                        text = stringResource(R.string.account),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = NeoColors.MediumGray
@@ -287,7 +289,7 @@ fun EditTransactionScreen(
                     NeoDatePickerField(
                         selectedDate = date,
                         onDateClick = viewModel::showDatePicker,
-                        label = "Date"
+                        label = stringResource(R.string.date)
                     )
                 }
 
@@ -295,8 +297,8 @@ fun EditTransactionScreen(
                 NeoInput(
                     value = uiState.note,
                     onValueChange = viewModel::onNoteChange,
-                    label = "Note",
-                    placeholder = "Enter transaction note...",
+                    label = stringResource(R.string.note),
+                    placeholder = stringResource(R.string.enter_note),
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Text,
                         imeAction = ImeAction.Next
@@ -306,7 +308,7 @@ fun EditTransactionScreen(
                 // Description & Image Row
                 Column(verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)) {
                     Text(
-                        text = "Description & Receipt (optional)",
+                        text = stringResource(R.string.description_receipt_optional),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = NeoColors.MediumGray
@@ -338,7 +340,7 @@ fun EditTransactionScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
-                                contentDescription = "Add image",
+                                contentDescription = stringResource(R.string.add_image),
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
                                 tint = if (hasImage) NeoColors.PureWhite else NeoColors.MediumGray
                             )
@@ -364,7 +366,7 @@ fun EditTransactionScreen(
                                     .data(imageData)
                                     .crossfade(true)
                                     .build(),
-                                contentDescription = "Selected image",
+                                contentDescription = stringResource(R.string.selected_image),
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
                             )
@@ -378,7 +380,7 @@ fun EditTransactionScreen(
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Close,
-                                    contentDescription = "Remove image",
+                                    contentDescription = stringResource(R.string.remove_image),
                                     modifier = Modifier.size(14.dp),
                                     tint = NeoColors.PureWhite
                                 )
@@ -391,7 +393,7 @@ fun EditTransactionScreen(
 
                 // Save Button
                 NeoButtonText(
-                    text = if (uiState.isSaving) "Updating..." else "Update Transaction",
+                    text = if (uiState.isSaving) stringResource(R.string.updating) else stringResource(R.string.update_transaction),
                     onClick = viewModel::saveTransaction,
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = if (uiState.isExpense) NeoColors.ExpenseRed else NeoColors.IncomeGreen,
@@ -401,7 +403,7 @@ fun EditTransactionScreen(
                 // Offline indicator
                 if (uiState.isOffline) {
                     Text(
-                        text = "You're offline. Changes will sync when online.",
+                        text = stringResource(R.string.offline_changes_sync),
                         style = MaterialTheme.typography.bodySmall,
                         color = NeoColors.MediumGray,
                         textAlign = TextAlign.Center,
@@ -471,7 +473,7 @@ private fun CategoryPicker(
                 )
                 Spacer(modifier = Modifier.width(NeoSpacing.sm))
                 Text(
-                    text = CategoryUtils.getDisplayName(selectedCategory),
+                    text = CategoryUtils.getLocalizedDisplayName(selectedCategory),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = NeoColors.PureWhite,
@@ -479,7 +481,7 @@ private fun CategoryPicker(
                 )
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = if (isExpanded) "Collapse" else "Expand",
+                    contentDescription = if (isExpanded) stringResource(R.string.collapse) else stringResource(R.string.expand),
                     modifier = Modifier.size(NeoDimens.iconSizeMedium),
                     tint = NeoColors.PureWhite
                 )
@@ -528,7 +530,7 @@ private fun CategoryPicker(
                             )
                             Spacer(modifier = Modifier.width(NeoSpacing.xs))
                             Text(
-                                text = CategoryUtils.getDisplayName(category),
+                                text = CategoryUtils.getLocalizedDisplayName(category),
                                 style = MaterialTheme.typography.labelSmall,
                                 color = if (isSelected) NeoColors.PureWhite else NeoColors.PureBlack,
                                 maxLines = 1
@@ -591,7 +593,7 @@ private fun ImagePickerDialog(
                 verticalArrangement = Arrangement.spacedBy(NeoSpacing.md)
             ) {
                 Text(
-                    text = "Add Image",
+                    text = stringResource(R.string.add_image),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.PureBlack
@@ -618,7 +620,7 @@ private fun ImagePickerDialog(
                             tint = NeoColors.ElectricBlue
                         )
                         Text(
-                            text = "Take Photo",
+                            text = stringResource(R.string.take_photo),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = NeoColors.PureBlack
@@ -647,7 +649,7 @@ private fun ImagePickerDialog(
                             tint = NeoColors.IncomeGreen
                         )
                         Text(
-                            text = "Choose from Gallery",
+                            text = stringResource(R.string.choose_from_gallery),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
                             color = NeoColors.PureBlack
@@ -657,7 +659,7 @@ private fun ImagePickerDialog(
 
                 // Cancel button
                 NeoButtonText(
-                    text = "Cancel",
+                    text = stringResource(R.string.cancel),
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = NeoColors.LightGray

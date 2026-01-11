@@ -1,7 +1,9 @@
 package com.diajarkoding.duittracker.ui.features.dashboard
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.model.Transaction
 import com.diajarkoding.duittracker.data.model.TransactionType
 import com.diajarkoding.duittracker.domain.model.TransactionResult
@@ -42,7 +44,7 @@ data class MonthData(
 
 data class DashboardUiState(
     val userName: String = "",
-    val greeting: String = "",
+    @StringRes val greetingResId: Int = R.string.good_morning,
     val currentMonthTransactions: List<Transaction> = emptyList(),
     val groupedTransactions: Map<LocalDate, List<Transaction>> = emptyMap(),
     val monthlyData: List<MonthData> = emptyList(),
@@ -110,14 +112,14 @@ class DashboardViewModel @Inject constructor(
             authRepository.currentUser.collect { user ->
                 val now = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
                 val hour = now.hour
-                val greeting = when (hour) {
-                    in 5..11 -> "Good morning"
-                    in 12..16 -> "Good afternoon"
-                    in 17..20 -> "Good evening"
-                    else -> "Good night"
+                val greetingResId = when (hour) {
+                    in 5..11 -> R.string.good_morning
+                    in 12..16 -> R.string.good_afternoon
+                    in 17..20 -> R.string.good_evening
+                    else -> R.string.good_night
                 }
-                val userName = user?.name?.split(" ")?.firstOrNull() ?: "User"
-                _uiState.update { it.copy(userName = userName, greeting = greeting) }
+                val userName = user?.name?.split(" ")?.firstOrNull() ?: ""
+                _uiState.update { it.copy(userName = userName, greetingResId = greetingResId) }
             }
         }
     }

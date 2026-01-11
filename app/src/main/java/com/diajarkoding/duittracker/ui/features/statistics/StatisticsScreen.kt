@@ -91,7 +91,7 @@ fun StatisticsScreen(
                 }
                 is StatisticsEvent.ShareExcel -> {
                     context.startActivity(
-                        android.content.Intent.createChooser(event.intent, "Share Report")
+                        android.content.Intent.createChooser(event.intent, context.getString(R.string.share_report))
                     )
                 }
             }
@@ -124,13 +124,13 @@ fun StatisticsScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
                 Spacer(modifier = Modifier.width(NeoSpacing.md))
                 Text(
-                    text = "Statistics",
+                    text = stringResource(R.string.statistics),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.PureBlack,
@@ -228,7 +228,7 @@ fun StatisticsScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Expense",
+                                    text = stringResource(R.string.expense),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Medium,
                                     color = NeoColors.PureWhite.copy(alpha = 0.8f)
@@ -256,7 +256,7 @@ fun StatisticsScreen(
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
-                                    text = "Income",
+                                    text = stringResource(R.string.income),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Medium,
                                     color = NeoColors.PureWhite.copy(alpha = 0.8f)
@@ -277,7 +277,7 @@ fun StatisticsScreen(
                 if (uiState.expenseByCategory.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Expense by Category",
+                            text = stringResource(R.string.expense_by_category),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = NeoColors.MediumGray,
@@ -324,14 +324,14 @@ fun StatisticsScreen(
                         )
                     }
                 } else {
-                    item { EmptyChartState(message = "No expenses this month") }
+                    item { EmptyChartState(message = stringResource(R.string.no_expenses_month)) }
                 }
 
                 // Income Section
                 if (uiState.incomeByCategory.isNotEmpty()) {
                     item {
                         Text(
-                            text = "Income by Category",
+                            text = stringResource(R.string.income_by_category),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = NeoColors.MediumGray,
@@ -405,7 +405,7 @@ private fun MonthSelector(
         IconButton(onClick = onPrevious, enabled = canGoPrevious) {
             Icon(
                 imageVector = Icons.Default.ChevronLeft,
-                contentDescription = "Previous Month",
+                contentDescription = stringResource(R.string.previous_month),
                 tint = if (canGoPrevious) NeoColors.PureBlack else NeoColors.LightGray,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
@@ -419,7 +419,7 @@ private fun MonthSelector(
         IconButton(onClick = onNext, enabled = canGoNext) {
             Icon(
                 imageVector = Icons.Default.ChevronRight,
-                contentDescription = "Next Month",
+                contentDescription = stringResource(R.string.next_month),
                 tint = if (canGoNext) NeoColors.PureBlack else NeoColors.LightGray,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
@@ -484,7 +484,7 @@ private fun PieChart(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Total",
+                text = stringResource(R.string.total),
                 style = MaterialTheme.typography.labelSmall,
                 color = NeoColors.OtherGray
             )
@@ -539,7 +539,7 @@ private fun CategoryRow(
 
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = CategoryUtils.getDisplayName(categoryData.category),
+                    text = CategoryUtils.getLocalizedDisplayName(categoryData.category),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = NeoColors.PureBlack
@@ -569,7 +569,7 @@ private fun CategoryRow(
 
             Icon(
                 imageVector = Icons.Default.ChevronRight,
-                contentDescription = "View transactions",
+                contentDescription = stringResource(R.string.view_transactions),
                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
                 tint = NeoColors.MediumGray
             )

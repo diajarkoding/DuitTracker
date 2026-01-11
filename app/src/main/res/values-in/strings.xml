@@ -39,6 +39,9 @@
     <string name="daily_reminder">Pengingat Harian</string>
     <string name="reminder_time">Waktu Pengingat</string>
     <string name="set_reminder_time">Atur Waktu Pengingat</string>
+    <string name="reminder_schedule">Jadwal Pengingat</string>
+    <string name="lunch_reminder">Jam Makan Siang</string>
+    <string name="evening_reminder">Sebelum Tidur</string>
     <string name="logout">Keluar</string>
     <string name="logout_confirmation">Apakah Anda yakin ingin keluar?</string>
 
@@ -46,7 +49,9 @@
     <string name="notification_channel_name">Pengingat Harian</string>
     <string name="notification_channel_description">Mengingatkan Anda untuk mencatat pengeluaran harian</string>
     <string name="notification_title">Pengingat DuitTracker</string>
-    <string name="notification_message">Jangan lupa catat pengeluaran hari ini! 📝</string>
+    <string name="notification_message">Jangan lupa catat pengeluaran hari ini!</string>
+    <string name="notification_message_lunch">Waktunya makan siang! Sudah catat pengeluaran pagi ini?</string>
+    <string name="notification_message_evening">Pengingat sebelum tidur: Catat pengeluaran harianmu sekarang!</string>
 
     <!-- Add/Edit Transaction -->
     <string name="add_transaction">Tambah Transaksi</string>
@@ -124,4 +129,106 @@
     <string name="error_empty_password">Masukkan kata sandi Anda</string>
     <string name="error_password_mismatch">Kata sandi tidak cocok</string>
     <string name="error_user_not_authenticated">Pengguna tidak terautentikasi</string>
+
+    <!-- Additional UI Strings -->
+    <string name="profile_picture">Foto profil</string>
+    <string name="add_transaction_desc">Tambah Transaksi</string>
+    <string name="good_morning">Selamat pagi</string>
+    <string name="good_afternoon">Selamat siang</string>
+    <string name="good_evening">Selamat sore</string>
+    <string name="good_night">Selamat malam</string>
+    <string name="user_default">Pengguna</string>
+    <string name="transaction_not_found">Transaksi tidak ditemukan</string>
+    <string name="no_transactions_found">Tidak ada transaksi</string>
+    <string name="no_note">Tidak ada catatan</string>
+    <string name="reminders_enabled">Pengingat diaktifkan (12:00 &amp; 22:00)</string>
+    <string name="reminders_disabled">Pengingat dinonaktifkan</string>
+    <string name="reminders_updated">Pengingat diperbarui</string>
+    <string name="transaction">Transaksi</string>
+    <string name="date">Tanggal</string>
+    <string name="time">Waktu</string>
+    <string name="account">Akun</string>
+    <string name="status">Status</string>
+    <string name="synced">Tersinkronisasi</string>
+    <string name="pending_sync_status">Menunggu sinkronisasi</string>
+    <string name="receipt">Struk</string>
+    <string name="receipt_image">Gambar struk</string>
+    <string name="delete_transaction">Hapus Transaksi</string>
+    <string name="name_required">Nama wajib diisi</string>
+    <string name="email_required">Email wajib diisi</string>
+    <string name="invalid_email">Format email tidak valid</string>
+    <string name="password_required">Kata sandi wajib diisi</string>
+    <string name="confirm_password_required">Konfirmasi kata sandi Anda</string>
+    <string name="passwords_not_match">Kata sandi tidak cocok</string>
+    <string name="full_name">Nama Lengkap</string>
+    <string name="enter_your_name">Masukkan nama Anda</string>
+    <string name="enter_your_email">Masukkan email Anda</string>
+    <string name="create_password">Buat kata sandi</string>
+    <string name="confirm_your_password">Konfirmasi kata sandi Anda</string>
+    <string name="creating_account">MEMBUAT AKUN...</string>
+    <string name="create_account">Buat Akun</string>
+    <string name="start_tracking">Mulai kelola keuanganmu hari ini</string>
+    <string name="logging_in">MASUK...</string>
+    <string name="saving">Menyimpan...</string>
+    <string name="updating">Memperbarui...</string>
+    <string name="update_transaction">Perbarui Transaksi</string>
+    <string name="save_transaction">Simpan Transaksi</string>
+    <string name="selected_image">Gambar terpilih</string>
+    <string name="collapse">Tutup</string>
+    <string name="expand">Buka</string>
+    <string name="take_photo">Ambil Foto</string>
+    <string name="choose_from_gallery">Pilih dari Galeri</string>
+    <string name="hide_password">Sembunyikan kata sandi</string>
+    <string name="show_password">Tampilkan kata sandi</string>
+    <string name="currency_symbol">Rp</string>
+    <string name="select_date">Pilih Tanggal</string>
+    <string name="previous_month">Bulan sebelumnya</string>
+    <string name="next_month">Bulan berikutnya</string>
+    <string name="increase">Tambah</string>
+    <string name="decrease">Kurang</string>
+    <string name="share_report">Bagikan Laporan</string>
+    <string name="view_transactions">Lihat transaksi</string>
+    <string name="all_time">Semua Waktu</string>
+
+    <!-- Additional Strings -->
+    <string name="description_receipt_optional">Deskripsi &amp; Struk (opsional)</string>
+    <string name="offline_changes_sync">Anda offline. Perubahan akan disinkronkan saat online.</string>
+    <string name="youre_offline">Anda offline</string>
+    <string name="syncing">Menyinkronkan...</string>
+    <string name="tagline">Kelola uangmu, raih masa depanmu</string>
+    <string name="version">Versi %1$s</string>
+
+    <!-- Date -->
+    <string name="today">Hari ini</string>
+    <string name="yesterday">Kemarin</string>
+
+    <!-- Days of week -->
+    <string name="day_sun">Min</string>
+    <string name="day_mon">Sen</string>
+    <string name="day_tue">Sel</string>
+    <string name="day_wed">Rab</string>
+    <string name="day_thu">Kam</string>
+    <string name="day_fri">Jum</string>
+    <string name="day_sat">Sab</string>
+    <string name="day_monday">Senin</string>
+    <string name="day_tuesday">Selasa</string>
+    <string name="day_wednesday">Rabu</string>
+    <string name="day_thursday">Kamis</string>
+    <string name="day_friday">Jumat</string>
+    <string name="day_saturday">Sabtu</string>
+    <string name="day_sunday">Minggu</string>
+
+    <!-- Months -->
+    <string name="month_january">Januari</string>
+    <string name="month_february">Februari</string>
+    <string name="month_march">Maret</string>
+    <string name="month_april">April</string>
+    <string name="month_may">Mei</string>
+    <string name="month_june">Juni</string>
+    <string name="month_july">Juli</string>
+    <string name="month_august">Agustus</string>
+    <string name="month_september">September</string>
+    <string name="month_october">Oktober</string>
+    <string name="month_november">November</string>
+    <string name="month_december">Desember</string>
 </resources>

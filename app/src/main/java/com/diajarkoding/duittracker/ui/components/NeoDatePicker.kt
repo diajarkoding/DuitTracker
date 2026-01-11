@@ -34,10 +34,12 @@
  import androidx.compose.ui.Alignment
  import androidx.compose.ui.Modifier
  import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.text.font.FontWeight
  import androidx.compose.ui.text.style.TextAlign
  import androidx.compose.ui.unit.dp
  import androidx.compose.ui.window.Dialog
+import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  import com.diajarkoding.duittracker.ui.theme.NeoSpacing
@@ -100,7 +102,7 @@
                          )
                      }
                      Text(
-                         text = formatDate(selectedDate),
+                        text = formatDateLocalized(selectedDate),
                          style = MaterialTheme.typography.bodyMedium,
                          fontWeight = FontWeight.Medium,
                          color = NeoColors.PureBlack
@@ -108,7 +110,7 @@
                  }
                  Icon(
                      imageVector = Icons.Default.ChevronRight,
-                     contentDescription = "Select date",
+                    contentDescription = stringResource(R.string.select_date),
                      tint = NeoColors.MediumGray,
                      modifier = Modifier.size(NeoDimens.iconSizeMedium)
                  )
@@ -141,7 +143,7 @@
              ) {
                  // Header
                  Text(
-                     text = "Select Date",
+                    text = stringResource(R.string.select_date),
                      style = MaterialTheme.typography.titleLarge,
                      fontWeight = FontWeight.Bold,
                      color = NeoColors.PureBlack
@@ -174,14 +176,14 @@
                          ) {
                              Icon(
                                  imageVector = Icons.Default.ChevronLeft,
-                                 contentDescription = "Previous month",
+                                contentDescription = stringResource(R.string.previous_month),
                                  tint = NeoColors.PureBlack
                              )
                          }
                      }
  
                      Text(
-                         text = getMonthYearString(currentMonth),
+                        text = getMonthYearStringLocalized(currentMonth),
                          style = MaterialTheme.typography.titleMedium,
                          fontWeight = FontWeight.Bold,
                          color = NeoColors.PureBlack
@@ -206,7 +208,7 @@
                          ) {
                              Icon(
                                  imageVector = Icons.Default.ChevronRight,
-                                 contentDescription = "Next month",
+                                contentDescription = stringResource(R.string.next_month),
                                  tint = NeoColors.PureBlack
                              )
                          }
@@ -220,7 +222,15 @@
                      modifier = Modifier.fillMaxWidth(),
                      horizontalArrangement = Arrangement.SpaceEvenly
                  ) {
-                     listOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat").forEach { day ->
+                    listOf(
+                        stringResource(R.string.day_sun),
+                        stringResource(R.string.day_mon),
+                        stringResource(R.string.day_tue),
+                        stringResource(R.string.day_wed),
+                        stringResource(R.string.day_thu),
+                        stringResource(R.string.day_fri),
+                        stringResource(R.string.day_sat)
+                    ).forEach { day ->
                          Text(
                              text = day,
                              style = MaterialTheme.typography.labelSmall,
@@ -297,14 +307,14 @@
                      horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
                  ) {
                      NeoButtonText(
-                         text = "Cancel",
+                        text = stringResource(R.string.cancel),
                          onClick = onDismiss,
                          modifier = Modifier.weight(1f),
                          backgroundColor = NeoColors.LightGray,
                          contentColor = NeoColors.PureBlack
                      )
                      NeoButtonText(
-                         text = "Confirm",
+                        text = stringResource(R.string.confirm),
                          onClick = { onDateSelected(selectedDate) },
                          modifier = Modifier.weight(1f),
                          backgroundColor = NeoColors.PureBlack,
@@ -316,41 +326,44 @@
      }
  }
  
- private fun formatDate(date: LocalDate): String {
-     val dayOfWeek = when (date.dayOfWeek.ordinal) {
-         0 -> "Monday"
-         1 -> "Tuesday"
-         2 -> "Wednesday"
-         3 -> "Thursday"
-         4 -> "Friday"
-         5 -> "Saturday"
-         6 -> "Sunday"
-         else -> ""
+@Composable
+private fun formatDateLocalized(date: LocalDate): String {
+    val dayOfWeek = when (date.dayOfWeek.ordinal) {
+        0 -> stringResource(R.string.day_monday)
+        1 -> stringResource(R.string.day_tuesday)
+        2 -> stringResource(R.string.day_wednesday)
+        3 -> stringResource(R.string.day_thursday)
+        4 -> stringResource(R.string.day_friday)
+        5 -> stringResource(R.string.day_saturday)
+        6 -> stringResource(R.string.day_sunday)
+        else -> ""
      }
-     val month = getMonthName(date.monthNumber)
+    val month = getMonthNameLocalized(date.monthNumber)
      return "$dayOfWeek, ${date.dayOfMonth} $month ${date.year}"
  }
  
- private fun getMonthName(month: Int): String {
+@Composable
+private fun getMonthNameLocalized(month: Int): String {
      return when (month) {
-         1 -> "January"
-         2 -> "February"
-         3 -> "March"
-         4 -> "April"
-         5 -> "May"
-         6 -> "June"
-         7 -> "July"
-         8 -> "August"
-         9 -> "September"
-         10 -> "October"
-         11 -> "November"
-         12 -> "December"
+        1 -> stringResource(R.string.month_january)
+        2 -> stringResource(R.string.month_february)
+        3 -> stringResource(R.string.month_march)
+        4 -> stringResource(R.string.month_april)
+        5 -> stringResource(R.string.month_may)
+        6 -> stringResource(R.string.month_june)
+        7 -> stringResource(R.string.month_july)
+        8 -> stringResource(R.string.month_august)
+        9 -> stringResource(R.string.month_september)
+        10 -> stringResource(R.string.month_october)
+        11 -> stringResource(R.string.month_november)
+        12 -> stringResource(R.string.month_december)
          else -> ""
      }
  }
  
- private fun getMonthYearString(date: LocalDate): String {
-     return "${getMonthName(date.monthNumber)} ${date.year}"
+@Composable
+private fun getMonthYearStringLocalized(date: LocalDate): String {
+    return "${getMonthNameLocalized(date.monthNumber)} ${date.year}"
  }
  
  private fun getCalendarDays(currentMonth: LocalDate): List<LocalDate?> {

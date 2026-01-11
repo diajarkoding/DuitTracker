@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +43,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.model.Transaction
 import com.diajarkoding.duittracker.data.model.TransactionType
 import com.diajarkoding.duittracker.ui.components.NeoButtonText
@@ -91,13 +93,13 @@ fun TransactionDetailScreen(
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
                 Spacer(modifier = Modifier.width(NeoSpacing.md))
                 Text(
-                    text = "Transaction",
+                    text = stringResource(R.string.transaction),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.PureBlack,
@@ -111,7 +113,7 @@ fun TransactionDetailScreen(
                     ) {
                         Icon(
                             imageVector = Icons.Default.Edit,
-                            contentDescription = "Edit",
+                            contentDescription = stringResource(R.string.edit),
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
                             tint = NeoColors.PureBlack
                         )
@@ -194,7 +196,7 @@ private fun TransactionDetailContent(
                         .padding(horizontal = NeoSpacing.md, vertical = NeoSpacing.xs)
                 ) {
                     Text(
-                        text = if (isExpense) "Expense" else "Income",
+                        text = if (isExpense) stringResource(R.string.expense) else stringResource(R.string.income),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.SemiBold,
                         color = if (isExpense) NeoColors.ExpenseRed else NeoColors.IncomeGreen
@@ -237,12 +239,12 @@ private fun TransactionDetailContent(
                 }
                 Column {
                     Text(
-                        text = "Category",
+                        text = stringResource(R.string.category),
                         style = MaterialTheme.typography.labelSmall,
                         color = NeoColors.MediumGray
                     )
                     Text(
-                        text = CategoryUtils.getDisplayName(transaction.category),
+                        text = CategoryUtils.getLocalizedDisplayName(transaction.category),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
                         color = NeoColors.PureBlack
@@ -260,22 +262,22 @@ private fun TransactionDetailContent(
                 modifier = Modifier.padding(NeoSpacing.lg),
                 verticalArrangement = Arrangement.spacedBy(NeoSpacing.lg)
             ) {
-                DetailRow(label = "Note", value = transaction.note)
+                DetailRow(label = stringResource(R.string.note), value = transaction.note)
                 if (!transaction.description.isNullOrBlank()) {
-                    DetailRow(label = "Description", value = transaction.description)
+                    DetailRow(label = stringResource(R.string.description), value = transaction.description)
                 }
                 DetailRow(
-                    label = "Date",
-                    value = DateFormatter.formatFullDate(transaction.transactionDate.date)
+                    label = stringResource(R.string.date),
+                    value = DateFormatter.formatFullDateLocalized(transaction.transactionDate.date)
                 )
                 DetailRow(
-                    label = "Time",
+                    label = stringResource(R.string.time),
                     value = DateFormatter.formatTime(transaction.transactionDate)
                 )
-                DetailRow(label = "Account", value = transaction.accountSource.name)
+                DetailRow(label = stringResource(R.string.account), value = transaction.accountSource.name)
                 DetailRow(
-                    label = "Status",
-                    value = if (transaction.isSynced) "Synced" else "Pending sync"
+                    label = stringResource(R.string.status),
+                    value = if (transaction.isSynced) stringResource(R.string.synced) else stringResource(R.string.pending_sync_status)
                 )
             }
         }
@@ -291,7 +293,7 @@ private fun TransactionDetailContent(
                     verticalArrangement = Arrangement.spacedBy(NeoSpacing.sm)
                 ) {
                     Text(
-                        text = "Receipt",
+                        text = stringResource(R.string.receipt),
                         style = MaterialTheme.typography.labelSmall,
                         color = NeoColors.MediumGray
                     )
@@ -301,7 +303,7 @@ private fun TransactionDetailContent(
                             .data(imageUrl)
                             .crossfade(true)
                             .build(),
-                        contentDescription = "Receipt image",
+                        contentDescription = stringResource(R.string.receipt_image),
                         modifier = Modifier
                             .fillMaxWidth()
                             .height(200.dp)
@@ -321,7 +323,7 @@ private fun TransactionDetailContent(
 
         // Delete Button
         NeoButtonText(
-            text = "Delete Transaction",
+            text = stringResource(R.string.delete_transaction),
             onClick = onDelete,
             modifier = Modifier.fillMaxWidth(),
             backgroundColor = NeoColors.ExpenseRed

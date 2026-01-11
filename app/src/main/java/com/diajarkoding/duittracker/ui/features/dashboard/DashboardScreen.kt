@@ -36,11 +36,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.data.model.Transaction
 import com.diajarkoding.duittracker.data.model.TransactionType
 import com.diajarkoding.duittracker.ui.components.NeoButton
@@ -107,12 +109,12 @@ fun DashboardScreen(
             ) {
                 Column {
                     Text(
-                        text = "${uiState.greeting},",
+                        text = "${stringResource(uiState.greetingResId)},",
                         style = MaterialTheme.typography.bodyMedium,
                         color = NeoColors.MediumGray
                     )
                     Text(
-                        text = uiState.userName,
+                        text = uiState.userName.ifEmpty { stringResource(R.string.user_default) },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
                         color = NeoColors.PureBlack
@@ -134,7 +136,7 @@ fun DashboardScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = "Add Transaction",
+                    contentDescription = stringResource(R.string.add_transaction),
                     modifier = Modifier.size(NeoDimens.iconSizeLarge)
                 )
             }
@@ -187,7 +189,7 @@ fun DashboardScreen(
                 when (uiState.viewMode) {
                     ViewMode.DAILY -> {
                         if (uiState.groupedTransactions.isEmpty()) {
-                            item { EmptyState(message = "No transactions this month") }
+                            item { EmptyState(message = stringResource(R.string.no_transactions_month)) }
                         } else {
                             uiState.groupedTransactions.forEach { (date, transactions) ->
                                 item(key = "date_$date") {
@@ -204,7 +206,7 @@ fun DashboardScreen(
                     }
                     ViewMode.MONTHLY -> {
                         if (uiState.monthlyData.isEmpty()) {
-                            item { EmptyState(message = "No transactions yet") }
+                            item { EmptyState(message = stringResource(R.string.no_transactions)) }
                         } else {
                             uiState.monthlyData.forEach { monthData ->
                                 item(key = "month_${monthData.monthKey}") {
@@ -284,7 +286,7 @@ private fun SummaryCard(
                         .padding(horizontal = NeoSpacing.md, vertical = NeoSpacing.xs)
                 ) {
                     Text(
-                        text = "Balance",
+                        text = stringResource(R.string.balance),
                         style = MaterialTheme.typography.labelSmall,
                         fontWeight = FontWeight.Bold,
                         color = NeoColors.PureBlack
@@ -308,7 +310,7 @@ private fun SummaryCard(
                 ) {
                     Column(modifier = Modifier.padding(NeoSpacing.md)) {
                         Text(
-                            text = "Income",
+                            text = stringResource(R.string.income),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
                             color = NeoColors.PureWhite.copy(alpha = 0.8f)
@@ -331,7 +333,7 @@ private fun SummaryCard(
                 ) {
                     Column(modifier = Modifier.padding(NeoSpacing.md)) {
                         Text(
-                            text = "Expense",
+                            text = stringResource(R.string.expense),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
                             color = NeoColors.PureWhite.copy(alpha = 0.8f)
@@ -375,7 +377,10 @@ private fun ViewModeToggle(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = mode.name.lowercase().replaceFirstChar { it.uppercase() },
+                    text = when (mode) {
+                        ViewMode.DAILY -> stringResource(R.string.daily)
+                        ViewMode.MONTHLY -> stringResource(R.string.monthly)
+                    },
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
                     color = if (isSelected) NeoColors.PureWhite else NeoColors.MediumGray
@@ -388,7 +393,7 @@ private fun ViewModeToggle(
 @Composable
 private fun DateHeader(date: LocalDate) {
     Text(
-        text = DateFormatter.formatDateHeader(date),
+        text = DateFormatter.formatDateHeaderLocalized(date),
         style = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.SemiBold,
         color = NeoColors.MediumGray,
@@ -524,7 +529,7 @@ private fun TransactionItem(
                     color = NeoColors.PureBlack
                 )
                 Text(
-                    text = "${CategoryUtils.getDisplayName(transaction.category)} · ${DateFormatter.formatTime(transaction.transactionDate)}",
+                    text = "${CategoryUtils.getLocalizedDisplayName(transaction.category)} · ${DateFormatter.formatTime(transaction.transactionDate)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = NeoColors.MediumGray
                 )

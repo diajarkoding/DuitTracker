@@ -32,10 +32,12 @@
  import androidx.compose.ui.Alignment
  import androidx.compose.ui.Modifier
  import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.text.font.FontWeight
  import androidx.compose.ui.text.style.TextAlign
  import androidx.compose.ui.unit.dp
  import androidx.compose.ui.window.Dialog
+import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  import com.diajarkoding.duittracker.ui.theme.NeoSpacing
@@ -62,7 +64,7 @@
                  horizontalAlignment = Alignment.CenterHorizontally
              ) {
                  Text(
-                     text = "Set Reminder Time",
+                    text = stringResource(R.string.set_reminder_time),
                      style = MaterialTheme.typography.titleLarge,
                      fontWeight = FontWeight.Bold,
                      color = NeoColors.PureBlack
@@ -104,14 +106,14 @@
                      horizontalArrangement = Arrangement.spacedBy(NeoSpacing.md)
                  ) {
                      NeoButtonText(
-                         text = "Cancel",
+                        text = stringResource(R.string.cancel),
                          onClick = onDismiss,
                          modifier = Modifier.weight(1f),
                          backgroundColor = NeoColors.LightGray,
                          contentColor = NeoColors.PureBlack
                      )
                      NeoButtonText(
-                         text = "Confirm",
+                        text = stringResource(R.string.confirm),
                          onClick = { onTimeSelected(selectedHour, selectedMinute) },
                          modifier = Modifier.weight(1f),
                          backgroundColor = NeoColors.PureBlack,
@@ -140,7 +142,7 @@
          ) {
              Icon(
                  imageVector = Icons.Default.KeyboardArrowUp,
-                 contentDescription = "Increase",
+                contentDescription = stringResource(R.string.increase),
                  tint = NeoColors.PureBlack,
                  modifier = Modifier.size(NeoDimens.iconSizeLarge)
              )
@@ -175,7 +177,7 @@
          ) {
              Icon(
                  imageVector = Icons.Default.KeyboardArrowDown,
-                 contentDescription = "Decrease",
+                contentDescription = stringResource(R.string.decrease),
                  tint = NeoColors.PureBlack,
                  modifier = Modifier.size(NeoDimens.iconSizeLarge)
              )

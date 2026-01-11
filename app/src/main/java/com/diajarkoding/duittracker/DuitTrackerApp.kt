@@ -1,6 +1,7 @@
 package com.diajarkoding.duittracker
 
 import android.app.Application
+import android.content.Context
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import androidx.work.Constraints
@@ -10,13 +11,19 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.diajarkoding.duittracker.data.local.preferences.AppLanguage
+import com.diajarkoding.duittracker.data.local.preferences.AppPreferences
 import com.diajarkoding.duittracker.data.network.NetworkMonitor
+import com.diajarkoding.duittracker.data.notification.ReminderNotificationManager
 import com.diajarkoding.duittracker.data.sync.SyncWorker
+import com.diajarkoding.duittracker.utils.LocaleHelper
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -29,17 +36,43 @@ class DuitTrackerApp : Application(), Configuration.Provider {
     @Inject
     lateinit var networkMonitor: NetworkMonitor
 
+    @Inject
+    lateinit var reminderNotificationManager: ReminderNotificationManager
+
+    @Inject
+    lateinit var appPreferences: AppPreferences
+
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+    
+    private var currentLanguage: AppLanguage = AppLanguage.ENGLISH
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()
             .setWorkerFactory(workerFactory)
             .build()
 
+    override fun attachBaseContext(base: Context) {
+        super.attachBaseContext(base)
+    }
+
     override fun onCreate() {
         super.onCreate()
+        setupNotificationChannel()
         setupNetworkMonitoring()
         setupPeriodicSync()
+        observeLanguageChanges()
+    }
+
+    private fun setupNotificationChannel() {
+        reminderNotificationManager.createNotificationChannel()
+    }
+
+    private fun observeLanguageChanges() {
+        applicationScope.launch {
+            appPreferences.language.collect { language ->
+                currentLanguage = language
+            }
+        }
     }
 
     private fun setupNetworkMonitoring() {

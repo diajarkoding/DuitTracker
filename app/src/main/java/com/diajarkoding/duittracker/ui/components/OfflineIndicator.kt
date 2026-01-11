@@ -22,8 +22,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
 
 @Composable
@@ -62,14 +64,14 @@ fun OfflineIndicator(
             Spacer(modifier = Modifier.width(12.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = "You're offline",
+                    text = stringResource(R.string.youre_offline),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Bold,
                     color = NeoColors.DarkGray
                 )
                 if (pendingCount > 0) {
                     Text(
-                        text = "$pendingCount pending changes will sync when online",
+                        text = stringResource(R.string.pending_sync, pendingCount),
                         style = MaterialTheme.typography.bodySmall,
                         color = NeoColors.DarkGray
                     )
@@ -121,7 +123,7 @@ fun SyncingIndicator(
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = "Syncing...",
+                text = stringResource(R.string.syncing),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 color = NeoColors.PureWhite

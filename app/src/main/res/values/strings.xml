@@ -38,6 +38,9 @@
     <string name="daily_reminder">Daily Reminder</string>
     <string name="reminder_time">Reminder Time</string>
     <string name="set_reminder_time">Set Reminder Time</string>
+    <string name="reminder_schedule">Reminder Schedule</string>
+    <string name="lunch_reminder">Lunch Time</string>
+    <string name="evening_reminder">Before Bed</string>
     <string name="logout">Logout</string>
     <string name="logout_confirmation">Are you sure you want to logout?</string>
 
@@ -45,7 +48,9 @@
     <string name="notification_channel_name">Daily Reminder</string>
     <string name="notification_channel_description">Reminds you to record your daily expenses</string>
     <string name="notification_title">DuitTracker Reminder</string>
-    <string name="notification_message">Don\'t forget to record your expenses today! 📝</string>
+    <string name="notification_message">Don\'t forget to record your expenses today!</string>
+    <string name="notification_message_lunch">Time for lunch! Have you recorded your morning expenses?</string>
+    <string name="notification_message_evening">Before bed reminder: Record your daily expenses now!</string>
 
     <!-- Add/Edit Transaction -->
     <string name="add_transaction">Add Transaction</string>
@@ -123,4 +128,106 @@
     <string name="error_empty_password">Please enter your password</string>
     <string name="error_password_mismatch">Passwords do not match</string>
     <string name="error_user_not_authenticated">User not authenticated</string>
- </resources>
+
+    <!-- Additional UI Strings -->
+    <string name="profile_picture">Profile picture</string>
+    <string name="add_transaction_desc">Add Transaction</string>
+    <string name="good_morning">Good morning</string>
+    <string name="good_afternoon">Good afternoon</string>
+    <string name="good_evening">Good evening</string>
+    <string name="good_night">Good night</string>
+    <string name="user_default">User</string>
+    <string name="transaction_not_found">Transaction not found</string>
+    <string name="no_transactions_found">No transactions found</string>
+    <string name="no_note">No note</string>
+    <string name="reminders_enabled">Reminders enabled (12:00 &amp; 22:00)</string>
+    <string name="reminders_disabled">Reminders disabled</string>
+    <string name="reminders_updated">Reminders updated</string>
+    <string name="transaction">Transaction</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="account">Account</string>
+    <string name="status">Status</string>
+    <string name="synced">Synced</string>
+    <string name="pending_sync_status">Pending sync</string>
+    <string name="receipt">Receipt</string>
+    <string name="receipt_image">Receipt image</string>
+    <string name="delete_transaction">Delete Transaction</string>
+    <string name="name_required">Name is required</string>
+    <string name="email_required">Email is required</string>
+    <string name="invalid_email">Invalid email format</string>
+    <string name="password_required">Password is required</string>
+    <string name="confirm_password_required">Please confirm your password</string>
+    <string name="passwords_not_match">Passwords do not match</string>
+    <string name="full_name">Full Name</string>
+    <string name="enter_your_name">Enter your name</string>
+    <string name="enter_your_email">Enter your email</string>
+    <string name="create_password">Create a password</string>
+    <string name="confirm_your_password">Confirm your password</string>
+    <string name="creating_account">CREATING ACCOUNT...</string>
+    <string name="create_account">Create Account</string>
+    <string name="start_tracking">Start tracking your finances today</string>
+    <string name="logging_in">LOGGING IN...</string>
+    <string name="saving">Saving...</string>
+    <string name="updating">Updating...</string>
+    <string name="update_transaction">Update Transaction</string>
+    <string name="save_transaction">Save Transaction</string>
+    <string name="selected_image">Selected image</string>
+    <string name="collapse">Collapse</string>
+    <string name="expand">Expand</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="choose_from_gallery">Choose from Gallery</string>
+    <string name="hide_password">Hide password</string>
+    <string name="show_password">Show password</string>
+    <string name="currency_symbol">Rp</string>
+    <string name="select_date">Select Date</string>
+    <string name="previous_month">Previous month</string>
+    <string name="next_month">Next month</string>
+    <string name="increase">Increase</string>
+    <string name="decrease">Decrease</string>
+    <string name="share_report">Share Report</string>
+    <string name="view_transactions">View transactions</string>
+    <string name="all_time">All Time</string>
+
+    <!-- Additional Strings -->
+    <string name="description_receipt_optional">Description &amp; Receipt (optional)</string>
+    <string name="offline_changes_sync">You\'re offline. Changes will sync when online.</string>
+    <string name="youre_offline">You\'re offline</string>
+    <string name="syncing">Syncing...</string>
+    <string name="tagline">Track your money, own your future</string>
+    <string name="version">Version %1$s</string>
+
+    <!-- Date -->
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+
+    <!-- Days of week -->
+    <string name="day_sun">Sun</string>
+    <string name="day_mon">Mon</string>
+    <string name="day_tue">Tue</string>
+    <string name="day_wed">Wed</string>
+    <string name="day_thu">Thu</string>
+    <string name="day_fri">Fri</string>
+    <string name="day_sat">Sat</string>
+    <string name="day_monday">Monday</string>
+    <string name="day_tuesday">Tuesday</string>
+    <string name="day_wednesday">Wednesday</string>
+    <string name="day_thursday">Thursday</string>
+    <string name="day_friday">Friday</string>
+    <string name="day_saturday">Saturday</string>
+    <string name="day_sunday">Sunday</string>
+
+    <!-- Months -->
+    <string name="month_january">January</string>
+    <string name="month_february">February</string>
+    <string name="month_march">March</string>
+    <string name="month_april">April</string>
+    <string name="month_may">May</string>
+    <string name="month_june">June</string>
+    <string name="month_july">July</string>
+    <string name="month_august">August</string>
+    <string name="month_september">September</string>
+    <string name="month_october">October</string>
+    <string name="month_november">November</string>
+    <string name="month_december">December</string>
+</resources>
