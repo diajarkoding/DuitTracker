@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 @Composable
 fun OfflineIndicator(
@@ -45,7 +46,7 @@ fun OfflineIndicator(
                 .fillMaxWidth()
                 .border(
                     width = 2.dp,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .background(
@@ -105,7 +106,7 @@ fun SyncingIndicator(
                 .fillMaxWidth()
                 .border(
                     width = 2.dp,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     shape = RoundedCornerShape(8.dp)
                 )
                 .background(
@@ -118,7 +119,7 @@ fun SyncingIndicator(
             Icon(
                 imageVector = Icons.Default.Sync,
                 contentDescription = null,
-                tint = NeoColors.PureWhite,
+                tint = NeoTheme.colors.cardBackground,
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.width(12.dp))
@@ -126,7 +127,7 @@ fun SyncingIndicator(
                 text = stringResource(R.string.syncing),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
-                color = NeoColors.PureWhite
+                color = NeoTheme.colors.cardBackground
             )
         }
     }

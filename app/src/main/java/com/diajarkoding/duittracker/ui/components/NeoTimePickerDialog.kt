@@ -39,6 +39,7 @@ import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.window.Dialog
 import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  import com.diajarkoding.duittracker.ui.theme.NeoSpacing
  
@@ -55,7 +56,7 @@ import com.diajarkoding.duittracker.R
      Dialog(onDismissRequest = onDismiss) {
          NeoCard(
              modifier = Modifier.fillMaxWidth(),
-             backgroundColor = NeoColors.PureWhite,
+             backgroundColor = NeoTheme.colors.cardBackground,
              shadowOffset = NeoDimens.shadowOffset,
              cornerRadius = NeoDimens.cornerRadius
          ) {
@@ -67,7 +68,7 @@ import com.diajarkoding.duittracker.R
                     text = stringResource(R.string.set_reminder_time),
                      style = MaterialTheme.typography.titleLarge,
                      fontWeight = FontWeight.Bold,
-                     color = NeoColors.PureBlack
+                     color = NeoTheme.colors.textPrimary
                  )
  
                  Spacer(modifier = Modifier.height(NeoSpacing.xl))
@@ -87,7 +88,7 @@ import com.diajarkoding.duittracker.R
                          text = ":",
                          style = MaterialTheme.typography.headlineLarge,
                          fontWeight = FontWeight.Bold,
-                         color = NeoColors.PureBlack,
+                         color = NeoTheme.colors.textPrimary,
                          modifier = Modifier.padding(horizontal = NeoSpacing.md)
                      )
  
@@ -109,14 +110,14 @@ import com.diajarkoding.duittracker.R
                         text = stringResource(R.string.cancel),
                          onClick = onDismiss,
                          modifier = Modifier.weight(1f),
-                         backgroundColor = NeoColors.LightGray,
-                         contentColor = NeoColors.PureBlack
+                         backgroundColor = NeoTheme.colors.lightGray,
+                         contentColor = NeoTheme.colors.textPrimary
                      )
                      NeoButtonText(
                         text = stringResource(R.string.confirm),
                          onClick = { onTimeSelected(selectedHour, selectedMinute) },
                          modifier = Modifier.weight(1f),
-                         backgroundColor = NeoColors.PureBlack,
+                         backgroundColor = NeoTheme.colors.textPrimary,
                          contentColor = NeoColors.SunYellow
                      )
                  }
@@ -143,7 +144,7 @@ import com.diajarkoding.duittracker.R
              Icon(
                  imageVector = Icons.Default.KeyboardArrowUp,
                 contentDescription = stringResource(R.string.increase),
-                 tint = NeoColors.PureBlack,
+                 tint = NeoTheme.colors.textPrimary,
                  modifier = Modifier.size(NeoDimens.iconSizeLarge)
              )
          }
@@ -155,7 +156,7 @@ import com.diajarkoding.duittracker.R
                  .background(NeoColors.SunYellow)
                  .border(
                      NeoDimens.borderWidth,
-                     NeoColors.PureBlack,
+                     NeoTheme.colors.textPrimary,
                      RoundedCornerShape(NeoDimens.cornerRadiusSmall)
                  ),
              contentAlignment = Alignment.Center
@@ -164,7 +165,7 @@ import com.diajarkoding.duittracker.R
                  text = String.format("%02d", value),
                  style = MaterialTheme.typography.headlineMedium,
                  fontWeight = FontWeight.Bold,
-                 color = NeoColors.PureBlack,
+                 color = NeoTheme.colors.textPrimary,
                  textAlign = TextAlign.Center
              )
          }
@@ -178,7 +179,7 @@ import com.diajarkoding.duittracker.R
              Icon(
                  imageVector = Icons.Default.KeyboardArrowDown,
                 contentDescription = stringResource(R.string.decrease),
-                 tint = NeoColors.PureBlack,
+                 tint = NeoTheme.colors.textPrimary,
                  modifier = Modifier.size(NeoDimens.iconSizeLarge)
              )
          }

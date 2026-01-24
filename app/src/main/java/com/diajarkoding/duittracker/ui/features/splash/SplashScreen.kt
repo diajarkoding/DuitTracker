@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.BuildConfig
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -78,7 +79,7 @@ fun SplashScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(NeoColors.Background)
+            .background(NeoTheme.colors.background)
     ) {
         Column(
             modifier = Modifier.align(Alignment.Center),
@@ -98,14 +99,14 @@ fun SplashScreen(
                         .size(100.dp)
                         .offset(x = 4.dp, y = 4.dp)
                         .clip(CircleShape)
-                        .background(NeoColors.LightGray)
+                        .background(NeoTheme.colors.lightGray)
                 )
                 // Main circle
                 Box(
                     modifier = Modifier
                         .size(100.dp)
                         .clip(CircleShape)
-                        .background(NeoColors.PureBlack),
+                        .background(NeoTheme.colors.textPrimary),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
@@ -124,7 +125,7 @@ fun SplashScreen(
                 text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Black,
-                color = NeoColors.PureBlack,
+                color = NeoTheme.colors.textPrimary,
                 modifier = Modifier.graphicsLayer { alpha = contentAlpha }
             )
             
@@ -135,7 +136,7 @@ fun SplashScreen(
                 text = stringResource(R.string.tagline),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Medium,
-                color = NeoColors.MediumGray,
+                color = NeoTheme.colors.textSecondary,
                 modifier = Modifier.graphicsLayer { alpha = contentAlpha }
             )
 
@@ -147,7 +148,7 @@ fun SplashScreen(
                     modifier = Modifier
                         .size(32.dp)
                         .graphicsLayer { alpha = contentAlpha },
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     strokeWidth = 3.dp
                 )
             }
@@ -157,7 +158,7 @@ fun SplashScreen(
         Text(
             text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
             style = MaterialTheme.typography.bodySmall,
-            color = NeoColors.MediumGray,
+            color = NeoTheme.colors.textSecondary,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = NeoSpacing.xxl)

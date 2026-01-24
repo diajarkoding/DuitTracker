@@ -1,5 +1,6 @@
 package com.diajarkoding.duittracker.data.local.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -50,4 +51,13 @@ interface TransactionDao {
 
     @Query("DELETE FROM transactions")
     suspend fun deleteAllTransactions()
+
+    @Query("SELECT * FROM transactions WHERE user_id = :userId ORDER BY transaction_date DESC")
+    fun getTransactionsPaged(userId: String): PagingSource<Int, TransactionEntity>
+
+    @Query("SELECT * FROM transactions WHERE user_id = :userId AND transaction_date LIKE :monthPrefix || '%' ORDER BY transaction_date DESC")
+    fun getTransactionsByMonthPaged(userId: String, monthPrefix: String): PagingSource<Int, TransactionEntity>
+
+    @Query("SELECT COUNT(*) FROM transactions WHERE user_id = :userId")
+    suspend fun getTransactionCount(userId: String): Int
 }

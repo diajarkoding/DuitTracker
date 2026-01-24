@@ -19,13 +19,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 @Composable
 fun NeoTopBar(
     title: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {}
@@ -53,7 +54,7 @@ fun NeoTopBar(
                     text = title,
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Black,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
             }
             Row(
@@ -68,8 +69,8 @@ fun NeoTopBar(
 fun NeoTopBarCentered(
     title: String,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     navigationIcon: @Composable (() -> Unit)? = null,
     actions: @Composable RowScope.() -> Unit = {}
@@ -97,7 +98,7 @@ fun NeoTopBarCentered(
             text = title,
             style = MaterialTheme.typography.headlineSmall,
             fontWeight = FontWeight.Black,
-            color = NeoColors.PureBlack,
+            color = NeoTheme.colors.textPrimary,
             modifier = Modifier.align(Alignment.Center)
         )
 

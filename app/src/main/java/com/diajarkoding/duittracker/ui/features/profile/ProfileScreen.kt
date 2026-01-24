@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Language
 import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Icon
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -58,6 +59,7 @@ import com.diajarkoding.duittracker.ui.components.NeoIconButton
 import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.flow.collectLatest
@@ -73,6 +75,7 @@ fun ProfileScreen(
     onNavigateToLanguage: () -> Unit,
     onNavigateToReminder: () -> Unit,
     onLogout: () -> Unit,
+    onNavigateToTheme: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -117,7 +120,7 @@ fun ProfileScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -130,12 +133,12 @@ fun ProfileScreen(
                     text = stringResource(R.string.profile),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
             }
         },
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -150,7 +153,7 @@ fun ProfileScreen(
             // Profile Card
             NeoCard(
                 modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
+                backgroundColor = NeoTheme.colors.cardBackground,
                 shadowOffset = NeoDimens.shadowOffset,
                 cornerRadius = NeoDimens.cornerRadius
             ) {
@@ -170,12 +173,12 @@ fun ProfileScreen(
                         text = uiState.userName,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                     Text(
                         text = uiState.email,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                 }
             }
@@ -210,6 +213,16 @@ fun ProfileScreen(
                 onClick = onNavigateToReminder
             )
 
+            Spacer(modifier = Modifier.height(NeoSpacing.md))
+
+            // Theme Menu
+            ProfileMenuItem(
+                icon = Icons.Default.Palette,
+                title = stringResource(R.string.theme),
+                iconBackgroundColor = NeoColors.ElectricBlue,
+                onClick = onNavigateToTheme
+            )
+
             Spacer(modifier = Modifier.height(NeoSpacing.xl))
 
             // Logout Button
@@ -218,7 +231,7 @@ fun ProfileScreen(
                 onClick = { viewModel.showLogoutDialog() },
                 modifier = Modifier.fillMaxWidth(),
                 backgroundColor = NeoColors.ExpenseRed,
-                contentColor = NeoColors.PureWhite
+                contentColor = NeoTheme.colors.cardBackground
             )
 
             Spacer(modifier = Modifier.height(NeoSpacing.xxl))
@@ -237,7 +250,7 @@ private fun ProfileMenuItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         cornerRadius = NeoDimens.cornerRadius
     ) {
         Row(
@@ -258,7 +271,7 @@ private fun ProfileMenuItem(
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
-                        tint = NeoColors.PureWhite,
+                        tint = NeoTheme.colors.cardBackground,
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
@@ -267,13 +280,13 @@ private fun ProfileMenuItem(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
             }
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = null,
-                tint = NeoColors.MediumGray,
+                tint = NeoTheme.colors.textSecondary,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
         }
@@ -301,17 +314,17 @@ private fun NeoLogoutDialog(
                     .matchParentSize()
                     .padding(top = 4.dp, start = 4.dp)
                     .clip(RoundedCornerShape(NeoDimens.cornerRadius))
-                    .background(NeoColors.PureBlack)
+                    .background(NeoTheme.colors.textPrimary)
             )
             
             // Main dialog content
             Column(
                 modifier = Modifier
                     .clip(RoundedCornerShape(NeoDimens.cornerRadius))
-                    .background(NeoColors.PureWhite)
+                    .background(NeoTheme.colors.cardBackground)
                     .border(
                         width = NeoDimens.borderWidth,
-                        color = NeoColors.PureBlack,
+                        color = NeoTheme.colors.textPrimary,
                         shape = RoundedCornerShape(NeoDimens.cornerRadius)
                     )
                     .padding(NeoSpacing.xl),
@@ -328,7 +341,7 @@ private fun NeoLogoutDialog(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.Logout,
                         contentDescription = null,
-                        tint = NeoColors.PureWhite,
+                        tint = NeoTheme.colors.cardBackground,
                         modifier = Modifier.size(32.dp)
                     )
                 }
@@ -340,7 +353,7 @@ private fun NeoLogoutDialog(
                     text = stringResource(R.string.logout),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     textAlign = TextAlign.Center
                 )
                 
@@ -350,7 +363,7 @@ private fun NeoLogoutDialog(
                 Text(
                     text = stringResource(R.string.logout_confirmation),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = NeoColors.MediumGray,
+                    color = NeoTheme.colors.textSecondary,
                     textAlign = TextAlign.Center
                 )
                 
@@ -366,8 +379,8 @@ private fun NeoLogoutDialog(
                         text = stringResource(R.string.cancel),
                         onClick = onDismiss,
                         modifier = Modifier.weight(1f),
-                        backgroundColor = NeoColors.LightGray,
-                        contentColor = NeoColors.PureBlack
+                        backgroundColor = NeoTheme.colors.lightGray,
+                        contentColor = NeoTheme.colors.textPrimary
                     )
                     
                     // Logout button
@@ -376,7 +389,7 @@ private fun NeoLogoutDialog(
                         onClick = onConfirm,
                         modifier = Modifier.weight(1f),
                         backgroundColor = NeoColors.ExpenseRed,
-                        contentColor = NeoColors.PureWhite
+                        contentColor = NeoTheme.colors.cardBackground
                     )
                 }
             }
@@ -453,7 +466,7 @@ private fun ProfileScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -466,11 +479,11 @@ private fun ProfileScreenFullPreview() {
                         text = "Profile",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -484,7 +497,7 @@ private fun ProfileScreenFullPreview() {
 
                 NeoCard(
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     shadowOffset = NeoDimens.shadowOffset,
                     cornerRadius = NeoDimens.cornerRadius
                 ) {
@@ -500,12 +513,12 @@ private fun ProfileScreenFullPreview() {
                             text = "John Doe",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                         Text(
                             text = "john@example.com",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = NeoColors.MediumGray
+                            color = NeoTheme.colors.textSecondary
                         )
                     }
                 }
@@ -544,7 +557,7 @@ private fun ProfileScreenFullPreview() {
                     onClick = {},
                     modifier = Modifier.fillMaxWidth(),
                     backgroundColor = NeoColors.ExpenseRed,
-                    contentColor = NeoColors.PureWhite
+                    contentColor = NeoTheme.colors.cardBackground
                 )
 
                 Spacer(modifier = Modifier.height(NeoSpacing.xxl))

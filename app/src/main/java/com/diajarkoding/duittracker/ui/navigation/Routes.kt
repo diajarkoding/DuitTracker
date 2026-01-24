@@ -43,4 +43,7 @@ sealed interface Routes {
 
     @Serializable
     data object Reminder : Routes
+
+    @Serializable
+    data object Theme : Routes
 }

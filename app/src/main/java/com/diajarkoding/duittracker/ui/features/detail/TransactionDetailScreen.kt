@@ -52,6 +52,7 @@ import com.diajarkoding.duittracker.ui.components.NeoIconButton
 import com.diajarkoding.duittracker.ui.components.NeoSkeletonTransactionDetail
 import com.diajarkoding.duittracker.ui.theme.MoneyLargeTextStyle
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
@@ -93,7 +94,7 @@ fun TransactionDetailScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -106,7 +107,7 @@ fun TransactionDetailScreen(
                     text = stringResource(R.string.transaction),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     modifier = Modifier.weight(1f)
                 )
                 // Edit button
@@ -119,14 +120,14 @@ fun TransactionDetailScreen(
                             imageVector = Icons.Default.Edit,
                             contentDescription = stringResource(R.string.edit),
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                            tint = NeoColors.PureBlack
+                            tint = NeoTheme.colors.textPrimary
                         )
                     }
                 }
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         when {
             uiState.isLoading -> {
@@ -237,7 +238,7 @@ private fun TransactionDetailContent(
                     Icon(
                         imageVector = categoryIcon,
                         contentDescription = null,
-                        tint = NeoColors.PureWhite,
+                        tint = NeoTheme.colors.cardBackground,
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
@@ -245,13 +246,13 @@ private fun TransactionDetailContent(
                     Text(
                         text = stringResource(R.string.category),
                         style = MaterialTheme.typography.labelSmall,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     Text(
                         text = CategoryUtils.getLocalizedDisplayName(transaction.category),
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             }
@@ -299,7 +300,7 @@ private fun TransactionDetailContent(
                     Text(
                         text = stringResource(R.string.receipt),
                         style = MaterialTheme.typography.labelSmall,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     val context = LocalContext.current
                     AsyncImage(
@@ -314,7 +315,7 @@ private fun TransactionDetailContent(
                             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
                             .border(
                                 NeoDimens.borderWidth,
-                                NeoColors.PureBlack,
+                                NeoTheme.colors.textPrimary,
                                 RoundedCornerShape(NeoDimens.cornerRadiusSmall)
                             ),
                         contentScale = ContentScale.Crop
@@ -346,14 +347,14 @@ private fun DetailRow(
         Text(
             text = label,
             style = MaterialTheme.typography.labelSmall,
-            color = NeoColors.MediumGray
+            color = NeoTheme.colors.textSecondary
         )
         Spacer(modifier = Modifier.height(NeoSpacing.xs))
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
-            color = NeoColors.PureBlack
+            color = NeoTheme.colors.textPrimary
         )
     }
 }
@@ -440,7 +441,7 @@ private fun TransactionDetailScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -453,7 +454,7 @@ private fun TransactionDetailScreenFullPreview() {
                         text = "Transaksi",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack,
+                        color = NeoTheme.colors.textPrimary,
                         modifier = Modifier.weight(1f)
                     )
                     NeoIconButton(
@@ -464,12 +465,12 @@ private fun TransactionDetailScreenFullPreview() {
                             imageVector = Icons.Default.Edit,
                             contentDescription = "Edit",
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                            tint = NeoColors.PureBlack
+                            tint = NeoTheme.colors.textPrimary
                         )
                     }
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             TransactionDetailContent(
                 transaction = DetailPreviewData.sampleExpenseTransaction,

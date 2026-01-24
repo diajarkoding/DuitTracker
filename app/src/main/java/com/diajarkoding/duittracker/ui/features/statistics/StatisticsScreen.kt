@@ -66,6 +66,7 @@ import com.diajarkoding.duittracker.ui.components.NeoSkeletonStatistics
 import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
@@ -123,7 +124,7 @@ fun StatisticsScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -136,7 +137,7 @@ fun StatisticsScreen(
                     text = stringResource(R.string.statistics),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     modifier = Modifier.weight(1f)
                 )
                 // Export Button
@@ -147,7 +148,7 @@ fun StatisticsScreen(
                     if (uiState.isExporting) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                            color = NeoColors.PureWhite,
+                            color = NeoTheme.colors.cardBackground,
                             strokeWidth = 2.dp
                         )
                     } else {
@@ -155,14 +156,14 @@ fun StatisticsScreen(
                             imageVector = Icons.Default.FileDownload,
                             contentDescription = "Export to Excel",
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                            tint = NeoColors.PureWhite
+                            tint = NeoTheme.colors.cardBackground
                         )
                     }
                 }
             }
         },
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         if (uiState.isLoading && uiState.expenseByCategory.isEmpty() && uiState.incomeByCategory.isEmpty()) {
             Box(
@@ -234,14 +235,14 @@ fun StatisticsScreen(
                                     text = stringResource(R.string.income),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Medium,
-                                    color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                                    color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                                 )
                                 Spacer(modifier = Modifier.height(NeoSpacing.xs))
                                 Text(
                                     text = CurrencyFormatter.formatCompact(uiState.totalIncome),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoColors.PureWhite
+                                    color = NeoTheme.colors.cardBackground
                                 )
                             }
                         }
@@ -262,14 +263,14 @@ fun StatisticsScreen(
                                     text = stringResource(R.string.expense),
                                     style = MaterialTheme.typography.labelSmall,
                                     fontWeight = FontWeight.Medium,
-                                    color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                                    color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                                 )
                                 Spacer(modifier = Modifier.height(NeoSpacing.xs))
                                 Text(
                                     text = CurrencyFormatter.formatCompact(uiState.totalExpense),
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoColors.PureWhite
+                                    color = NeoTheme.colors.cardBackground
                                 )
                             }
                         }
@@ -283,7 +284,7 @@ fun StatisticsScreen(
                             text = stringResource(R.string.expense_by_category),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = NeoColors.MediumGray,
+                            color = NeoTheme.colors.textSecondary,
                             modifier = Modifier.padding(top = NeoSpacing.sm)
                         )
                     }
@@ -291,7 +292,7 @@ fun StatisticsScreen(
                     item {
                         NeoCardFlat(
                             modifier = Modifier.fillMaxWidth(),
-                            backgroundColor = NeoColors.PureWhite,
+                            backgroundColor = NeoTheme.colors.cardBackground,
                             cornerRadius = NeoDimens.cornerRadius
                         ) {
                             Box(
@@ -337,7 +338,7 @@ fun StatisticsScreen(
                             text = stringResource(R.string.income_by_category),
                             style = MaterialTheme.typography.labelMedium,
                             fontWeight = FontWeight.SemiBold,
-                            color = NeoColors.MediumGray,
+                            color = NeoTheme.colors.textSecondary,
                             modifier = Modifier.padding(top = NeoSpacing.sm)
                         )
                     }
@@ -345,7 +346,7 @@ fun StatisticsScreen(
                     item {
                         NeoCardFlat(
                             modifier = Modifier.fillMaxWidth(),
-                            backgroundColor = NeoColors.PureWhite,
+                            backgroundColor = NeoTheme.colors.cardBackground,
                             cornerRadius = NeoDimens.cornerRadius
                         ) {
                             Box(
@@ -400,7 +401,7 @@ private fun MonthSelector(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(NeoDimens.cornerRadius))
-            .background(NeoColors.PureWhite)
+            .background(NeoTheme.colors.cardBackground)
             .padding(horizontal = NeoSpacing.sm, vertical = NeoSpacing.xs),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
@@ -409,7 +410,7 @@ private fun MonthSelector(
             Icon(
                 imageVector = Icons.Default.ChevronLeft,
                 contentDescription = stringResource(R.string.previous_month),
-                tint = if (canGoPrevious) NeoColors.PureBlack else NeoColors.LightGray,
+                tint = if (canGoPrevious) NeoTheme.colors.textPrimary else NeoTheme.colors.lightGray,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
         }
@@ -417,13 +418,13 @@ private fun MonthSelector(
             text = currentMonth,
             style = MaterialTheme.typography.titleMedium,
             fontWeight = FontWeight.Bold,
-            color = NeoColors.PureBlack
+            color = NeoTheme.colors.textPrimary
         )
         IconButton(onClick = onNext, enabled = canGoNext) {
             Icon(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = stringResource(R.string.next_month),
-                tint = if (canGoNext) NeoColors.PureBlack else NeoColors.LightGray,
+                tint = if (canGoNext) NeoTheme.colors.textPrimary else NeoTheme.colors.lightGray,
                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
             )
         }
@@ -495,7 +496,7 @@ private fun PieChart(
                 text = CurrencyFormatter.formatCompact(totalAmount),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
         }
     }
@@ -533,7 +534,7 @@ private fun CategoryRow(
                 Icon(
                     imageVector = categoryIcon,
                     contentDescription = null,
-                    tint = NeoColors.PureWhite,
+                    tint = NeoTheme.colors.cardBackground,
                     modifier = Modifier.size(NeoDimens.iconSizeSmall)
                 )
             }
@@ -545,12 +546,12 @@ private fun CategoryRow(
                     text = CategoryUtils.getLocalizedDisplayName(categoryData.category),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
                 Text(
-                    text = "${categoryData.transactionCount} transactions",
+                    text = stringResource(R.string.transaction_count_format, categoryData.transactionCount),
                     style = MaterialTheme.typography.bodySmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
 
@@ -564,7 +565,7 @@ private fun CategoryRow(
                 Text(
                     text = "${categoryData.percentage.toInt()}%",
                     style = MaterialTheme.typography.labelSmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
 
@@ -574,7 +575,7 @@ private fun CategoryRow(
                 imageVector = Icons.Default.ChevronRight,
                 contentDescription = stringResource(R.string.view_transactions),
                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                tint = NeoColors.MediumGray
+                tint = NeoTheme.colors.textSecondary
             )
         }
     }
@@ -591,7 +592,7 @@ private fun EmptyChartState(message: String) {
         Text(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
-            color = NeoColors.MediumGray
+            color = NeoTheme.colors.textSecondary
         )
     }
 }
@@ -605,7 +606,7 @@ private fun PeriodSelector(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-            .background(NeoColors.LightGray.copy(alpha = 0.5f))
+            .background(NeoTheme.colors.lightGray.copy(alpha = 0.5f))
             .padding(NeoSpacing.xs),
         horizontalArrangement = Arrangement.spacedBy(NeoSpacing.xs)
     ) {
@@ -615,7 +616,7 @@ private fun PeriodSelector(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                    .background(if (isSelected) NeoColors.PureBlack else Color.Transparent)
+                    .background(if (isSelected) NeoTheme.colors.textPrimary else Color.Transparent)
                     .clickable { onPeriodChange(period) }
                     .padding(vertical = NeoSpacing.md),
                 contentAlignment = Alignment.Center
@@ -628,7 +629,7 @@ private fun PeriodSelector(
                     },
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isSelected) NeoColors.PureWhite else NeoColors.MediumGray
+                    color = if (isSelected) NeoTheme.colors.cardBackground else NeoTheme.colors.textSecondary
                 )
             }
         }
@@ -644,7 +645,7 @@ private fun ExportOptionsDialog(
     Dialog(onDismissRequest = onDismiss) {
         NeoCard(
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = NeoColors.PureWhite,
+            backgroundColor = NeoTheme.colors.cardBackground,
             shadowOffset = NeoDimens.shadowOffset,
             cornerRadius = NeoDimens.cornerRadius
         ) {
@@ -656,7 +657,7 @@ private fun ExportOptionsDialog(
                     text = stringResource(R.string.export_report),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
 
                 Spacer(modifier = Modifier.height(NeoSpacing.sm))
@@ -688,8 +689,8 @@ private fun ExportOptionsDialog(
                     text = stringResource(R.string.cancel),
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.LightGray,
-                    contentColor = NeoColors.PureBlack,
+                    backgroundColor = NeoTheme.colors.lightGray,
+                    contentColor = NeoTheme.colors.textPrimary,
                     enabled = !isExporting
                 )
             }
@@ -707,7 +708,7 @@ private fun ExportOptionItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-            .background(if (enabled) NeoColors.Background else NeoColors.LightGray)
+            .background(if (enabled) NeoTheme.colors.background else NeoTheme.colors.lightGray)
             .clickable(enabled = enabled, onClick = onClick)
             .padding(NeoSpacing.lg),
         contentAlignment = Alignment.CenterStart
@@ -716,7 +717,7 @@ private fun ExportOptionItem(
             text = title,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Medium,
-            color = if (enabled) NeoColors.PureBlack else NeoColors.MediumGray
+            color = if (enabled) NeoTheme.colors.textPrimary else NeoTheme.colors.textSecondary
         )
     }
 }
@@ -908,7 +909,7 @@ private fun StatisticsScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -921,7 +922,7 @@ private fun StatisticsScreenFullPreview() {
                         text = "Statistik",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack,
+                        color = NeoTheme.colors.textPrimary,
                         modifier = Modifier.weight(1f)
                     )
                     NeoIconButton(
@@ -932,12 +933,12 @@ private fun StatisticsScreenFullPreview() {
                             imageVector = Icons.Default.FileDownload,
                             contentDescription = "Export",
                             modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                            tint = NeoColors.PureWhite
+                            tint = NeoTheme.colors.cardBackground
                         )
                     }
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             LazyColumn(
                 modifier = Modifier
@@ -978,9 +979,9 @@ private fun StatisticsScreenFullPreview() {
                                 modifier = Modifier.fillMaxWidth().padding(NeoSpacing.lg),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("Pemasukan", style = MaterialTheme.typography.labelSmall, color = NeoColors.PureWhite.copy(alpha = 0.8f))
+                                Text("Pemasukan", style = MaterialTheme.typography.labelSmall, color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f))
                                 Spacer(modifier = Modifier.height(NeoSpacing.xs))
-                                Text("Rp 5jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoColors.PureWhite)
+                                Text("Rp 5jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoTheme.colors.cardBackground)
                             }
                         }
                         NeoCardFlat(
@@ -993,9 +994,9 @@ private fun StatisticsScreenFullPreview() {
                                 modifier = Modifier.fillMaxWidth().padding(NeoSpacing.lg),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("Pengeluaran", style = MaterialTheme.typography.labelSmall, color = NeoColors.PureWhite.copy(alpha = 0.8f))
+                                Text("Pengeluaran", style = MaterialTheme.typography.labelSmall, color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f))
                                 Spacer(modifier = Modifier.height(NeoSpacing.xs))
-                                Text("Rp 1.2jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoColors.PureWhite)
+                                Text("Rp 1.2jt", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = NeoTheme.colors.cardBackground)
                             }
                         }
                     }
@@ -1006,7 +1007,7 @@ private fun StatisticsScreenFullPreview() {
                         text = "Pengeluaran per Kategori",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray,
+                        color = NeoTheme.colors.textSecondary,
                         modifier = Modifier.padding(top = NeoSpacing.sm)
                     )
                 }
@@ -1014,7 +1015,7 @@ private fun StatisticsScreenFullPreview() {
                 item {
                     NeoCardFlat(
                         modifier = Modifier.fillMaxWidth(),
-                        backgroundColor = NeoColors.PureWhite,
+                        backgroundColor = NeoTheme.colors.cardBackground,
                         cornerRadius = NeoDimens.cornerRadius
                     ) {
                         Box(

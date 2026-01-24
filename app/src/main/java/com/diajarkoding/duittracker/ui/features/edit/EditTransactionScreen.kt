@@ -81,6 +81,7 @@ import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.SnackbarType
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
@@ -206,7 +207,7 @@ fun EditTransactionScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -218,12 +219,12 @@ fun EditTransactionScreen(
                     text = stringResource(R.string.edit_transaction),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
             }
         },
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         if (uiState.isLoading) {
             Box(
@@ -274,7 +275,7 @@ fun EditTransactionScreen(
                         text = stringResource(R.string.category),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     CategoryPicker(
                         selectedCategory = uiState.category,
@@ -289,7 +290,7 @@ fun EditTransactionScreen(
                         text = stringResource(R.string.account),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     AccountSourcePicker(
                         selectedSource = uiState.accountSource,
@@ -315,7 +316,7 @@ fun EditTransactionScreen(
                         text = stringResource(R.string.description_receipt_optional),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     val hasImage = uiState.imageUri != null || uiState.existingImageUrl != null
                     Row(
@@ -339,14 +340,14 @@ fun EditTransactionScreen(
                         // Camera Button
                         NeoIconButton(
                             onClick = { showImagePickerDialog = true },
-                            backgroundColor = if (hasImage) NeoColors.IncomeGreen else NeoColors.PureWhite,
+                            backgroundColor = if (hasImage) NeoColors.IncomeGreen else NeoTheme.colors.cardBackground,
                             size = 56.dp
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
                                 contentDescription = stringResource(R.string.add_image),
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                                tint = if (hasImage) NeoColors.PureWhite else NeoColors.MediumGray
+                                tint = if (hasImage) NeoTheme.colors.cardBackground else NeoTheme.colors.textSecondary
                             )
                         }
                     }
@@ -360,7 +361,7 @@ fun EditTransactionScreen(
                                 .clip(RoundedCornerShape(NeoDimens.cornerRadius))
                                 .border(
                                     NeoDimens.borderWidth,
-                                    NeoColors.PureBlack,
+                                    NeoTheme.colors.textPrimary,
                                     RoundedCornerShape(NeoDimens.cornerRadius)
                                 )
                         ) {
@@ -386,7 +387,7 @@ fun EditTransactionScreen(
                                     imageVector = Icons.Default.Close,
                                     contentDescription = stringResource(R.string.remove_image),
                                     modifier = Modifier.size(14.dp),
-                                    tint = NeoColors.PureWhite
+                                    tint = NeoTheme.colors.cardBackground
                                 )
                             }
                         }
@@ -409,7 +410,7 @@ fun EditTransactionScreen(
                     Text(
                         text = stringResource(R.string.offline_changes_sync),
                         style = MaterialTheme.typography.bodySmall,
-                        color = NeoColors.MediumGray,
+                        color = NeoTheme.colors.textSecondary,
                         textAlign = TextAlign.Center,
                         modifier = Modifier.fillMaxWidth()
                     )
@@ -442,7 +443,7 @@ private fun EditTransactionScreenIncomePreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -454,11 +455,11 @@ private fun EditTransactionScreenIncomePreview() {
                         text = "Edit Transaksi",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -485,7 +486,7 @@ private fun EditTransactionScreenIncomePreview() {
                         text = "Kategori",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     CategoryPicker(
                         selectedCategory = TransactionCategory.SALARY,
@@ -499,7 +500,7 @@ private fun EditTransactionScreenIncomePreview() {
                         text = "Akun",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     AccountSourcePicker(
                         selectedSource = AccountSource.BANK,
@@ -525,7 +526,7 @@ private fun EditTransactionScreenIncomePreview() {
                         text = "Deskripsi & Struk (Opsional)",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -542,14 +543,14 @@ private fun EditTransactionScreenIncomePreview() {
                         )
                         NeoIconButton(
                             onClick = {},
-                            backgroundColor = NeoColors.PureWhite,
+                            backgroundColor = NeoTheme.colors.cardBackground,
                             size = 56.dp
                         ) {
                             Icon(
                                 imageVector = Icons.Default.CameraAlt,
                                 contentDescription = "Tambah gambar",
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                                tint = NeoColors.MediumGray
+                                tint = NeoTheme.colors.textSecondary
                             )
                         }
                     }
@@ -703,7 +704,7 @@ private fun EditDescriptionRowEmptyPreview() {
                 text = "Deskripsi & Struk (Opsional)",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = NeoColors.MediumGray
+                color = NeoTheme.colors.textSecondary
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -720,14 +721,14 @@ private fun EditDescriptionRowEmptyPreview() {
                 )
                 NeoIconButton(
                     onClick = {},
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     size = 56.dp
                 ) {
                     Icon(
                         imageVector = Icons.Default.CameraAlt,
                         contentDescription = "Tambah gambar",
                         modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                        tint = NeoColors.MediumGray
+                        tint = NeoTheme.colors.textSecondary
                     )
                 }
             }
@@ -744,7 +745,7 @@ private fun EditDescriptionRowFilledPreview() {
                 text = "Deskripsi & Struk (Opsional)",
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = NeoColors.MediumGray
+                color = NeoTheme.colors.textSecondary
             )
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -768,7 +769,7 @@ private fun EditDescriptionRowFilledPreview() {
                         imageVector = Icons.Default.CameraAlt,
                         contentDescription = "Tambah gambar",
                         modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                        tint = NeoColors.PureWhite
+                        tint = NeoTheme.colors.cardBackground
                     )
                 }
             }
@@ -828,21 +829,21 @@ private fun CategoryPicker(
                     imageVector = CategoryUtils.getIcon(selectedCategory),
                     contentDescription = null,
                     modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                    tint = NeoColors.PureWhite
+                    tint = NeoTheme.colors.cardBackground
                 )
                 Spacer(modifier = Modifier.width(NeoSpacing.sm))
                 Text(
                     text = CategoryUtils.getLocalizedDisplayName(selectedCategory),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.PureWhite,
+                    color = NeoTheme.colors.cardBackground,
                     modifier = Modifier.weight(1f)
                 )
                 Icon(
                     imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
                     contentDescription = if (isExpanded) stringResource(R.string.collapse) else stringResource(R.string.expand),
                     modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                    tint = NeoColors.PureWhite
+                    tint = NeoTheme.colors.cardBackground
                 )
             }
         }
@@ -870,7 +871,7 @@ private fun CategoryPicker(
                                 onCategorySelect(category)
                                 isExpanded = false
                             },
-                        backgroundColor = if (isSelected) catColor else NeoColors.PureWhite,
+                        backgroundColor = if (isSelected) catColor else NeoTheme.colors.cardBackground,
                         cornerRadius = NeoDimens.cornerRadiusSmall,
                         borderWidth = NeoDimens.borderWidth
                     ) {
@@ -885,13 +886,13 @@ private fun CategoryPicker(
                                 imageVector = CategoryUtils.getIcon(category),
                                 contentDescription = null,
                                 modifier = Modifier.size(NeoDimens.iconSizeSmall),
-                                tint = if (isSelected) NeoColors.PureWhite else catColor
+                                tint = if (isSelected) NeoTheme.colors.cardBackground else catColor
                             )
                             Spacer(modifier = Modifier.width(NeoSpacing.xs))
                             Text(
                                 text = CategoryUtils.getLocalizedDisplayName(category),
                                 style = MaterialTheme.typography.labelSmall,
-                                color = if (isSelected) NeoColors.PureWhite else NeoColors.PureBlack,
+                                color = if (isSelected) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary,
                                 maxLines = 1
                             )
                         }
@@ -915,7 +916,7 @@ private fun AccountSourcePicker(
                 modifier = Modifier
                     .weight(1f)
                     .clickable { onSourceSelect(source) },
-                backgroundColor = if (isSelected) NeoColors.PureBlack else NeoColors.PureWhite,
+                backgroundColor = if (isSelected) NeoTheme.colors.textPrimary else NeoTheme.colors.cardBackground,
                 cornerRadius = NeoDimens.cornerRadiusSmall,
                 borderWidth = NeoDimens.borderWidth
             ) {
@@ -923,7 +924,7 @@ private fun AccountSourcePicker(
                     text = source.name,
                     style = MaterialTheme.typography.labelSmall,
                     fontWeight = FontWeight.Medium,
-                    color = if (isSelected) NeoColors.PureWhite else NeoColors.PureBlack,
+                    color = if (isSelected) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -943,7 +944,7 @@ private fun ImagePickerDialog(
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         NeoCardFlat(
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = NeoColors.PureWhite
+            backgroundColor = NeoTheme.colors.cardBackground
         ) {
             Column(
                 modifier = Modifier
@@ -955,7 +956,7 @@ private fun ImagePickerDialog(
                     text = stringResource(R.string.add_image),
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
 
                 // Camera option
@@ -963,7 +964,7 @@ private fun ImagePickerDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onCameraClick() },
-                    backgroundColor = NeoColors.Background
+                    backgroundColor = NeoTheme.colors.background
                 ) {
                     Row(
                         modifier = Modifier
@@ -982,7 +983,7 @@ private fun ImagePickerDialog(
                             text = stringResource(R.string.take_photo),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                     }
                 }
@@ -992,7 +993,7 @@ private fun ImagePickerDialog(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { onGalleryClick() },
-                    backgroundColor = NeoColors.Background
+                    backgroundColor = NeoTheme.colors.background
                 ) {
                     Row(
                         modifier = Modifier
@@ -1011,7 +1012,7 @@ private fun ImagePickerDialog(
                             text = stringResource(R.string.choose_from_gallery),
                             style = MaterialTheme.typography.bodyMedium,
                             fontWeight = FontWeight.Medium,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                     }
                 }
@@ -1021,7 +1022,7 @@ private fun ImagePickerDialog(
                     text = stringResource(R.string.cancel),
                     onClick = onDismiss,
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.LightGray
+                    backgroundColor = NeoTheme.colors.lightGray
                 )
             }
         }
@@ -1085,7 +1086,7 @@ private fun EditTransactionScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -1097,11 +1098,11 @@ private fun EditTransactionScreenFullPreview() {
                         text = "Edit Transaksi",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -1128,7 +1129,7 @@ private fun EditTransactionScreenFullPreview() {
                         text = "Kategori",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     CategoryPicker(
                         selectedCategory = TransactionCategory.TRANSPORT,
@@ -1142,7 +1143,7 @@ private fun EditTransactionScreenFullPreview() {
                         text = "Akun",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     AccountSourcePicker(
                         selectedSource = AccountSource.EWALLET,
@@ -1168,7 +1169,7 @@ private fun EditTransactionScreenFullPreview() {
                         text = "Deskripsi & Struk (Opsional)",
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -1192,7 +1193,7 @@ private fun EditTransactionScreenFullPreview() {
                                 imageVector = Icons.Default.CameraAlt,
                                 contentDescription = "Tambah gambar",
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium),
-                                tint = NeoColors.PureWhite
+                                tint = NeoTheme.colors.cardBackground
                             )
                         }
                     }

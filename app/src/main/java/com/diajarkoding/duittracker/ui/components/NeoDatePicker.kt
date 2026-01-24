@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
  import androidx.compose.ui.window.Dialog
 import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  import com.diajarkoding.duittracker.ui.theme.NeoSpacing
  import kotlinx.datetime.Clock
@@ -67,13 +68,13 @@ fun NeoDatePickerField(
             text = label,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.SemiBold,
-            color = NeoColors.MediumGray
+            color = NeoTheme.colors.textSecondary
         )
         Text(
             text = formatDateLocalized(selectedDate),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Medium,
-            color = NeoColors.PureBlack
+            color = NeoTheme.colors.textPrimary
         )
     }
 }
@@ -96,13 +97,13 @@ fun NeoDatePickerFieldWithCard(
             text = label,
             style = MaterialTheme.typography.labelMedium,
             fontWeight = FontWeight.SemiBold,
-            color = NeoColors.MediumGray
+            color = NeoTheme.colors.textSecondary
         )
         NeoCardFlat(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { onDateClick() },
-            backgroundColor = NeoColors.PureWhite,
+            backgroundColor = NeoTheme.colors.cardBackground,
             cornerRadius = NeoDimens.cornerRadiusSmall,
             borderWidth = NeoDimens.borderWidth
         ) {
@@ -127,7 +128,7 @@ fun NeoDatePickerFieldWithCard(
                         Icon(
                             imageVector = Icons.Default.CalendarMonth,
                             contentDescription = null,
-                            tint = NeoColors.PureWhite,
+                            tint = NeoTheme.colors.cardBackground,
                             modifier = Modifier.size(NeoDimens.iconSizeSmall)
                         )
                     }
@@ -135,13 +136,13 @@ fun NeoDatePickerFieldWithCard(
                         text = formatDateLocalized(selectedDate),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Medium,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
                 Icon(
                     imageVector = Icons.Default.ChevronRight,
                     contentDescription = stringResource(R.string.select_date),
-                    tint = NeoColors.MediumGray,
+                    tint = NeoTheme.colors.textSecondary,
                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
                 )
             }
@@ -165,7 +166,7 @@ fun NeoDatePickerFieldWithCard(
      Dialog(onDismissRequest = onDismiss) {
          NeoCard(
              modifier = Modifier.fillMaxWidth(),
-             backgroundColor = NeoColors.PureWhite,
+             backgroundColor = NeoTheme.colors.cardBackground,
              shadowOffset = NeoDimens.shadowOffset,
              cornerRadius = NeoDimens.cornerRadius
          ) {
@@ -177,7 +178,7 @@ fun NeoDatePickerFieldWithCard(
                     text = stringResource(R.string.select_date),
                      style = MaterialTheme.typography.titleLarge,
                      fontWeight = FontWeight.Bold,
-                     color = NeoColors.PureBlack
+                     color = NeoTheme.colors.textPrimary
                  )
  
                  Spacer(modifier = Modifier.height(NeoSpacing.lg))
@@ -197,10 +198,10 @@ fun NeoDatePickerFieldWithCard(
                              modifier = Modifier
                                  .size(36.dp)
                                  .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                 .background(NeoColors.LightGray)
+                                 .background(NeoTheme.colors.lightGray)
                                  .border(
                                      NeoDimens.borderWidth,
-                                     NeoColors.PureBlack,
+                                     NeoTheme.colors.textPrimary,
                                      RoundedCornerShape(NeoDimens.cornerRadiusSmall)
                                  ),
                              contentAlignment = Alignment.Center
@@ -208,7 +209,7 @@ fun NeoDatePickerFieldWithCard(
                              Icon(
                                  imageVector = Icons.Default.ChevronLeft,
                                 contentDescription = stringResource(R.string.previous_month),
-                                 tint = NeoColors.PureBlack
+                                 tint = NeoTheme.colors.textPrimary
                              )
                          }
                      }
@@ -217,7 +218,7 @@ fun NeoDatePickerFieldWithCard(
                         text = getMonthYearStringLocalized(currentMonth),
                          style = MaterialTheme.typography.titleMedium,
                          fontWeight = FontWeight.Bold,
-                         color = NeoColors.PureBlack
+                         color = NeoTheme.colors.textPrimary
                      )
  
                      IconButton(
@@ -229,10 +230,10 @@ fun NeoDatePickerFieldWithCard(
                              modifier = Modifier
                                  .size(36.dp)
                                  .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                 .background(NeoColors.LightGray)
+                                 .background(NeoTheme.colors.lightGray)
                                  .border(
                                      NeoDimens.borderWidth,
-                                     NeoColors.PureBlack,
+                                     NeoTheme.colors.textPrimary,
                                      RoundedCornerShape(NeoDimens.cornerRadiusSmall)
                                  ),
                              contentAlignment = Alignment.Center
@@ -240,7 +241,7 @@ fun NeoDatePickerFieldWithCard(
                              Icon(
                                  imageVector = Icons.Default.ChevronRight,
                                 contentDescription = stringResource(R.string.next_month),
-                                 tint = NeoColors.PureBlack
+                                 tint = NeoTheme.colors.textPrimary
                              )
                          }
                      }
@@ -266,7 +267,7 @@ fun NeoDatePickerFieldWithCard(
                              text = day,
                              style = MaterialTheme.typography.labelSmall,
                              fontWeight = FontWeight.Bold,
-                             color = NeoColors.MediumGray,
+                             color = NeoTheme.colors.textSecondary,
                              textAlign = TextAlign.Center,
                              modifier = Modifier.weight(1f)
                          )
@@ -297,14 +298,14 @@ fun NeoDatePickerFieldWithCard(
                                          when {
                                              isSelected -> NeoColors.SunYellow
                                              isToday -> NeoColors.ElectricBlue.copy(alpha = 0.2f)
-                                             else -> NeoColors.PureWhite
+                                             else -> NeoTheme.colors.cardBackground
                                          }
                                      )
                                      .then(
                                          if (isSelected) {
                                              Modifier.border(
                                                  NeoDimens.borderWidth,
-                                                 NeoColors.PureBlack,
+                                                 NeoTheme.colors.textPrimary,
                                                  RoundedCornerShape(NeoDimens.cornerRadiusSmall)
                                              )
                                          } else Modifier
@@ -317,10 +318,10 @@ fun NeoDatePickerFieldWithCard(
                                      style = MaterialTheme.typography.bodyMedium,
                                      fontWeight = if (isSelected || isToday) FontWeight.Bold else FontWeight.Normal,
                                      color = when {
-                                         isSelected -> NeoColors.PureBlack
-                                         !isCurrentMonth -> NeoColors.LightGray
+                                         isSelected -> NeoTheme.colors.textPrimary
+                                         !isCurrentMonth -> NeoTheme.colors.lightGray
                                          isToday -> NeoColors.ElectricBlue
-                                         else -> NeoColors.PureBlack
+                                         else -> NeoTheme.colors.textPrimary
                                      }
                                  )
                              }
@@ -341,14 +342,14 @@ fun NeoDatePickerFieldWithCard(
                         text = stringResource(R.string.cancel),
                          onClick = onDismiss,
                          modifier = Modifier.weight(1f),
-                         backgroundColor = NeoColors.LightGray,
-                         contentColor = NeoColors.PureBlack
+                         backgroundColor = NeoTheme.colors.lightGray,
+                         contentColor = NeoTheme.colors.textPrimary
                      )
                      NeoButtonText(
                         text = stringResource(R.string.confirm),
                          onClick = { onDateSelected(selectedDate) },
                          modifier = Modifier.weight(1f),
-                         backgroundColor = NeoColors.PureBlack,
+                         backgroundColor = NeoTheme.colors.textPrimary,
                          contentColor = NeoColors.SunYellow
                      )
                  }

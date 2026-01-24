@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 @Composable
 fun NeoToggle(
@@ -32,9 +33,9 @@ fun NeoToggle(
     onSelectionChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
     selectedColor: Color = NeoColors.ElectricBlue,
-    unselectedColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    unselectedColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
+    shadowColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     shadowOffset: Dp = 4.dp
@@ -66,7 +67,7 @@ fun NeoToggle(
                     label = "toggleBg"
                 )
                 val textColor by animateColorAsState(
-                    targetValue = if (isSelected) NeoColors.PureWhite else NeoColors.PureBlack,
+                    targetValue = if (isSelected) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary,
                     label = "toggleText"
                 )
 
@@ -96,8 +97,8 @@ fun NeoExpenseIncomeToggle(
     onToggle: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val expenseColor = if (isExpense) NeoColors.ExpenseRed else NeoColors.PureWhite
-    val incomeColor = if (!isExpense) NeoColors.IncomeGreen else NeoColors.PureWhite
+    val expenseColor = if (isExpense) NeoColors.ExpenseRed else NeoTheme.colors.cardBackground
+    val incomeColor = if (!isExpense) NeoColors.IncomeGreen else NeoTheme.colors.cardBackground
 
     Box(modifier = modifier) {
         // Shadow
@@ -106,14 +107,14 @@ fun NeoExpenseIncomeToggle(
                 .matchParentSize()
                 .offset(x = 4.dp, y = 4.dp)
                 .clip(RoundedCornerShape(4.dp))
-                .background(NeoColors.PureBlack)
+                .background(NeoTheme.colors.textPrimary)
         )
 
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(4.dp))
-                .background(NeoColors.PureWhite)
-                .border(2.dp, NeoColors.PureBlack, RoundedCornerShape(4.dp))
+                .background(NeoTheme.colors.cardBackground)
+                .border(2.dp, NeoTheme.colors.textPrimary, RoundedCornerShape(4.dp))
         ) {
             Box(
                 modifier = Modifier
@@ -127,7 +128,7 @@ fun NeoExpenseIncomeToggle(
                     text = stringResource(R.string.expense).uppercase(),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (isExpense) NeoColors.PureWhite else NeoColors.PureBlack
+                    color = if (isExpense) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary
                 )
             }
             Box(
@@ -142,7 +143,7 @@ fun NeoExpenseIncomeToggle(
                     text = stringResource(R.string.income).uppercase(),
                     style = MaterialTheme.typography.labelLarge,
                     fontWeight = FontWeight.Bold,
-                    color = if (!isExpense) NeoColors.PureWhite else NeoColors.PureBlack
+                    color = if (!isExpense) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary
                 )
             }
         }

@@ -82,6 +82,9 @@ dependencies {
     // ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
 
+    // Window Size Class for adaptive layouts
+    implementation("androidx.compose.material3:material3-window-size-class")
+
     // Kotlinx
     implementation(libs.kotlinx.datetime)
     implementation(libs.kotlinx.serialization.json)
@@ -92,7 +95,16 @@ dependencies {
     // Room Database
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-paging:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+
+    // Paging 3
+    implementation("androidx.paging:paging-runtime-ktx:3.3.5")
+    implementation("androidx.paging:paging-compose:3.3.5")
+
+    // Glance for App Widgets
+    implementation("androidx.glance:glance-appwidget:1.1.1")
+    implementation("androidx.glance:glance-material3:1.1.1")
 
     // Supabase
     implementation(platform("io.github.jan-tennert.supabase:bom:3.0.3"))
@@ -114,6 +126,9 @@ dependencies {
     // DataStore for preferences
     implementation("androidx.datastore:datastore-preferences:1.1.1")
 
+    // Security - Encrypted SharedPreferences
+    implementation("androidx.security:security-crypto:1.1.0-alpha06")
+
     // Splash Screen API
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -125,6 +140,11 @@ dependencies {
     implementation("org.apache.poi:poi-ooxml:5.2.5")
 
     testImplementation(libs.junit)
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

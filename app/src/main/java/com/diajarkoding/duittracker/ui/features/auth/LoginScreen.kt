@@ -48,6 +48,7 @@ import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.SnackbarType
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.ui.tooling.preview.Preview
 import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
@@ -76,7 +77,7 @@ fun LoginScreen(
 
     Scaffold(
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         Box(
             modifier = Modifier
@@ -101,7 +102,7 @@ fun LoginScreen(
                     text = stringResource(R.string.app_name),
                     style = MaterialTheme.typography.displaySmall,
                     fontWeight = FontWeight.Black,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -116,7 +117,7 @@ fun LoginScreen(
 
                 NeoCard(
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     shadowOffset = 6.dp
                 ) {
                     Column(
@@ -199,7 +200,7 @@ fun LoginScreen(
                 Text(
                     text = stringResource(R.string.version, BuildConfig.VERSION_NAME),
                     style = MaterialTheme.typography.bodySmall,
-                    color = NeoColors.MediumGray,
+                    color = NeoTheme.colors.textSecondary,
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
             }
@@ -238,7 +239,7 @@ private fun LoginScreenContent(
                 text = "Duit Tracker",
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Black,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -253,7 +254,7 @@ private fun LoginScreenContent(
 
             NeoCard(
                 modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
+                backgroundColor = NeoTheme.colors.cardBackground,
                 shadowOffset = 6.dp
             ) {
                 Column(
@@ -337,7 +338,7 @@ private fun LoginScreenContent(
             Text(
                 text = "Version 1.0.0",
                 style = MaterialTheme.typography.bodySmall,
-                color = NeoColors.MediumGray,
+                color = NeoTheme.colors.textSecondary,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
         }
@@ -371,7 +372,7 @@ private fun LoginScreenEmptyPreview() {
 private fun LoginScreenFullPreview() {
     DuitTrackerTheme {
         Scaffold(
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 LoginScreenContent(

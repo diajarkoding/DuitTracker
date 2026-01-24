@@ -27,6 +27,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 
@@ -52,7 +53,7 @@ fun NeoSkeletonBox(
         modifier = modifier
             .size(width, height)
             .clip(RoundedCornerShape(cornerRadius))
-            .background(NeoColors.LightGray.copy(alpha = alpha))
+            .background(NeoTheme.colors.lightGray.copy(alpha = alpha))
     )
 }
 
@@ -76,7 +77,7 @@ fun NeoSkeletonCircle(
         modifier = modifier
             .size(size)
             .clip(CircleShape)
-            .background(NeoColors.LightGray.copy(alpha = alpha))
+            .background(NeoTheme.colors.lightGray.copy(alpha = alpha))
     )
 }
 
@@ -101,7 +102,7 @@ fun NeoSkeletonRoundedBox(
         modifier = modifier
             .size(size)
             .clip(RoundedCornerShape(cornerRadius))
-            .background(NeoColors.LightGray.copy(alpha = alpha))
+            .background(NeoTheme.colors.lightGray.copy(alpha = alpha))
     )
 }
 
@@ -141,7 +142,7 @@ fun NeoSkeletonSummaryCard(
 ) {
     NeoCard(
         modifier = modifier.fillMaxWidth(),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         shadowOffset = NeoDimens.shadowOffset,
         cornerRadius = NeoDimens.cornerRadius
     ) {
@@ -246,7 +247,7 @@ fun NeoSkeletonDashboard(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                .background(NeoColors.LightGray.copy(alpha = 0.3f))
+                .background(NeoTheme.colors.lightGray.copy(alpha = 0.3f))
                 .padding(NeoSpacing.xs)
         ) {
             Row(
@@ -371,7 +372,7 @@ fun NeoSkeletonStatistics(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(NeoDimens.cornerRadius))
-                .background(NeoColors.PureWhite)
+                .background(NeoTheme.colors.cardBackground)
                 .padding(horizontal = NeoSpacing.sm, vertical = NeoSpacing.md)
         ) {
             Row(

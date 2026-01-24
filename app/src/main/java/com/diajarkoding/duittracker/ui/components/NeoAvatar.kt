@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
  import coil.compose.AsyncImage
 import com.diajarkoding.duittracker.R
  import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
  import com.diajarkoding.duittracker.ui.theme.NeoDimens
  
  @Composable
@@ -30,8 +31,8 @@ import com.diajarkoding.duittracker.R
      avatarUrl: String? = null,
      size: Dp = 44.dp,
      backgroundColor: Color = NeoColors.SunYellow,
-     borderColor: Color = NeoColors.PureBlack,
-     textColor: Color = NeoColors.PureBlack,
+    borderColor: Color = NeoTheme.colors.textPrimary,
+    textColor: Color = NeoColors.PureBlack,
      onClick: (() -> Unit)? = null
  ) {
      val initials = userName

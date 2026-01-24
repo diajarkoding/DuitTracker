@@ -40,6 +40,7 @@ import com.diajarkoding.duittracker.ui.components.NeoCardFlat
 import com.diajarkoding.duittracker.ui.components.NeoIconButton
 import com.diajarkoding.duittracker.ui.components.NeoSkeletonBox
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
@@ -71,7 +72,7 @@ fun CategoryTransactionsScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -85,17 +86,17 @@ fun CategoryTransactionsScreen(
                         text = uiState.categoryName,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                     Text(
                         text = uiState.monthName,
                         style = MaterialTheme.typography.bodySmall,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                 }
             }
         },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         if (uiState.isLoading) {
             LoadingSkeleton(modifier = Modifier.padding(paddingValues))
@@ -146,7 +147,7 @@ fun CategoryTransactionsScreen(
                             Text(
                                 text = stringResource(R.string.no_transactions_found),
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = NeoColors.MediumGray
+                                color = NeoTheme.colors.textSecondary
                             )
                         }
                     }
@@ -192,13 +193,13 @@ private fun SummaryCard(
                 modifier = Modifier
                     .size(48.dp)
                     .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                    .background(NeoColors.PureWhite.copy(alpha = 0.2f)),
+                    .background(NeoTheme.colors.cardBackground.copy(alpha = 0.2f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = categoryIcon,
                     contentDescription = null,
-                    tint = NeoColors.PureWhite,
+                    tint = NeoTheme.colors.cardBackground,
                     modifier = Modifier.size(NeoDimens.iconSizeLarge)
                 )
             }
@@ -209,13 +210,13 @@ private fun SummaryCard(
                 Text(
                     text = stringResource(R.string.transactions_count, transactionCount),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                    color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                 )
                 Text(
                     text = CurrencyFormatter.format(totalAmount),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureWhite
+                    color = NeoTheme.colors.cardBackground
                 )
             }
         }
@@ -232,7 +233,7 @@ private fun TransactionItem(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onClick),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         cornerRadius = NeoDimens.cornerRadius,
         borderWidth = NeoDimens.borderWidth
     ) {
@@ -247,7 +248,7 @@ private fun TransactionItem(
                     text = transaction.note.ifEmpty { stringResource(R.string.no_note) },
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = NeoColors.PureBlack,
+                    color = NeoTheme.colors.textPrimary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -255,7 +256,7 @@ private fun TransactionItem(
                     Text(
                         text = transaction.description,
                         style = MaterialTheme.typography.bodySmall,
-                        color = NeoColors.MediumGray,
+                        color = NeoTheme.colors.textSecondary,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
@@ -263,7 +264,7 @@ private fun TransactionItem(
                 Text(
                     text = DateFormatter.formatDateHeaderLocalized(transaction.transactionDate.date),
                     style = MaterialTheme.typography.labelSmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
 
@@ -279,7 +280,7 @@ private fun TransactionItem(
                 Text(
                     text = transaction.accountSource.name,
                     style = MaterialTheme.typography.labelSmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
         }
@@ -438,7 +439,7 @@ private fun CategoryTransactionsScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -452,17 +453,17 @@ private fun CategoryTransactionsScreenFullPreview() {
                             text = "Makanan",
                             style = MaterialTheme.typography.titleLarge,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                         Text(
                             text = "January 2024",
                             style = MaterialTheme.typography.bodySmall,
-                            color = NeoColors.MediumGray
+                            color = NeoTheme.colors.textSecondary
                         )
                     }
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             LazyColumn(
                 modifier = Modifier

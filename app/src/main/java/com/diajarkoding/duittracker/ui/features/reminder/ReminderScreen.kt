@@ -56,6 +56,7 @@ import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.features.profile.ProfileEvent
 import com.diajarkoding.duittracker.ui.features.profile.ProfileViewModel
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import androidx.compose.ui.tooling.preview.Preview
@@ -100,7 +101,7 @@ fun ReminderScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -113,12 +114,12 @@ fun ReminderScreen(
                     text = stringResource(R.string.daily_reminder),
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
             }
         },
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -146,7 +147,7 @@ fun ReminderScreen(
                         modifier = Modifier
                             .size(56.dp)
                             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                            .background(NeoColors.PureWhite.copy(alpha = 0.2f)),
+                            .background(NeoTheme.colors.cardBackground.copy(alpha = 0.2f)),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
@@ -155,7 +156,7 @@ fun ReminderScreen(
                             else 
                                 Icons.Default.Notifications,
                             contentDescription = null,
-                            tint = NeoColors.PureWhite,
+                            tint = NeoTheme.colors.cardBackground,
                             modifier = Modifier.size(32.dp)
                         )
                     }
@@ -165,13 +166,13 @@ fun ReminderScreen(
                             text = stringResource(R.string.reminder_settings),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureWhite
+                            color = NeoTheme.colors.cardBackground
                         )
                         Spacer(modifier = Modifier.height(NeoSpacing.xs))
                         Text(
                             text = stringResource(R.string.reminder_description),
                             style = MaterialTheme.typography.bodySmall,
-                            color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                            color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                         )
                     }
                 }
@@ -182,7 +183,7 @@ fun ReminderScreen(
             // Enable/Disable Reminder
             NeoCardFlat(
                 modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
+                backgroundColor = NeoTheme.colors.cardBackground,
                 cornerRadius = NeoDimens.cornerRadius
             ) {
                 Row(
@@ -199,14 +200,14 @@ fun ReminderScreen(
                                 .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
                                 .background(
                                     if (uiState.isReminderEnabled) NeoColors.IncomeGreen 
-                                    else NeoColors.LightGray
+                                    else NeoTheme.colors.lightGray
                                 ),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Notifications,
                                 contentDescription = null,
-                                tint = NeoColors.PureWhite,
+                                tint = NeoTheme.colors.cardBackground,
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
                             )
                         }
@@ -216,7 +217,7 @@ fun ReminderScreen(
                                 text = stringResource(R.string.enable_reminder),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                color = NeoColors.PureBlack
+                                color = NeoTheme.colors.textPrimary
                             )
                             Text(
                                 text = if (uiState.isReminderEnabled) 
@@ -224,7 +225,7 @@ fun ReminderScreen(
                                 else 
                                     stringResource(R.string.reminder_inactive),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = NeoColors.MediumGray
+                                color = NeoTheme.colors.textSecondary
                             )
                         }
                     }
@@ -242,10 +243,10 @@ fun ReminderScreen(
                             viewModel.setReminderEnabled(enabled)
                         },
                         colors = SwitchDefaults.colors(
-                            checkedThumbColor = NeoColors.PureWhite,
+                            checkedThumbColor = NeoTheme.colors.cardBackground,
                             checkedTrackColor = NeoColors.IncomeGreen,
-                            uncheckedThumbColor = NeoColors.PureWhite,
-                            uncheckedTrackColor = NeoColors.LightGray
+                            uncheckedThumbColor = NeoTheme.colors.cardBackground,
+                            uncheckedTrackColor = NeoTheme.colors.lightGray
                         )
                     )
                 }
@@ -259,7 +260,7 @@ fun ReminderScreen(
                     text = stringResource(R.string.reminder_schedule),
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
 
                 Spacer(modifier = Modifier.height(NeoSpacing.md))
@@ -267,7 +268,7 @@ fun ReminderScreen(
                 // Lunch Reminder Card
                 NeoCardFlat(
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     cornerRadius = NeoDimens.cornerRadius
                 ) {
                     Row(
@@ -286,7 +287,7 @@ fun ReminderScreen(
                             Icon(
                                 imageVector = Icons.Default.Schedule,
                                 contentDescription = null,
-                                tint = NeoColors.PureBlack,
+                                tint = NeoTheme.colors.textPrimary,
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
                             )
                         }
@@ -296,19 +297,19 @@ fun ReminderScreen(
                                 text = stringResource(R.string.lunch_reminder),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                color = NeoColors.PureBlack
+                                color = NeoTheme.colors.textPrimary
                             )
                             Text(
                                 text = stringResource(R.string.lunch_reminder_desc),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = NeoColors.MediumGray
+                                color = NeoTheme.colors.textSecondary
                             )
                         }
                         Text(
                             text = "12:00",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                     }
                 }
@@ -318,7 +319,7 @@ fun ReminderScreen(
                 // Evening Reminder Card
                 NeoCardFlat(
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     cornerRadius = NeoDimens.cornerRadius
                 ) {
                     Row(
@@ -337,7 +338,7 @@ fun ReminderScreen(
                             Icon(
                                 imageVector = Icons.Default.Schedule,
                                 contentDescription = null,
-                                tint = NeoColors.PureWhite,
+                                tint = NeoTheme.colors.cardBackground,
                                 modifier = Modifier.size(NeoDimens.iconSizeMedium)
                             )
                         }
@@ -347,19 +348,19 @@ fun ReminderScreen(
                                 text = stringResource(R.string.evening_reminder),
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.SemiBold,
-                                color = NeoColors.PureBlack
+                                color = NeoTheme.colors.textPrimary
                             )
                             Text(
                                 text = stringResource(R.string.evening_reminder_desc),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = NeoColors.MediumGray
+                                color = NeoTheme.colors.textSecondary
                             )
                         }
                         Text(
                             text = "22:00",
                             style = MaterialTheme.typography.headlineSmall,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureBlack
+                            color = NeoTheme.colors.textPrimary
                         )
                     }
                 }
@@ -373,14 +374,14 @@ fun ReminderScreen(
                     text = "Debug Tools",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
 
                 Spacer(modifier = Modifier.height(NeoSpacing.md))
 
                 NeoCardFlat(
                     modifier = Modifier.fillMaxWidth(),
-                    backgroundColor = NeoColors.PureWhite,
+                    backgroundColor = NeoTheme.colors.cardBackground,
                     cornerRadius = NeoDimens.cornerRadius
                 ) {
                     Column(
@@ -401,7 +402,7 @@ fun ReminderScreen(
                                 Icon(
                                     imageVector = Icons.Default.BugReport,
                                     contentDescription = null,
-                                    tint = NeoColors.PureWhite,
+                                    tint = NeoTheme.colors.cardBackground,
                                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
                                 )
                             }
@@ -411,12 +412,12 @@ fun ReminderScreen(
                                     text = "Test Notification",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.SemiBold,
-                                    color = NeoColors.PureBlack
+                                    color = NeoTheme.colors.textPrimary
                                 )
                                 Text(
                                     text = "Send test notification to verify it works",
                                     style = MaterialTheme.typography.bodySmall,
-                                    color = NeoColors.MediumGray
+                                    color = NeoTheme.colors.textSecondary
                                 )
                             }
                         }
@@ -432,14 +433,14 @@ fun ReminderScreen(
                                 onClick = { viewModel.showTestNotification(isLunchTime = true) },
                                 modifier = Modifier.weight(1f),
                                 backgroundColor = NeoColors.SunYellow,
-                                contentColor = NeoColors.PureBlack
+                                contentColor = NeoTheme.colors.textPrimary
                             )
                             NeoButtonText(
                                 text = "Evening (22:00)",
                                 onClick = { viewModel.showTestNotification(isLunchTime = false) },
                                 modifier = Modifier.weight(1f),
                                 backgroundColor = NeoColors.DeepPurple,
-                                contentColor = NeoColors.PureWhite
+                                contentColor = NeoTheme.colors.cardBackground
                             )
                         }
                     }
@@ -458,7 +459,7 @@ private fun ReminderToggleCard(
 ) {
     NeoCardFlat(
         modifier = Modifier.fillMaxWidth(),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         cornerRadius = NeoDimens.cornerRadius
     ) {
         Row(
@@ -475,14 +476,14 @@ private fun ReminderToggleCard(
                         .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
                         .background(
                             if (isEnabled) NeoColors.IncomeGreen
-                            else NeoColors.LightGray
+                            else NeoTheme.colors.lightGray
                         ),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = Icons.Default.Notifications,
                         contentDescription = null,
-                        tint = NeoColors.PureWhite,
+                        tint = NeoTheme.colors.cardBackground,
                         modifier = Modifier.size(NeoDimens.iconSizeMedium)
                     )
                 }
@@ -492,12 +493,12 @@ private fun ReminderToggleCard(
                         text = "Aktifkan Pengingat",
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.SemiBold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                     Text(
                         text = if (isEnabled) "Pengingat aktif" else "Pengingat tidak aktif",
                         style = MaterialTheme.typography.bodySmall,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                 }
             }
@@ -505,10 +506,10 @@ private fun ReminderToggleCard(
                 checked = isEnabled,
                 onCheckedChange = onToggle,
                 colors = SwitchDefaults.colors(
-                    checkedThumbColor = NeoColors.PureWhite,
+                    checkedThumbColor = NeoTheme.colors.cardBackground,
                     checkedTrackColor = NeoColors.IncomeGreen,
-                    uncheckedThumbColor = NeoColors.PureWhite,
-                    uncheckedTrackColor = NeoColors.LightGray
+                    uncheckedThumbColor = NeoTheme.colors.cardBackground,
+                    uncheckedTrackColor = NeoTheme.colors.lightGray
                 )
             )
         }
@@ -524,7 +525,7 @@ private fun ReminderScheduleCard(
 ) {
     NeoCardFlat(
         modifier = Modifier.fillMaxWidth(),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         cornerRadius = NeoDimens.cornerRadius
     ) {
         Row(
@@ -543,7 +544,7 @@ private fun ReminderScheduleCard(
                 Icon(
                     imageVector = Icons.Default.Schedule,
                     contentDescription = null,
-                    tint = if (iconBackgroundColor == NeoColors.SunYellow) NeoColors.PureBlack else NeoColors.PureWhite,
+                    tint = if (iconBackgroundColor == NeoColors.SunYellow) NeoTheme.colors.textPrimary else NeoTheme.colors.cardBackground,
                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
                 )
             }
@@ -553,19 +554,19 @@ private fun ReminderScheduleCard(
                     text = title,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
                 Text(
                     text = description,
                     style = MaterialTheme.typography.bodySmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
             Text(
                 text = time,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
         }
     }
@@ -638,7 +639,7 @@ private fun ReminderScreenFullPreview() {
                 ) {
                     NeoIconButton(
                         onClick = {},
-                        backgroundColor = NeoColors.PureWhite
+                        backgroundColor = NeoTheme.colors.cardBackground
                     ) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -651,11 +652,11 @@ private fun ReminderScreenFullPreview() {
                         text = "Pengingat Harian",
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             },
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Column(
                 modifier = Modifier
@@ -682,13 +683,13 @@ private fun ReminderScreenFullPreview() {
                             modifier = Modifier
                                 .size(56.dp)
                                 .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                                .background(NeoColors.PureWhite.copy(alpha = 0.2f)),
+                                .background(NeoTheme.colors.cardBackground.copy(alpha = 0.2f)),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
                                 imageVector = Icons.Default.NotificationsActive,
                                 contentDescription = null,
-                                tint = NeoColors.PureWhite,
+                                tint = NeoTheme.colors.cardBackground,
                                 modifier = Modifier.size(32.dp)
                             )
                         }
@@ -698,13 +699,13 @@ private fun ReminderScreenFullPreview() {
                                 text = "Pengaturan Pengingat",
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = NeoColors.PureWhite
+                                color = NeoTheme.colors.cardBackground
                             )
                             Spacer(modifier = Modifier.height(NeoSpacing.xs))
                             Text(
                                 text = "Atur pengingat untuk mencatat transaksi",
                                 style = MaterialTheme.typography.bodySmall,
-                                color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                                color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                             )
                         }
                     }
@@ -723,7 +724,7 @@ private fun ReminderScreenFullPreview() {
                     text = "Jadwal Pengingat",
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
 
                 Spacer(modifier = Modifier.height(NeoSpacing.md))

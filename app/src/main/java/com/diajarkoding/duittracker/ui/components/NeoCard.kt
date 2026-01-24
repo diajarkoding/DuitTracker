@@ -5,7 +5,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -13,14 +12,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 @Composable
 fun NeoCard(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.border,
+    shadowColor: Color = NeoTheme.colors.shadow,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     shadowOffset: Dp = 4.dp,
@@ -52,8 +51,8 @@ fun NeoCard(
 @Composable
 fun NeoCardFlat(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.border,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     content: @Composable BoxScope.() -> Unit

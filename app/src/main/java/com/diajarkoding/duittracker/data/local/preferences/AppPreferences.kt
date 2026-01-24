@@ -20,6 +20,12 @@ val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataSt
      INDONESIAN("id", "Indonesia")
  }
  
+enum class ThemeMode(val value: String) {
+    SYSTEM("system"),
+    LIGHT("light"),
+    DARK("dark")
+}
+
  @Singleton
  class AppPreferences @Inject constructor(
      @ApplicationContext private val context: Context
@@ -29,6 +35,7 @@ val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataSt
          private val REMINDER_ENABLED_KEY = booleanPreferencesKey("reminder_enabled")
          private val REMINDER_HOUR_KEY = stringPreferencesKey("reminder_hour")
          private val REMINDER_MINUTE_KEY = stringPreferencesKey("reminder_minute")
+        private val THEME_MODE_KEY = stringPreferencesKey("theme_mode")
      }
  
      val language: Flow<AppLanguage> = context.appPreferencesDataStore.data.map { preferences ->
@@ -66,4 +73,15 @@ val Context.appPreferencesDataStore: DataStore<Preferences> by preferencesDataSt
              preferences[REMINDER_MINUTE_KEY] = minute.toString()
          }
      }
+
+    val themeMode: Flow<ThemeMode> = context.appPreferencesDataStore.data.map { preferences ->
+        val value = preferences[THEME_MODE_KEY] ?: ThemeMode.SYSTEM.value
+        ThemeMode.entries.find { it.value == value } ?: ThemeMode.SYSTEM
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        context.appPreferencesDataStore.edit { preferences ->
+            preferences[THEME_MODE_KEY] = mode.value
+        }
+    }
  }

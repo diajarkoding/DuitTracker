@@ -56,6 +56,7 @@ import com.diajarkoding.duittracker.ui.components.OfflineIndicator
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.MoneyLargeTextStyle
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import com.diajarkoding.duittracker.utils.CategoryUtils
@@ -117,13 +118,13 @@ fun DashboardScreen(
                     Text(
                         text = "${stringResource(uiState.greetingResId)},",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     Text(
                         text = uiState.userName.ifEmpty { stringResource(R.string.user_default) },
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
                 NeoAvatar(
@@ -147,7 +148,7 @@ fun DashboardScreen(
                 )
             }
         },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         if (uiState.isLoading && uiState.currentMonthTransactions.isEmpty()) {
             Box(
@@ -262,7 +263,7 @@ private fun SummaryCard(
         modifier = Modifier.fillMaxWidth()
             .padding(bottom = NeoSpacing.sm
             ),
-        backgroundColor = NeoColors.PureWhite,
+        backgroundColor = NeoTheme.colors.cardBackground,
         shadowOffset = NeoDimens.shadowOffset,
         cornerRadius = NeoDimens.cornerRadius
     ) {
@@ -277,7 +278,7 @@ private fun SummaryCard(
                 Text(
                     text = currentMonthName,
                     style = MaterialTheme.typography.labelMedium,
-                    color = NeoColors.MediumGray,
+                    color = NeoTheme.colors.textSecondary,
                     maxLines = 1
                 )
                 // Balance indicator
@@ -303,7 +304,7 @@ private fun SummaryCard(
             Text(
                 text = CurrencyFormatter.format(balance),
                 style = MoneyLargeTextStyle,
-                color = NeoColors.PureBlack,
+                color = NeoTheme.colors.textPrimary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -327,14 +328,14 @@ private fun SummaryCard(
                             text = stringResource(R.string.income),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
-                            color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                            color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                         )
                         Spacer(modifier = Modifier.height(NeoSpacing.xs))
                         Text(
                             text = CurrencyFormatter.format(totalIncome),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureWhite
+                            color = NeoTheme.colors.cardBackground
                         )
                     }
                 }
@@ -350,14 +351,14 @@ private fun SummaryCard(
                             text = stringResource(R.string.expense),
                             style = MaterialTheme.typography.labelSmall,
                             fontWeight = FontWeight.Medium,
-                            color = NeoColors.PureWhite.copy(alpha = 0.8f)
+                            color = NeoTheme.colors.cardBackground.copy(alpha = 0.8f)
                         )
                         Spacer(modifier = Modifier.height(NeoSpacing.xs))
                         Text(
                             text = CurrencyFormatter.format(totalExpense),
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.PureWhite
+                            color = NeoTheme.colors.cardBackground
                         )
                     }
                 }
@@ -375,7 +376,7 @@ private fun ViewModeToggle(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-            .background(NeoColors.LightGray.copy(alpha = 0.5f))
+            .background(NeoTheme.colors.lightGray.copy(alpha = 0.5f))
             .padding(NeoSpacing.xs),
         horizontalArrangement = Arrangement.spacedBy(NeoSpacing.xs)
     ) {
@@ -385,7 +386,7 @@ private fun ViewModeToggle(
                 modifier = Modifier
                     .weight(1f)
                     .clip(RoundedCornerShape(NeoDimens.cornerRadiusSmall))
-                    .background(if (isSelected) NeoColors.PureBlack else NeoColors.Background.copy(alpha = 0f))
+                    .background(if (isSelected) NeoTheme.colors.textPrimary else NeoTheme.colors.background.copy(alpha = 0f))
                     .clickable { onModeChange(mode) }
                     .padding(vertical = NeoSpacing.md),
                 contentAlignment = Alignment.Center
@@ -397,7 +398,7 @@ private fun ViewModeToggle(
                     },
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = if (isSelected) NeoColors.PureWhite else NeoColors.MediumGray
+                    color = if (isSelected) NeoTheme.colors.cardBackground else NeoTheme.colors.textSecondary
                 )
             }
         }
@@ -410,7 +411,7 @@ private fun DateHeader(date: LocalDate) {
         text = DateFormatter.formatDateHeaderLocalized(date),
         style = MaterialTheme.typography.labelMedium,
         fontWeight = FontWeight.SemiBold,
-        color = NeoColors.MediumGray,
+        color = NeoTheme.colors.textSecondary,
         modifier = Modifier.padding(top = NeoSpacing.sm)
     )
 }
@@ -424,7 +425,7 @@ private fun ExpandableMonthHeader(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onToggle),
-        backgroundColor = if (monthData.isExpanded) NeoColors.PureBlack else NeoColors.PureWhite,
+        backgroundColor = if (monthData.isExpanded) NeoTheme.colors.textPrimary else NeoTheme.colors.cardBackground,
         borderWidth = NeoDimens.borderWidth,
         cornerRadius = NeoDimens.cornerRadius
     ) {
@@ -445,7 +446,7 @@ private fun ExpandableMonthHeader(
                     else
                         Icons.Default.KeyboardArrowDown,
                     contentDescription = null,
-                    tint = if (monthData.isExpanded) NeoColors.PureWhite else NeoColors.PureBlack,
+                    tint = if (monthData.isExpanded) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary,
                     modifier = Modifier.size(NeoDimens.iconSizeMedium)
                 )
                 Column {
@@ -453,12 +454,12 @@ private fun ExpandableMonthHeader(
                         text = monthData.monthKey,
                         style = MaterialTheme.typography.titleSmall,
                         fontWeight = FontWeight.Bold,
-                        color = if (monthData.isExpanded) NeoColors.PureWhite else NeoColors.PureBlack
+                        color = if (monthData.isExpanded) NeoTheme.colors.cardBackground else NeoTheme.colors.textPrimary
                     )
                     Text(
-                        text = "${monthData.transactions.size} transactions",
+                        text = stringResource(R.string.transaction_count_format, monthData.transactions.size),
                         style = MaterialTheme.typography.bodySmall,
-                        color = if (monthData.isExpanded) NeoColors.LightGray else NeoColors.MediumGray
+                        color = if (monthData.isExpanded) NeoTheme.colors.lightGray else NeoTheme.colors.textSecondary
                     )
                 }
             }
@@ -491,7 +492,7 @@ private fun EmptyState(message: String) {
         Text(
             text = message,
             style = MaterialTheme.typography.bodyMedium,
-            color = NeoColors.MediumGray
+            color = NeoTheme.colors.textSecondary
         )
     }
 }
@@ -528,7 +529,7 @@ private fun TransactionItem(
                 Icon(
                     imageVector = categoryIcon,
                     contentDescription = null,
-                    tint = NeoColors.PureWhite,
+                    tint = NeoTheme.colors.cardBackground,
                     modifier = Modifier.size(NeoDimens.iconSizeSmall)
                 )
             }
@@ -540,12 +541,12 @@ private fun TransactionItem(
                     text = transaction.note,
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 )
                 Text(
                     text = "${CategoryUtils.getLocalizedDisplayName(transaction.category)} · ${DateFormatter.formatTime(transaction.transactionDate)}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = NeoColors.MediumGray
+                    color = NeoTheme.colors.textSecondary
                 )
             }
 
@@ -666,13 +667,13 @@ private fun DashboardContentPreview(
                     Text(
                         text = "Good Morning,",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = NeoColors.MediumGray
+                        color = NeoTheme.colors.textSecondary
                     )
                     Text(
                         text = userName,
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        color = NeoColors.PureBlack
+                        color = NeoTheme.colors.textPrimary
                     )
                 }
             }
@@ -692,7 +693,7 @@ private fun DashboardContentPreview(
                 )
             }
         },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         LazyColumn(
             modifier = Modifier
@@ -718,7 +719,7 @@ private fun DashboardContentPreview(
             }
 
             if (transactions.isEmpty()) {
-                item { EmptyState(message = "Tidak ada transaksi bulan ini") }
+                item { EmptyState(message = stringResource(R.string.no_transactions_month)) }
             } else {
                 transactions.groupBy { it.transactionDate.date }.forEach { (date, txList) ->
                     item { DateHeader(date = date) }

@@ -26,16 +26,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 @Composable
 fun NeoButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = NeoColors.ElectricBlue,
-    contentColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.electricBlue,
+    contentColor: Color = NeoTheme.colors.textOnAccent,
+    borderColor: Color = NeoTheme.colors.border,
+    shadowColor: Color = NeoTheme.colors.shadow,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     shadowOffset: Dp = 4.dp,
@@ -96,8 +97,8 @@ fun NeoButtonText(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = NeoColors.ElectricBlue,
-    contentColor: Color = NeoColors.PureWhite
+    backgroundColor: Color = NeoTheme.colors.electricBlue,
+    contentColor: Color = NeoTheme.colors.textOnAccent
 ) {
     NeoButton(
         onClick = onClick,
@@ -119,8 +120,8 @@ fun NeoIconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    backgroundColor: Color = NeoColors.PureWhite,
-    contentColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    contentColor: Color = NeoTheme.colors.textPrimary,
     size: Dp = 48.dp,
     content: @Composable () -> Unit
 ) {

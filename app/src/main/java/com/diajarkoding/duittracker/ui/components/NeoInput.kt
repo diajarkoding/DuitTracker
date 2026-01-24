@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -61,9 +62,9 @@ fun NeoInput(
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
+    shadowColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     shadowOffset: Dp = 4.dp,
@@ -91,7 +92,7 @@ fun NeoInput(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -119,7 +120,7 @@ fun NeoInput(
                 enabled = enabled,
                 singleLine = singleLine,
                 maxLines = maxLines,
-                textStyle = textStyle.copy(color = NeoColors.PureBlack),
+                textStyle = textStyle.copy(color = NeoTheme.colors.textPrimary),
                 cursorBrush = SolidColor(NeoColors.ElectricBlue),
                 visualTransformation = visualTransformation,
                 keyboardOptions = keyboardOptions,
@@ -149,8 +150,8 @@ fun NeoInputFlat(
     enabled: Boolean = true,
     singleLine: Boolean = true,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -163,7 +164,7 @@ fun NeoInputFlat(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -179,7 +180,7 @@ fun NeoInputFlat(
                 .padding(16.dp),
             enabled = enabled,
             singleLine = singleLine,
-            textStyle = textStyle.copy(color = NeoColors.PureBlack),
+            textStyle = textStyle.copy(color = NeoTheme.colors.textPrimary),
             cursorBrush = SolidColor(NeoColors.ElectricBlue),
             keyboardOptions = keyboardOptions,
             keyboardActions = keyboardActions,
@@ -207,9 +208,9 @@ fun NeoPasswordInput(
     placeholder: String = "",
     enabled: Boolean = true,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
+    shadowColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = 2.dp,
     cornerRadius: Dp = 4.dp,
     shadowOffset: Dp = 4.dp,
@@ -237,7 +238,7 @@ fun NeoPasswordInput(
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
             Spacer(modifier = Modifier.height(8.dp))
         }
@@ -264,7 +265,7 @@ fun NeoPasswordInput(
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 enabled = enabled,
                 singleLine = true,
-                textStyle = textStyle.copy(color = NeoColors.PureBlack),
+                textStyle = textStyle.copy(color = NeoTheme.colors.textPrimary),
                 cursorBrush = SolidColor(NeoColors.ElectricBlue),
                 visualTransformation = if (passwordVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = keyboardOptions,

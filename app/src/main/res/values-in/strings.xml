@@ -125,6 +125,11 @@
     <!-- Validation -->
     <string name="error_invalid_amount">Masukkan jumlah yang valid</string>
     <string name="error_empty_note">Masukkan catatan</string>
+    <string name="error_amount_too_small">Jumlah minimal 0.01</string>
+    <string name="error_amount_too_large">Jumlah terlalu besar</string>
+    <string name="error_note_too_long">Catatan terlalu panjang (maks 200 karakter)</string>
+    <string name="error_description_too_long">Deskripsi terlalu panjang (maks 500 karakter)</string>
+    <string name="error_invalid_input">Input tidak valid terdeteksi</string>
     <string name="error_empty_email">Masukkan email Anda</string>
     <string name="error_empty_password">Masukkan kata sandi Anda</string>
     <string name="error_password_mismatch">Kata sandi tidak cocok</string>
@@ -243,4 +248,38 @@
     <string name="reminder_inactive">Pengingat tidak aktif</string>
     <string name="lunch_reminder_desc">Mengingatkan untuk mencatat pengeluaran pagi</string>
     <string name="evening_reminder_desc">Pengingat sebelum tidur</string>
+
+    <!-- Plurals for transaction count -->
+    <string name="transaction_count_format">%d transaksi</string>
+
+    <!-- Error messages -->
+    <string name="transaction_not_found_error">Transaksi tidak ditemukan</string>
+    <string name="transaction_deleted_success">Transaksi berhasil dihapus</string>
+    <string name="failed_to_get_transaction">Gagal mendapatkan transaksi</string>
+    <string name="failed_to_delete">Gagal menghapus transaksi</string>
+
+    <!-- Settings -->
+    <string name="settings">Pengaturan</string>
+    <string name="appearance">Tampilan</string>
+    <string name="dark_mode">Mode Gelap</string>
+    <string name="dark_mode_description">Beralih antara tema terang dan gelap</string>
+    <string name="system_default">Ikuti Sistem</string>
+    <string name="light">Terang</string>
+    <string name="dark">Gelap</string>
+
+    <!-- Theme Settings -->
+    <string name="theme">Tema</string>
+    <string name="theme_settings">Pengaturan Tema</string>
+    <string name="theme_description">Pilih tampilan aplikasi yang Anda sukai</string>
+    <string name="select_theme">Pilih Tema</string>
+    <string name="theme_system">Sistem</string>
+    <string name="theme_system_desc">Ikuti pengaturan tema perangkat</string>
+    <string name="theme_light">Terang</string>
+    <string name="theme_light_desc">Selalu gunakan tema terang</string>
+    <string name="theme_dark">Gelap</string>
+    <string name="theme_dark_desc">Selalu gunakan tema gelap</string>
+
+    <!-- Widget -->
+    <string name="widget_description">Menampilkan saldo, pemasukan, dan pengeluaran bulan ini</string>
+    <string name="widget_name">Widget Saldo</string>
 </resources>

@@ -45,6 +45,15 @@ object NeoColors {
     val DailyNeedsBlue = Color(0xFF0EA5E9)
     val GiftMagenta = Color(0xFFD946EF)
     val OtherGray = Color(0xFF6B7280)
+
+    // Dark Mode Colors
+    val DarkBackground = Color(0xFF121212)
+    val DarkSurface = Color(0xFF1E1E1E)
+    val DarkCard = Color(0xFF2D2D2D)
+    val DarkOnBackground = Color(0xFFE5E5E5)
+    val DarkOnSurface = Color(0xFFF5F5F5)
+    val DarkMediumGray = Color(0xFF9CA3AF)
+    val DarkLightGray = Color(0xFF4B5563)
 }
 
 // Consistent Spacing System
@@ -84,3 +93,17 @@ val NeoOnBackground = NeoColors.PureBlack
 val NeoOnSurface = NeoColors.PureBlack
 val NeoError = NeoColors.ExpenseRed
 val NeoOnError = NeoColors.PureWhite
+
+// Dark Mode Material3 Color Scheme mappings
+val NeoPrimaryDark = NeoColors.ElectricBlue
+val NeoSecondaryDark = NeoColors.LimeGreen
+val NeoTertiaryDark = NeoColors.HotPink
+val NeoBackgroundDark = NeoColors.DarkBackground
+val NeoSurfaceDark = NeoColors.DarkSurface
+val NeoOnPrimaryDark = NeoColors.PureWhite
+val NeoOnSecondaryDark = NeoColors.PureBlack
+val NeoOnTertiaryDark = NeoColors.PureWhite
+val NeoOnBackgroundDark = NeoColors.DarkOnBackground
+val NeoOnSurfaceDark = NeoColors.DarkOnSurface
+val NeoErrorDark = NeoColors.ExpenseRed
+val NeoOnErrorDark = NeoColors.PureWhite

@@ -46,6 +46,7 @@ import com.diajarkoding.duittracker.ui.components.NeoSnackbarHost
 import com.diajarkoding.duittracker.ui.components.SnackbarType
 import com.diajarkoding.duittracker.ui.components.showNeoSnackbar
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import kotlinx.coroutines.flow.collectLatest
 import androidx.compose.ui.tooling.preview.Preview
 import com.diajarkoding.duittracker.ui.theme.DuitTrackerTheme
@@ -80,7 +81,7 @@ fun RegisterScreen(
 
     Scaffold(
         snackbarHost = { NeoSnackbarHost(snackbarHostState) },
-        containerColor = NeoColors.Background
+        containerColor = NeoTheme.colors.background
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -101,7 +102,7 @@ fun RegisterScreen(
             ) {
                 NeoIconButton(
                     onClick = onNavigateBack,
-                    backgroundColor = NeoColors.PureWhite
+                    backgroundColor = NeoTheme.colors.cardBackground
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -116,7 +117,7 @@ fun RegisterScreen(
                 text = stringResource(R.string.create_account),
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Black,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -131,7 +132,7 @@ fun RegisterScreen(
 
             NeoCard(
                 modifier = Modifier.fillMaxWidth(),
-                backgroundColor = NeoColors.PureWhite,
+                backgroundColor = NeoTheme.colors.cardBackground,
                 shadowOffset = 6.dp
             ) {
                 Column(
@@ -280,7 +281,7 @@ private fun RegisterScreenContent(
         ) {
             NeoIconButton(
                 onClick = onNavigateBack,
-                backgroundColor = NeoColors.PureWhite
+                backgroundColor = NeoTheme.colors.cardBackground
             ) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -295,7 +296,7 @@ private fun RegisterScreenContent(
             text = "Buat Akun",
             style = MaterialTheme.typography.displaySmall,
             fontWeight = FontWeight.Black,
-            color = NeoColors.PureBlack
+            color = NeoTheme.colors.textPrimary
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -310,7 +311,7 @@ private fun RegisterScreenContent(
 
         NeoCard(
             modifier = Modifier.fillMaxWidth(),
-            backgroundColor = NeoColors.PureWhite,
+            backgroundColor = NeoTheme.colors.cardBackground,
             shadowOffset = 6.dp
         ) {
             Column(
@@ -455,7 +456,7 @@ private fun RegisterScreenEmptyPreview() {
 private fun RegisterScreenFullPreview() {
     DuitTrackerTheme {
         Scaffold(
-            containerColor = NeoColors.Background
+            containerColor = NeoTheme.colors.background
         ) { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 RegisterScreenContent(

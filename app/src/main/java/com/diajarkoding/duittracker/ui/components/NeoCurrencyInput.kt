@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.diajarkoding.duittracker.R
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 import com.diajarkoding.duittracker.ui.theme.NeoDimens
 import com.diajarkoding.duittracker.ui.theme.NeoSpacing
 import kotlinx.coroutines.delay
@@ -70,9 +71,9 @@ fun NeoCurrencyInput(
     label: String? = null,
     placeholder: String = "0",
     enabled: Boolean = true,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
-    shadowColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
+    shadowColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = NeoDimens.borderWidth,
     cornerRadius: Dp = NeoDimens.cornerRadius,
     shadowOffset: Dp = NeoDimens.shadowOffset,
@@ -110,7 +111,7 @@ fun NeoCurrencyInput(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = NeoColors.MediumGray
+                color = NeoTheme.colors.textSecondary
             )
             Spacer(modifier = Modifier.height(NeoSpacing.sm))
         }
@@ -160,7 +161,7 @@ fun NeoCurrencyInput(
                 textStyle = TextStyle(
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
-                    color = NeoColors.PureBlack
+                    color = NeoTheme.colors.textPrimary
                 ),
                 cursorBrush = SolidColor(NeoColors.ElectricBlue),
                 keyboardOptions = KeyboardOptions(
@@ -178,7 +179,7 @@ fun NeoCurrencyInput(
                             style = TextStyle(
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = NeoColors.MediumGray
+                                color = NeoTheme.colors.textSecondary
                             ),
                             modifier = Modifier.padding(end = NeoSpacing.sm)
                         )
@@ -189,7 +190,7 @@ fun NeoCurrencyInput(
                                     style = TextStyle(
                                         fontSize = 24.sp,
                                         fontWeight = FontWeight.Bold,
-                                        color = NeoColors.LightGray
+                                        color = NeoTheme.colors.lightGray
                                     )
                                 )
                             }
@@ -211,8 +212,8 @@ fun NeoCurrencyInputFlat(
     label: String? = null,
     placeholder: String = "0",
     enabled: Boolean = true,
-    backgroundColor: Color = NeoColors.PureWhite,
-    borderColor: Color = NeoColors.PureBlack,
+    backgroundColor: Color = NeoTheme.colors.cardBackground,
+    borderColor: Color = NeoTheme.colors.textPrimary,
     borderWidth: Dp = NeoDimens.borderWidth,
     cornerRadius: Dp = NeoDimens.cornerRadius,
     keyboardActions: KeyboardActions = KeyboardActions.Default
@@ -248,7 +249,7 @@ fun NeoCurrencyInputFlat(
                 text = label,
                 style = MaterialTheme.typography.labelMedium,
                 fontWeight = FontWeight.SemiBold,
-                color = NeoColors.MediumGray
+                color = NeoTheme.colors.textSecondary
             )
             Spacer(modifier = Modifier.height(NeoSpacing.sm))
         }
@@ -283,7 +284,7 @@ fun NeoCurrencyInputFlat(
             textStyle = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = NeoColors.PureBlack
+                color = NeoTheme.colors.textPrimary
             ),
             cursorBrush = SolidColor(NeoColors.ElectricBlue),
             keyboardOptions = KeyboardOptions(
@@ -301,7 +302,7 @@ fun NeoCurrencyInputFlat(
                         style = TextStyle(
                             fontSize = 24.sp,
                             fontWeight = FontWeight.Bold,
-                            color = NeoColors.MediumGray
+                            color = NeoTheme.colors.textSecondary
                         ),
                         modifier = Modifier.padding(end = NeoSpacing.sm)
                     )
@@ -312,7 +313,7 @@ fun NeoCurrencyInputFlat(
                                 style = TextStyle(
                                     fontSize = 24.sp,
                                     fontWeight = FontWeight.Bold,
-                                    color = NeoColors.LightGray
+                                    color = NeoTheme.colors.lightGray
                                 )
                             )
                         }

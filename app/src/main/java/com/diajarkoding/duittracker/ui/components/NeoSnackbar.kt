@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.diajarkoding.duittracker.ui.theme.NeoColors
+import com.diajarkoding.duittracker.ui.theme.NeoTheme
 
 enum class SnackbarType {
     SUCCESS,
@@ -111,7 +112,7 @@ fun NeoSnackbar(
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .border(
                 width = 2.dp,
-                color = NeoColors.PureBlack,
+                color = NeoTheme.colors.textPrimary,
                 shape = RoundedCornerShape(8.dp)
             )
             .background(
