@@ -238,9 +238,10 @@ google-services.json
 **/google-services.json
 
 # ==========================================
-# Claude Code Settings (Local Only)
+# AI Settings
 # ==========================================
-.claude/settings.local.json
+.factory/
+.claude/
 
 # ==========================================
 # Temporary Files
